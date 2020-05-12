@@ -68,7 +68,7 @@ export const RotateToolCached = React.memo<RotateToolProps>(
     }
 );
 
-export function VisualizerRotateTool(props: RotateToolProps) {
+export function RotateTool(props: RotateToolProps) {
     const rotationControlValue = useRef(0)
 
     function rotateChanged(radians: number) {
