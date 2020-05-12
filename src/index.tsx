@@ -13,3 +13,5 @@ export default class Hello extends React.Component<Props> {
         return <div style={{ color: "red" }}>Hello {text}</div>;
     }
 }
+
+export * from "./VisualizerRotateTool"

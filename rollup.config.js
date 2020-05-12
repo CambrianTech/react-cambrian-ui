@@ -4,6 +4,8 @@ import external from "rollup-plugin-peer-deps-external";
 import resolve from "rollup-plugin-node-resolve";
 
 import pkg from "./package.json";
+import * as react from "react";
+import * as reactDom from "react-dom";
 
 export default {
   input: "src/index.tsx",
@@ -32,13 +34,8 @@ export default {
     commonjs({
       include: ["node_modules/**"],
       namedExports: {
-        "node_modules/react/react.js": [
-          "Children",
-          "Component",
-          "PropTypes",
-          "createElement"
-        ],
-        "node_modules/react-dom/index.js": ["render"]
+        react: Object.keys(react),
+        'react-dom': Object.keys(reactDom)
       }
     })
   ]
