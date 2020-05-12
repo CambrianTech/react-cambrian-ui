@@ -3,7 +3,7 @@ import {Fab} from "@material/react-fab";
 import '@material/react-fab/dist/fab.css';
 import {useRef} from "react";
 
-import classes from "./RotateTool.module.scss";
+import classes from "./RotateTool.scss";
 import MaterialIcon from "@material/react-material-icon";
 
 type RotateToolProps = {

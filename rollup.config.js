@@ -34,6 +34,7 @@ export default {
     }),
     commonjs({
       include: ["node_modules/**"],
+      exclude: ["dist"],
       namedExports: {
         react: Object.keys(react),
         'react-dom': Object.keys(reactDom)
