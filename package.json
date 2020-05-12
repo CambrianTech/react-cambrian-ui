@@ -1,0 +1,70 @@
+{
+  "name": "react-cambrian-ui",
+  "version": "0.0.001",
+  "description": "React Cambrian UI",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "bump": "npm version patch --no-git-tag-version",
+    "add-name": "cross-var sed -i -- 's/@SDK_NAME@/$npm_package_name/g' dist/index.*",
+    "add-version": "cross-var sed -i -- 's/@SDK_VERSION@/$npm_package_version/g' dist/index.*",
+    "delete-garbage": "cross-var rm dist/index.*-*",
+    "prepublishOnly": "npm-run-all bump",
+    "prepack": "npm-run-all add-name add-version delete-garbage",
+    "build": "npm-run-all clean build:js prepack",
+    "build:js": "rollup -c",
+    "clean": "rimraf dist",
+    "format": "prettier --write 'src/**/*' 'demo/src/**/*'",
+    "prepare": "npm-run-all clean build",
+    "start": "npm-run-all --parallel start:js",
+    "start:js": "rollup -c -w",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CambrianTech/react-cambrian-ui.git"
+  },
+  "keywords": [
+    "Cambrian",
+    "UI"
+  ],
+  "author": "Cambrian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CambrianTech/react-home-ar/issues"
+  },
+  "homepage": "https://github.com/CambrianTech/react-home-ar#readme",
+  "dependencies": {
+    "@types/node": "^12.11.1",
+    "exif-js": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/react": "^16.9",
+    "@types/react-dom": "^16.9",
+    "cross-var": "^1.1.0",
+    "jest": "^26.0.1",
+    "npm-run-all": "^4.1.5",
+    "react": "^16.9",
+    "react-dom": "^16.9",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.24.0",
+    "rollup-plugin-typescript2": "^0.24.3",
+    "ts-jest": "^25.5.1",
+    "typescript": "^3.8.3"
+  },
+  "peerDependencies": {
+    "react": "^16.9",
+    "react-dom": "^16.9",
+    "@types/react": "^16.9",
+    "@types/react-dom": "^16.9"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  }
+}
