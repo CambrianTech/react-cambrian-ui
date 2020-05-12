@@ -1,8 +1,9 @@
-//import './VisualizerRotateTool.css'
 import * as React from "react";
 import {Fab} from "@material/react-fab";
 import '@material/react-fab/dist/fab.css';
 import {useRef} from "react";
+
+import classes from "./RotateTool.module.scss";
 
 type RotateToolProps = {
     visible: boolean
@@ -23,8 +24,8 @@ export const RotateToolCached = React.memo<RotateToolProps>(
     (cProps) => {
         if (cProps.visible) {
             return (
-                <div className="visualizer-rotate-tool">
-                    <div className="visualizer-rotate-tool-content">
+                <div className={classes.rotateTool}>
+                    <div>
                         <div className="visualizer-rotate-tool-slider">
                             <div className="visualizer-rotate-tool-slider-labels">
                                 <div>-180°</div>
