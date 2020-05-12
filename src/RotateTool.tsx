@@ -26,8 +26,8 @@ export const RotateToolCached = React.memo<RotateToolProps>(
             return (
                 <div className={classes.rotateTool}>
                     <div>
-                        <div className="visualizer-rotate-tool-slider">
-                            <div className="visualizer-rotate-tool-slider-labels">
+                        <div className={classes.rotateToolSlider}>
+                            <div className={classes.rotateToolSliderLabels}>
                                 <div>-180°</div>
                                 <div>|&nbsp;</div>
                                 <div>-90°</div>
@@ -38,7 +38,7 @@ export const RotateToolCached = React.memo<RotateToolProps>(
                                 <div>|&nbsp;</div>
                                 <div>180°</div>
                             </div>
-                            <div className="visualizer-rotate-tool-slider-container">
+                            <div className={classes.rotateToolSliderBar}>
                                 <input type="range" min={-180} max={180} step={0.5} defaultValue={toDegrees(cProps.rotation) + ""}
                                        onChange={e => cProps.onRotationChanged(toRadians(Number(e.target.value)))} list="range-values" />
                                 <datalist id="range-values">
@@ -54,9 +54,9 @@ export const RotateToolCached = React.memo<RotateToolProps>(
                                 </datalist>
                             </div>
                         </div>
-                        <div className="visualizer-rotate-tool-buttons">
-                            <Fab className="tool-button" style={{backgroundColor:"#555"}} onClick={() => cProps.onRotationFinished(false, 0)} />
-                            <Fab className="tool-button" onClick={() => cProps.onRotationFinished(true, 0)} />
+                        <div className={classes.rotateToolSliderFooter}>
+                            <Fab className={classes.rotateToolSliderButton} style={{backgroundColor:"#555"}} onClick={() => cProps.onRotationFinished(false, 0)} />
+                            <Fab className={classes.rotateToolSliderButton} onClick={() => cProps.onRotationFinished(true, 0)} />
                         </div>
                     </div>
                 </div>
