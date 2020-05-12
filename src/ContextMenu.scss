@@ -1,0 +1,50 @@
+.contextMenu {
+  visibility: hidden;
+  position: fixed;
+  background: #f2f2f2;
+  top:0;
+  left:0;
+  z-index: 100;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contextMenuContainer {
+  width: 200px;
+  height: 30px;
+  line-height: 30px;
+
+  padding-left: 10px;
+}
+
+.contextMenuRow {
+  width: 200px;
+  height: 30px;
+  line-height: 30px;
+
+  padding-left: 10px;
+}
+
+.contextMenuTitle {
+  @extend .contextMenuRow;
+  background: #777777;
+  color: #f2f2f2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contextMenuItem {
+  @extend .contextMenuRow;
+
+  &:hover {
+    background: #1f1f1f;
+    color: #f2f2f2;
+  }
+}
