@@ -2,6 +2,7 @@ import typescript from "rollup-plugin-typescript2";
 import commonjs from "rollup-plugin-commonjs";
 import external from "rollup-plugin-peer-deps-external";
 import resolve from "rollup-plugin-node-resolve";
+import postcss from 'rollup-plugin-postcss';
 
 import pkg from "./package.json";
 import * as react from "react";
@@ -37,6 +38,11 @@ export default {
         react: Object.keys(react),
         'react-dom': Object.keys(reactDom)
       }
+    }),
+    postcss({
+      extract: false,
+      modules: true,
+      use: ['sass'],
     })
   ]
 };
