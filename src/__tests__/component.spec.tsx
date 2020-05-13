@@ -1,5 +1,5 @@
 import * as React from "react";
-import {RotateTool} from "../RotateTool";
+import {RotateTool} from "../visualizer/RotateTool";
 import * as renderer from "react-test-renderer";
 
 test("Component should show 'red' text 'Hello World'", () => {
