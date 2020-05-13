@@ -38,7 +38,6 @@ type VisualizerToolsProperties = {
 export function VisualizerTools(props: VisualizerToolsProperties) {
 
     const [isOpen, setIsOpen] = useState<boolean>()
-    //const siteContext = useContext(SiteContext)!
 
     const onChangeImage = useCallback((e:any) => {
         props.onChangeImage()
