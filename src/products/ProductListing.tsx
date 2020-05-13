@@ -1,8 +1,10 @@
 import * as React from "react";
 import classes from "./ProductListing.scss";
+import {Product} from "../data";
 
 type ProductListingProps = {
-    visible: boolean
+    visible: boolean,
+    product?:Product
 }
 
 export const ProductListingCached = React.memo<ProductListingProps>(
