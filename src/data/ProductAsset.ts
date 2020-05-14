@@ -8,7 +8,7 @@ export class ProductAsset extends ProductBase implements SwatchItem {
         super(json)
     }
 
-    get thumbnailPath(): string|undefined {
-        return undefined;
+    public load(json:any) {
+        super.load(json)
     }
 }

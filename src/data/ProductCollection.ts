@@ -12,11 +12,25 @@ export class ProductCollection extends ProductBase implements SwatchItem, Swatch
 
     public products: Product[] = []
 
-    get thumbnailPath(): string|undefined {
-        return undefined;
-    }
-
     public get children(): SwatchItem[] {
         return this.collections.length ? this.collections : this.products
+    }
+
+    public load(json:any) {
+        super.load(json)
+
+        this.collections = []
+        if (json.hasOwnProperty("collections")) {
+            for (const collection of json.collections) {
+                this.collections.push(new ProductCollection(collection))
+            }
+        }
+
+        this.products = []
+        if (json.hasOwnProperty("products")) {
+            for (const product of json.brands) {
+                this.products.push(new Product(product))
+            }
+        }
     }
 }

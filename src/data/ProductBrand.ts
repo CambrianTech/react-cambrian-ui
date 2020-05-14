@@ -7,15 +7,28 @@ export class ProductBrand extends ProductBase implements SwatchItem, SwatchListi
         super(json)
     }
 
-    public subBrands: ProductBrand[] = []
-
+    public brands: ProductBrand[] = []
     public collections: ProductCollection[] = []
 
-    get thumbnailPath(): string|undefined {
-        return undefined;
+    public get children(): SwatchItem[] {
+        return this.brands.length ? this.brands : this.collections
     }
 
-    public get children(): SwatchItem[] {
-        return this.subBrands.length ? this.subBrands : this.collections
+    public load(json:any) {
+        super.load(json)
+
+        this.brands = []
+        if (json.hasOwnProperty("brands")) {
+            for (const brand of json.brands) {
+                this.brands.push(new ProductBrand(brand))
+            }
+        }
+
+        this.collections = []
+        if (json.hasOwnProperty("collections")) {
+            for (const collection of json.collections) {
+                this.collections.push(new ProductCollection(collection))
+            }
+        }
     }
 }

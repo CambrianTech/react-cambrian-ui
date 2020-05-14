@@ -10,11 +10,11 @@ export class ProductColor extends ProductBase implements SwatchItem, SwatchListi
 
     public assets: ProductAsset[] = []
 
-    get thumbnailPath(): string|undefined {
-        return undefined;
-    }
-
     public get children(): SwatchItem[] {
         return this.assets
+    }
+
+    public load(json:any) {
+        super.load(json)
     }
 }

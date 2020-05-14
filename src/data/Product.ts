@@ -9,11 +9,18 @@ export class Product extends ProductBase implements SwatchItem, SwatchListing {
 
     public colors: ProductColor[] = []
 
-    get thumbnailPath(): string | undefined {
-        return undefined;
-    }
-
     public get children(): SwatchItem[] {
         return this.colors
+    }
+
+    public load(json:any) {
+        super.load(json)
+
+        this.colors = []
+        if (json.hasOwnProperty("colors")) {
+            for (const color of json.colors) {
+                this.colors.push(new ProductColor(color))
+            }
+        }
     }
 }
