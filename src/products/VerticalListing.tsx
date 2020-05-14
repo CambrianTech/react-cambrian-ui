@@ -8,6 +8,7 @@ type VerticalListingProps = {
     className?:string
     parent?:SwatchListing
     selectedRow?:SwatchItem|SwatchListing
+    selectedColumn?:SwatchItem
     onClick:(item:SwatchItem)=>void
     resolveThumbnailPath:(swatch:SwatchItem)=>string|undefined
 }
@@ -42,6 +43,7 @@ export const VerticalListingCached = React.memo<VerticalListingProps>(
 
                                     </div>
                                     <HorizontalListing visible={cProps.selectedRow === swatch}
+                                                       selectedSwatch={cProps.selectedColumn}
                                                        onClick={cProps.onClick}
                                                        resolveThumbnailPath={cProps.resolveThumbnailPath}
                                                        parent={cProps.selectedRow as SwatchListing} />

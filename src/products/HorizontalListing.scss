@@ -16,6 +16,14 @@
   display: inline-block;
   width: 100px;
   padding: 3px;
+  &_selected {
+    border: 1px solid cyan;
+  }
+}
+
+.horizontalListingItemSelected {
+  @extend .horizontalListingItem;
+  border: 1px solid #555555;
 }
 
 .horizontalListingDetails {
