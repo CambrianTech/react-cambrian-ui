@@ -1,6 +1,6 @@
 {
   "name": "react-cambrian-ui",
-  "version": "0.0.28",
+  "version": "0.0.30",
   "description": "React Cambrian UI",
   "main": "dist/index.tsx",
   "module": "dist/index.esm.js",
@@ -68,7 +68,7 @@
     "ts-jest": "^25.5.1",
     "typescript": "^3.8.3",
     "typescript-plugin-css-modules": "^2.3.0",
-    "react-home-ar": "^0.0.4"
+    "react-home-ar": "^0.0.5"
   },
   "peerDependencies": {
     "@types/react": ">=16.9.35",
@@ -81,7 +81,7 @@
     "@material/react-fab": ">=0.15.0",
     "@material/react-icon-button": ">=0.15.0",
     "@material/react-material-icon": ">=0.15.0",
-    "react-home-ar": "^0.0.4"
+    "react-home-ar": "^0.0.5"
   },
   "jest": {
     "preset": "ts-jest",

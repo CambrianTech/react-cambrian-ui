@@ -1,22 +1,15 @@
 import {ProductColor} from "./ProductColor";
 import {SwatchItem} from "./SwatchItem";
+import {ProductBase} from "./ProductBase";
 
-export class Product implements SwatchItem {
-    constructor(public product?: Product, public json?: any) {
-
+export class Product extends ProductBase implements SwatchItem {
+    constructor(public product?: Product, json?: any) {
+        super(json)
     }
 
     public colors: ProductColor[] = []
 
-    displayCode(): string | undefined {
-        return undefined;
-    }
-
-    displayName(): string {
-        return "";
-    }
-
-    thumbnailPath(): string | undefined {
+    get thumbnailPath(): string | undefined {
         return undefined;
     }
 }

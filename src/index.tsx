@@ -1,15 +1,14 @@
 
-//general tools
-export * from "./general/ContextMenu"
+//general tools, root "namespace"
+export * from "./general"
 
-//visualizer tools
-export * from "./visualizer/RotateTool"
-export * from "./visualizer/VisualizerTools"
-export * from "./visualizer/ImageUpload"
+//visualizer tools, or controls specifically for the visualizer
+import * as VisualizerControls from './visualizer'
+export {VisualizerControls}
 
-//products/ swatches
-export * from "./products/ProductListing"
-export * from "./products/ProductListingRow"
+//products / swatches, listings
+import * as ProductControls from './products'
+export {ProductControls}
 
 //Data
 import * as DataStructures from './data'
