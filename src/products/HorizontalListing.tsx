@@ -24,18 +24,20 @@ export const HorizontalListingCached = React.memo<HorizontalListingProps>(
             className = appendClassName(className, cProps.className)
             return (
                 <div className={className}>
-                    {cProps.parent.children.map((swatch) => {
-                        return (
-                            <div key={swatch.key} className={appendClassName("item", classes.horizontalListingItem)}>
-                                <div className={appendClassName("details", classes.horizontalListingDetails)}>
-                                    <img className={appendClassName("image", classes.horizontalListingSwatch)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
-                                    <div className={appendClassName("info", classes.horizontalListingInfo)}>
-                                        {swatch.displayName}
+                    <div className={appendClassName("horizontal-swatch-listing-content", classes.horizontalListingContent)}>
+                        {cProps.parent.children.map((swatch) => {
+                            return (
+                                <div key={swatch.key} className={appendClassName("horizontal-swatch-listing-item", classes.horizontalListingItem)}>
+                                    <div className={appendClassName("horizontal-swatch-listing-details", classes.horizontalListingDetails)}>
+                                        <img className={appendClassName("horizontal-swatch-listing-image", classes.horizontalListingSwatch)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
+                                        <div className={appendClassName("horizontal-swatch-listing-info", classes.horizontalListingInfo)}>
+                                            {swatch.displayName}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    })}
+                            )
+                        })}
+                    </div>
                 </div>
             );
         }
