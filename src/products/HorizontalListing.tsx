@@ -26,10 +26,12 @@ export const HorizontalListingCached = React.memo<HorizontalListingProps>(
                 <div className={className}>
                     {cProps.parent.children.map((swatch) => {
                         return (
-                            <div key={swatch.key} className={appendClassName("swatch-item", classes.horizontalListingItem)}>
-                                <img className={appendClassName("swatch-image", classes.horizontalListingSwatch)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
-                                <div className={appendClassName("swatch-info", classes.horizontalListingInfo)}>
-                                    {swatch.displayName}
+                            <div key={swatch.key} className={appendClassName("item", classes.horizontalListingItem)}>
+                                <div className={appendClassName("details", classes.horizontalListingDetails)}>
+                                    <img className={appendClassName("image", classes.horizontalListingSwatch)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
+                                    <div className={appendClassName("info", classes.horizontalListingInfo)}>
+                                        {swatch.displayName}
+                                    </div>
                                 </div>
                             </div>
                         )

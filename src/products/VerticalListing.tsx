@@ -29,12 +29,12 @@ export const VerticalListingCached = React.memo<VerticalListingProps>(
                 <div className={className}>
                     {cProps.parent.children.map((swatch) => {
                         return (
-                            <div key={swatch.key} className={appendClassName("swatch-row", classes.verticalListingRow)} onClick={()=>cProps.onRowSelected(swatch)}>
-                                <div className={appendClassName("swatch-row", classes.verticalListingDetails)}>
-                                    <img className={appendClassName("swatch-image", classes.verticalListingSwatch)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
-                                    <div className={appendClassName("swatch-info", classes.verticalListingInfo)}>
-                                        <div className={appendClassName("swatch-title", classes.verticalListingTitle)}>{swatch.displayName}</div>
-                                        <div className={appendClassName("swatch-description", classes.verticalListingDescription)}>{swatch.description}</div>
+                            <div key={swatch.key} className={appendClassName("item", classes.verticalListingItem)} onClick={()=>cProps.onRowSelected(swatch)}>
+                                <div className={appendClassName("details", classes.verticalListingDetails)}>
+                                    <img className={appendClassName("image", classes.verticalListingSwatch)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
+                                    <div className={appendClassName("info", classes.verticalListingInfo)}>
+                                        <div className={appendClassName("title", classes.verticalListingTitle)}>{swatch.displayName}</div>
+                                        <div className={appendClassName("description", classes.verticalListingDescription)}>{swatch.description}</div>
                                     </div>
                                 </div>
                                 <HorizontalListing visible={cProps.selectedRow === swatch} resolveThumbnailPath={cProps.resolveThumbnailPath}
