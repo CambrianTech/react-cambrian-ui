@@ -1,6 +1,6 @@
 import {CBARAssetType} from "react-home-ar";
 import {SwatchItem} from "./SwatchItem";
-import uuid from "uuid";
+import { uuid } from 'uuidv4';
 
 export abstract class ProductBase implements SwatchItem {
     protected constructor(json:any) {
@@ -31,7 +31,7 @@ export abstract class ProductBase implements SwatchItem {
         }
     }
 
-    public key = uuid.v4()
+    public key = uuid()
     public json?: any
     public name?:string
     public code?:string
