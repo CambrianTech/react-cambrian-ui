@@ -34,7 +34,7 @@ export const VerticalListingCached = React.memo<VerticalListingProps>(
                                     <div onClick={()=>cProps.onClick(swatch)}
                                          className={appendClassName("vertical-swatch-listing-details", classes.verticalListingDetails)}>
 
-                                        <img className={appendClassName("vertical-swatch-listing-image", classes.verticalListingSwatch)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
+                                        <img className={appendClassName("vertical-swatch-listing-image", classes.verticalListingImage)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
                                         <div className={appendClassName("vertical-swatch-listing-info", classes.verticalListingInfo)}>
                                             <div className={appendClassName("vertical-swatch-listing-title", classes.verticalListingTitle)}>{swatch.displayName}</div>
                                             <div className={appendClassName("vertical-swatch-listing-description", classes.verticalListingDescription)}>{swatch.description}</div>

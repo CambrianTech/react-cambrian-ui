@@ -1,31 +1,46 @@
 
 .verticalListing {
-
+  width: 400px;
+  height: 100%;
+  overflow-y: scroll;
+  user-select: none;
+  color:#555555;
+  font-weight: 500;
 }
 
 .verticalListingContent {
-
+  height: 100%;
 }
 
 .verticalListingItem {
   display: flex;
   flex-direction: column;
+  border-bottom: solid 1px #f2f2f2;
+  cursor: pointer;
 }
 
 .verticalListingDetails {
   display: flex;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: solid 1px #f2f2f2;
+  cursor: pointer;
 }
 
-.verticalListingSwatch {
-
+.verticalListingImage {
+  border: 1px solid #cfcfcf;
+  height: 100px;
+  width: 180px;
+  object-fit: cover;
 }
 
 .verticalListingInfo {
-
+  padding: 10px;
 }
 
 .verticalListingTitle {
-
+  font-size: 20px;
 }
 
 .verticalListingDescription {
