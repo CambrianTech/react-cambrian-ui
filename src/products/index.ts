@@ -1,3 +1,3 @@
 
-export * from "./ProductListing"
-export * from "./ProductListingRow"
+export * from "./VerticalListing"
+export * from "./HorizontalListing"

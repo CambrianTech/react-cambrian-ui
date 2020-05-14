@@ -1,9 +1,9 @@
 import {ProductBrand} from "./ProductBrand";
 import {Product} from "./Product";
-import {SwatchItem} from "./SwatchItem";
+import {SwatchItem, SwatchListing} from "./SwatchItem";
 import {ProductBase} from "./ProductBase";
 
-export class ProductCollection extends ProductBase implements SwatchItem {
+export class ProductCollection extends ProductBase implements SwatchItem, SwatchListing {
     constructor(public brand?: ProductBrand, json?: any) {
         super(json)
     }
@@ -14,5 +14,9 @@ export class ProductCollection extends ProductBase implements SwatchItem {
 
     get thumbnailPath(): string|undefined {
         return undefined;
+    }
+
+    public get children(): SwatchItem[] {
+        return this.collections.length ? this.collections : this.products
     }
 }

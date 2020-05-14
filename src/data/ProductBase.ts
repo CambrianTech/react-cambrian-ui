@@ -6,6 +6,7 @@ export abstract class ProductBase implements SwatchItem {
 
     }
 
+    public key = ""
     public name?:string
     public code?:string
     public displayName?:string
