@@ -6,7 +6,8 @@ type HorizontalListingProps = {
     visible: boolean,
     className?:string
     parent?:SwatchListing
-    selectedSwatch?:SwatchItem
+    selectedSwatch?:SwatchItem,
+    onClick:(item:SwatchItem)=>void
     resolveThumbnailPath:(swatch:SwatchItem)=>string|undefined
 }
 
@@ -27,7 +28,8 @@ export const HorizontalListingCached = React.memo<HorizontalListingProps>(
                     <div className={appendClassName("horizontal-swatch-listing-content", classes.horizontalListingContent)}>
                         {cProps.parent.children.map((swatch) => {
                             return (
-                                <div key={swatch.key} className={appendClassName("horizontal-swatch-listing-item", classes.horizontalListingItem)}>
+                                <div key={swatch.key} onClick={()=>cProps.onClick(swatch)}
+                                     className={appendClassName("horizontal-swatch-listing-item", classes.horizontalListingItem)}>
                                     <div className={appendClassName("horizontal-swatch-listing-details", classes.horizontalListingDetails)}>
                                         <img className={appendClassName("horizontal-swatch-listing-image", classes.horizontalListingSwatch)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
                                         <div className={appendClassName("horizontal-swatch-listing-info", classes.horizontalListingInfo)}>
