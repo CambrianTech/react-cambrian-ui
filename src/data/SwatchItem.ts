@@ -1,7 +1,7 @@
 
 export interface SwatchItem {
     key:string
-    thumbnailPath?: string
+    thumbnail?: string
     displayName?: string
     description?: string
 }
