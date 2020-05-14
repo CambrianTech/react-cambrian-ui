@@ -1,13 +1,21 @@
 .horizontalListing {
-
+  background-color: #efefef;
+  padding-top: 10px;
+  overflow-x: scroll;
+  width:100%;
+  display: flex;
 }
 
 .horizontalListingContent {
-
+  flex: 0 0 auto;
+  height: 100%;
 }
 
 .horizontalListingItem {
-
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  padding: 3px;
 }
 
 .horizontalListingDetails {
@@ -15,10 +23,11 @@
   flex-direction: column;
 }
 
-.horizontalListingSwatch {
-
+.horizontalListingImage {
+  object-fit: cover;
 }
 
 .horizontalListingInfo {
-
+  font-size: 14px;
+  text-align: center;
 }
