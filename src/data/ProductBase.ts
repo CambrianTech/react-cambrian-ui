@@ -3,11 +3,6 @@ import {SwatchItem} from "./SwatchItem";
 import { uuid } from 'uuidv4';
 
 export abstract class ProductBase implements SwatchItem {
-    protected constructor(json:any) {
-        if (json) {
-            this.load(json)
-        }
-    }
 
     public load(json:any) {
         this.json = json

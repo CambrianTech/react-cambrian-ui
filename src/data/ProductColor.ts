@@ -4,10 +4,7 @@ import {SwatchItem, SwatchListing} from "./SwatchItem";
 import {ProductBase} from "./ProductBase";
 
 export class ProductColor extends ProductBase implements SwatchItem, SwatchListing {
-    constructor(public product?: Product, json?: any) {
-        super(json)
-    }
-
+    public product?: Product
     public assets: ProductAsset[] = []
 
     public get children(): SwatchItem[] {
