@@ -2,7 +2,7 @@ import * as React from "react";
 import classes from "./VerticalListing.scss";
 import {HorizontalListing} from "./HorizontalListing";
 import {SwatchItem} from "../data";
-import {Thumbnail} from "../visualizer/Thumbnail";
+import {Thumbnail} from "../general";
 
 type VerticalListingProps = {
     visible: boolean,
