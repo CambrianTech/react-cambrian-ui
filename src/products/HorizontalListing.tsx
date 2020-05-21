@@ -1,6 +1,7 @@
 import * as React from "react";
 import classes from "./HorizontalListing.scss";
 import {SwatchItem} from "../data";
+import {Thumbnail} from "../visualizer/Thumbnail";
 
 type HorizontalListingProps = {
     visible: boolean,
@@ -37,7 +38,7 @@ export const HorizontalListingCached = React.memo<HorizontalListingProps>(
                             return (
                                 <div key={swatch.key} onClick={()=>cProps.onClick(swatch)} className={className}>
                                     <div className={appendClassName("horizontal-swatch-listing-details", classes.horizontalListingDetails)}>
-                                        <img className={appendClassName("horizontal-swatch-listing-image", classes.horizontalListingImage)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
+                                        <Thumbnail className={appendClassName("horizontal-swatch-listing-image", classes.horizontalListingImage)} swatch={swatch} resolveThumbnailPath={cProps.resolveThumbnailPath} />
                                         <div className={appendClassName("horizontal-swatch-listing-info", classes.horizontalListingInfo)}>
                                             {swatch.displayName}
                                         </div>

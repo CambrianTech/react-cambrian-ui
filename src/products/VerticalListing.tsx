@@ -2,6 +2,7 @@ import * as React from "react";
 import classes from "./VerticalListing.scss";
 import {HorizontalListing} from "./HorizontalListing";
 import {SwatchItem} from "../data";
+import {Thumbnail} from "../visualizer/Thumbnail";
 
 type VerticalListingProps = {
     visible: boolean,
@@ -35,7 +36,8 @@ export const VerticalListingCached = React.memo<VerticalListingProps>(
                                     <div onClick={()=>cProps.onClick(swatch)}
                                          className={appendClassName("vertical-swatch-listing-details", classes.verticalListingDetails)}>
 
-                                        <img className={appendClassName("vertical-swatch-listing-image", classes.verticalListingImage)} src={cProps.resolveThumbnailPath(swatch)} alt={swatch.displayName} />
+                                        <Thumbnail className={appendClassName("vertical-swatch-listing-image", classes.verticalListingImage)} swatch={swatch} resolveThumbnailPath={cProps.resolveThumbnailPath} />
+
                                         <div className={appendClassName("vertical-swatch-listing-info", classes.verticalListingInfo)}>
                                             <div className={appendClassName("vertical-swatch-listing-title", classes.verticalListingTitle)}>{swatch.displayName}</div>
                                             <div className={appendClassName("vertical-swatch-listing-description", classes.verticalListingDescription)}>{swatch.description}</div>

@@ -22,6 +22,9 @@ export abstract class ProductBase implements SwatchItem {
         if (json.hasOwnProperty("thumbnail")) {
             this.thumbnail = json.thumbnail
         }
+        if (json.hasOwnProperty("color")) {
+            this.color = json.color
+        }
         if (json.hasOwnProperty("metaData")) {
             this.metaData = json.metaData
         }
@@ -48,5 +51,6 @@ export abstract class ProductBase implements SwatchItem {
     public displayName?:string
     public assetTypes:CBARAssetType[] = []
     public thumbnail?:string
+    public color?:string
     public metaData:any
 }
