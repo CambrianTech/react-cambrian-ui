@@ -29,6 +29,8 @@ export abstract class ProductBase implements SwatchItem {
 
     public abstract get description():string
 
+    public abstract get parent():SwatchItem|undefined
+
     public abstract get brand():ProductBrand
 
     public get hasColumns(): boolean {

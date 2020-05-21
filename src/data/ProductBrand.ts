@@ -11,6 +11,10 @@ export class ProductBrand extends ProductBase implements SwatchItem {
         return this
     }
 
+    public get parent():SwatchItem|undefined {
+        return this.parentBrand
+    }
+
     public get children(): ProductBase[] {
         return this.subBrands.length ? this.subBrands : this.collections
     }

@@ -4,5 +4,6 @@ export interface SwatchItem {
     displayName?: string
     description?: string
     hasColumns:boolean
+    parent:SwatchItem|undefined
     children:SwatchItem[]
 }

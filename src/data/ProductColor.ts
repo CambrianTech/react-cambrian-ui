@@ -17,6 +17,10 @@ export class ProductColor extends ProductBase implements SwatchItem {
         return this.product.collection
     }
 
+    public get parent():SwatchItem|undefined {
+        return this.product
+    }
+
     public get children(): ProductBase[] {
         return []
     }
