@@ -42,7 +42,7 @@ export const VerticalListingCached = React.memo<VerticalListingProps>(
                                         </div>
 
                                     </div>
-                                    <HorizontalListing visible={cProps.selectedRow === swatch}
+                                    <HorizontalListing visible={swatch.hasColumns && cProps.selectedRow === swatch}
                                                        selectedSwatch={cProps.selectedColumn}
                                                        onClick={cProps.onClick}
                                                        resolveThumbnailPath={cProps.resolveThumbnailPath}

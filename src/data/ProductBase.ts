@@ -26,6 +26,10 @@ export abstract class ProductBase implements SwatchItem {
         }
     }
 
+    public get hasColumns(): boolean {
+        return false
+    }
+
     public key = uuid()
     public json?: any
     public name?:string

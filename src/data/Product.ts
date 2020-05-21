@@ -11,6 +11,10 @@ export class Product extends ProductBase implements SwatchItem, SwatchListing {
         return this.colors
     }
 
+    public get hasColumns(): boolean {
+        return this.colors.length > 0
+    }
+
     public load(json:any) {
         super.load(json)
 

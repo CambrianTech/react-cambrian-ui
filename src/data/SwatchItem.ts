@@ -4,6 +4,7 @@ export interface SwatchItem {
     thumbnail?: string
     displayName?: string
     description?: string
+    hasColumns:boolean
 }
 
 export interface SwatchListing {
