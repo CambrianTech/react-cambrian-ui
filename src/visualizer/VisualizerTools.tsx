@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Fab} from "@material/react-fab";
 import '@material/react-fab/dist/fab.css';
-import {useState, useCallback, useEffect} from "react";
+import {useCallback} from "react";
 import {CBARContext} from "react-home-ar";
 import MaterialIcon from "@material/react-material-icon";
 import {RotateTool} from "./RotateTool";
@@ -10,6 +10,7 @@ import classes from "./VisualizerTools.scss";
 export enum VisualizerToolMode {
     None,
     Rotate,
+    Translate,
     Draw,
     Erase
 }
@@ -54,13 +55,18 @@ export function VisualizerTools(props: VisualizerToolsProperties) {
         props.changeMode(VisualizerToolMode.Rotate)
     } , [props]);
 
+    const translateButtonClicked = useCallback(() => {
+        props.changeMode(VisualizerToolMode.Translate)
+    } , [props]);
+
     return (
         <div>
             {props.visible && props.context && (
                 <div className={classes.visualizerTools}>
                     <Fab className={classes.toolButton} onClick={onChangeImage} icon={<MaterialIcon icon='add_a_photo' />} />
-                    {currentScene && <Fab className={classes.toolButton} onClick={rotateButtonClicked} icon={<MaterialIcon icon='rotate_right' />} />}
-                    {currentScene && currentScene.isEditable && <Fab className={classes.toolButton} icon={<MaterialIcon icon='edit' />} />}
+                    {currentScene && currentScene.selectedAsset && <Fab className={classes.toolButton} onClick={rotateButtonClicked} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
+                    {currentScene && currentScene.selectedAsset && <Fab className={classes.toolButton} onClick={translateButtonClicked} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}
+                    {currentScene && currentScene.selectedSurface && currentScene.isEditable && <Fab className={classes.toolButton} icon={<MaterialIcon icon='edit' />} />}
 
                     <RotateTool visible={props.mode === VisualizerToolMode.Rotate}
                                 onRotationFinished={rotateFinished}
