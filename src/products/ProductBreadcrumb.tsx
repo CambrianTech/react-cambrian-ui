@@ -31,12 +31,10 @@ export function ProductBreadcrumb(props: ProductBreadcrumbProps) {
 
     useEffect(()=>{
         const swatches:SwatchItem[] = []
-        if (props.currentItem) {
-            let current:SwatchItem|undefined = props.currentItem.parent
-            while (current) {
-                swatches.unshift(current)
-                current = current.parent
-            }
+        let current = props.currentItem
+        while (current) {
+            swatches.unshift(current)
+            current = current.parent
         }
         setSwatches(swatches)
     },[props])
