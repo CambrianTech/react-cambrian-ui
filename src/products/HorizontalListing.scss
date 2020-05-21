@@ -9,6 +9,8 @@
 .horizontalListingContent {
   flex: 0 0 auto;
   height: 100%;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .horizontalListingItem {
@@ -16,9 +18,6 @@
   display: inline-block;
   width: 100px;
   padding: 3px;
-  &_selected {
-    border: 1px solid cyan;
-  }
 }
 
 .horizontalListingItemSelected {
@@ -33,6 +32,8 @@
 
 .horizontalListingImage {
   object-fit: cover;
+  height: 95px;
+  border: 1px solid #aeaeae;
 }
 
 .horizontalListingInfo {
