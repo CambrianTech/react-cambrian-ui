@@ -1,6 +1,7 @@
 import {CBARAssetType} from "react-home-ar";
 import {SwatchItem} from "./SwatchItem";
 import { uuid } from 'uuidv4';
+import {ProductBrand} from "./ProductBrand";
 
 export abstract class ProductBase implements SwatchItem {
 
@@ -26,8 +27,16 @@ export abstract class ProductBase implements SwatchItem {
         }
     }
 
+    public abstract get description():string
+
+    public abstract get brand():ProductBrand
+
     public get hasColumns(): boolean {
         return false
+    }
+
+    public get children(): ProductBase[] {
+        return []
     }
 
     public key = uuid()

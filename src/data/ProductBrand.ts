@@ -1,14 +1,22 @@
 import {ProductCollection} from "./ProductCollection";
-import {SwatchItem, SwatchListing} from "./SwatchItem";
+import {SwatchItem} from "./SwatchItem";
 import {ProductBase} from "./ProductBase";
 
-export class ProductBrand extends ProductBase implements SwatchItem, SwatchListing {
+export class ProductBrand extends ProductBase implements SwatchItem {
     public parentBrand?: ProductBrand
     public subBrands: ProductBrand[] = []
     public collections: ProductCollection[] = []
 
-    public get children(): SwatchItem[] {
+    public get brand(): ProductBrand {
+        return this
+    }
+
+    public get children(): ProductBase[] {
         return this.subBrands.length ? this.subBrands : this.collections
+    }
+
+    public get description():string {
+        return `Brand ${this.displayName}`
     }
 
     public load(json:any) {

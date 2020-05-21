@@ -1,11 +1,11 @@
 import * as React from "react";
 import classes from "./HorizontalListing.scss";
-import {SwatchItem, SwatchListing} from "../data";
+import {SwatchItem} from "../data";
 
 type HorizontalListingProps = {
     visible: boolean,
     className?:string
-    parent?:SwatchListing
+    columns?:SwatchItem[]
     selectedSwatch?:SwatchItem,
     onClick:(item:SwatchItem)=>void
     resolveThumbnailPath:(swatch:SwatchItem)=>string|undefined
@@ -20,13 +20,13 @@ function appendClassName(current:string, name:string|undefined) {
 
 export const HorizontalListingCached = React.memo<HorizontalListingProps>(
     (cProps) => {
-        if (cProps.visible && cProps.parent) {
+        if (cProps.visible && cProps.columns) {
             let className = appendClassName("horizontal-swatch-listing", classes.horizontalListing)
             className = appendClassName(className, cProps.className)
             return (
                 <div className={className}>
                     <div className={appendClassName("horizontal-swatch-listing-content", classes.horizontalListingContent)}>
-                        {cProps.parent.children.map((swatch) => {
+                        {cProps.columns.map((swatch) => {
                             let className = appendClassName("horizontal-swatch-listing-item",
                                 cProps.selectedSwatch === swatch ? classes.horizontalListingItemSelected : classes.horizontalListingItem)
 

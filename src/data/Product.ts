@@ -1,18 +1,27 @@
 import {ProductColor} from "./ProductColor";
-import {SwatchItem, SwatchListing} from "./SwatchItem";
+import {SwatchItem} from "./SwatchItem";
 import {ProductBase} from "./ProductBase";
 import {ProductCollection} from "./ProductCollection";
+import {ProductBrand} from "./ProductBrand";
 
-export class Product extends ProductBase implements SwatchItem, SwatchListing {
-    public collection?: ProductCollection
+export class Product extends ProductBase implements SwatchItem {
+    public collection!: ProductCollection
     public colors: ProductColor[] = []
 
-    public get children(): SwatchItem[] {
+    public get brand(): ProductBrand {
+        return this.collection.brand
+    }
+
+    public get children(): ProductBase[] {
         return this.colors
     }
 
     public get hasColumns(): boolean {
-        return this.colors.length > 0
+        return true
+    }
+
+    public get description():string {
+        return `Product ${this.displayName}`
     }
 
     public load(json:any) {

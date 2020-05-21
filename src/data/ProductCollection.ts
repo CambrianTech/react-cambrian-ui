@@ -1,18 +1,32 @@
 import {Product} from "./Product";
-import {SwatchItem, SwatchListing} from "./SwatchItem";
+import {SwatchItem} from "./SwatchItem";
 import {ProductBase} from "./ProductBase";
 import {ProductBrand} from "./ProductBrand";
 
-export class ProductCollection extends ProductBase implements SwatchItem, SwatchListing {
+export class ProductCollection extends ProductBase implements SwatchItem {
 
-    public brand?: ProductBrand
-    public parentCollection?: ProductCollection
+    public _brand?: ProductBrand
+    public collection?: ProductCollection
 
     public collections: ProductCollection[] = []
     public products: Product[] = []
 
-    public get children(): SwatchItem[] {
+    public get brand(): ProductBrand {
+        return this.collection ? this.collection.brand : this._brand!
+    }
+
+    public set brand(value) {
+        if (!this.collection) {
+            this._brand = value
+        }
+    }
+
+    public get children(): ProductBase[] {
         return this.collections.length ? this.collections : this.products
+    }
+
+    public get description():string {
+        return `Collection ${this.displayName}`
     }
 
     public load(json:any) {
@@ -23,7 +37,7 @@ export class ProductCollection extends ProductBase implements SwatchItem, Swatch
             for (const collectionJson of json.collections) {
                 const collection = new ProductCollection()
                 collection.load(collectionJson)
-                collection.parentCollection = this
+                collection.collection = this
                 this.collections.push(collection)
             }
         }

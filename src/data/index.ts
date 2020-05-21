@@ -1,6 +1,7 @@
 
 
 //classes
+export * from "./ProductBase"
 export * from "./ProductBrand"
 export * from "./ProductCollection"
 export * from "./Product"
