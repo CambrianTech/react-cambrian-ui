@@ -1,4 +1,4 @@
-import {default as React, useEffect, useState} from "react";
+import {default as React} from "react";
 import {SwatchItem} from "../data";
 import classes from "./ProductBreadcrumb.scss";
 
@@ -27,17 +27,12 @@ const ProductBreadcrumbListing = React.memo<ProductBreadcrumbListingProps>(
 
 export function ProductBreadcrumb(props: ProductBreadcrumbProps) {
 
-    const [swatches, setSwatches] = useState<SwatchItem[]>([])
-
-    useEffect(()=>{
-        const swatches:SwatchItem[] = []
-        let current = props.currentItem
-        while (current) {
-            swatches.unshift(current)
-            current = current.parent
-        }
-        setSwatches(swatches)
-    },[props])
+    const swatches:SwatchItem[] = []
+    let current = props.currentItem
+    while (current) {
+        swatches.unshift(current)
+        current = current.parent
+    }
 
     return <ProductBreadcrumbListing swatches={swatches} {...props} />
 }
