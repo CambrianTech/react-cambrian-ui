@@ -6,8 +6,11 @@ import {useRef} from "react";
 import classes from "./RotateTool.scss";
 import MaterialIcon from "@material/react-material-icon";
 
+import {appendClassName} from "../internal/Utils"
+
 type RotateToolProps = {
     visible: boolean
+    className?:string
     rotation: number
     onRotationFinished: (commit: boolean, rotation: number) => void
     onRotationChanged: (rotation: number) => void
@@ -24,8 +27,11 @@ function toRadians(degrees: number) {
 export const RotateToolCached = React.memo<RotateToolProps>(
     (cProps) => {
         if (cProps.visible) {
+            let className = appendClassName("rotate-tool", classes.rotateTool)
+            className = appendClassName(className, cProps.className)
+
             return (
-                <div className={classes.rotateTool}>
+                <div className={className}>
                     <div>
                         <div className={classes.rotateToolSlider}>
                             <div className={classes.rotateToolSliderLabels}>

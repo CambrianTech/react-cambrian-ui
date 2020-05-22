@@ -6,6 +6,7 @@ import {CBARContext} from "react-home-ar";
 import MaterialIcon from "@material/react-material-icon";
 import {RotateTool} from "./RotateTool";
 import classes from "./VisualizerTools.scss";
+import {appendClassName} from "../internal/Utils"
 
 export enum VisualizerToolMode {
     None,
@@ -17,6 +18,7 @@ export enum VisualizerToolMode {
 
 type VisualizerToolsProperties = {
     visible:boolean
+    className?:string
 
     context:CBARContext|undefined
 
@@ -34,7 +36,6 @@ type VisualizerToolsProperties = {
 }
 
 export function VisualizerTools(props: VisualizerToolsProperties) {
-
 
     const currentScene = props.context ? props.context.getScene() : undefined
 
@@ -59,10 +60,13 @@ export function VisualizerTools(props: VisualizerToolsProperties) {
         props.changeMode(VisualizerToolMode.Translate)
     } , [props]);
 
+    let className = appendClassName("visualizer-tools", classes.visualizerTools)
+    className = appendClassName(className, props.className)
+
     return (
         <div>
             {props.visible && props.context && (
-                <div className={classes.visualizerTools}>
+                <div className={className}>
                     <Fab className={classes.toolButton} onClick={onChangeImage} icon={<MaterialIcon icon='add_a_photo' />} />
                     {currentScene && currentScene.selectedAsset && <Fab className={classes.toolButton} onClick={rotateButtonClicked} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
                     {currentScene && currentScene.selectedAsset && <Fab className={classes.toolButton} onClick={translateButtonClicked} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}

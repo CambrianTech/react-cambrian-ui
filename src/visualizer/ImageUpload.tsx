@@ -53,6 +53,13 @@ export function ImageUpload(props: ImageUploadProperties) {
     }, [props])
 
     async function upload(acceptedFiles: File[]) {
+
+        const inputs = Array.from(document.getElementsByTagName("input"))
+        const input = inputs.find(element => element.type === "file") as HTMLInputElement;
+        if (input) {
+            (input as any).value = null
+        }
+
         const firstFile = acceptedFiles[0];
 
         if (!firstFile)

@@ -3,6 +3,7 @@ import classes from "./VerticalListing.scss";
 import {HorizontalListing} from "./HorizontalListing";
 import {SwatchItem} from "../data";
 import {Thumbnail} from "../general";
+import {appendClassName} from "../internal/Utils"
 
 type VerticalListingProps = {
     visible: boolean,
@@ -12,13 +13,6 @@ type VerticalListingProps = {
     selectedColumn?:SwatchItem
     onClick:(item:SwatchItem)=>void
     resolveThumbnailPath:(swatch:SwatchItem)=>string|undefined
-}
-
-function appendClassName(current:string, name:string|undefined) {
-    if (name) {
-        return `${current} ${name}`
-    }
-    return current
 }
 
 export const VerticalListingCached = React.memo<VerticalListingProps>(
