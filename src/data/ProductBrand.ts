@@ -7,6 +7,10 @@ export class ProductBrand extends ProductBase implements SwatchItem {
     public subBrands: ProductBrand[] = []
     public collections: ProductCollection[] = []
 
+    public get root(): ProductBrand {
+        return this.parentBrand ? this.parentBrand : this
+    }
+
     public get brand(): ProductBrand {
         return this
     }
