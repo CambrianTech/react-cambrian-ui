@@ -25,10 +25,6 @@ export class ProductColor extends ProductBase implements SwatchItem {
         return []
     }
 
-    public get description():string {
-        return `Color ${this.displayName}`
-    }
-
     public load(json:any) {
         super.load(json)
         if (json.hasOwnProperty("ppi")) {

@@ -24,10 +24,6 @@ export class Product extends ProductBase implements SwatchItem {
         return true
     }
 
-    public get description():string {
-        return `Product ${this.displayName}`
-    }
-
     public load(json:any) {
         super.load(json)
 

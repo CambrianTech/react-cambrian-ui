@@ -23,10 +23,6 @@ export class ProductBrand extends ProductBase implements SwatchItem {
         return this.subBrands.length ? this.subBrands : this.collections
     }
 
-    public get description():string {
-        return `Brand ${this.displayName}`
-    }
-
     public load(json:any) {
         super.load(json)
 

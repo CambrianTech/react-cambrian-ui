@@ -29,10 +29,6 @@ export class ProductCollection extends ProductBase implements SwatchItem {
         return this.collections.length ? this.collections : this.products
     }
 
-    public get description():string {
-        return `Collection ${this.displayName}`
-    }
-
     public load(json:any) {
         super.load(json)
 

@@ -30,7 +30,9 @@ export abstract class ProductBase implements SwatchItem {
         }
     }
 
-    public abstract get description():string
+    public get description():string {
+        return `${this.displayName}`
+    }
 
     public abstract get parent():SwatchItem|undefined
 
