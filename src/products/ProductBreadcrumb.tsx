@@ -1,6 +1,6 @@
 import {default as React} from "react";
-import {SwatchItem} from "../data";
 import classes from "./ProductBreadcrumb.scss";
+import {SwatchItem} from "react-home-ar";
 
 type ProductBreadcrumbProps = {
     firstElement?:React.ReactElement<HTMLElement>

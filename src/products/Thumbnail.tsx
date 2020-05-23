@@ -1,5 +1,5 @@
 import {default as React} from "react";
-import {SwatchItem} from "../data";
+import {SwatchItem} from "react-home-ar";
 
 type ThumbnailProps = {
     swatch:SwatchItem

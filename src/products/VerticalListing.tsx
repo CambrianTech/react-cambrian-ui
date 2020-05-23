@@ -1,9 +1,9 @@
 import * as React from "react";
 import classes from "./VerticalListing.scss";
 import {HorizontalListing} from "./HorizontalListing";
-import {SwatchItem} from "../data";
 import {Thumbnail} from "../general";
 import {appendClassName} from "../internal/Utils"
+import {SwatchItem} from "react-home-ar";
 
 type VerticalListingProps = {
     visible: boolean,

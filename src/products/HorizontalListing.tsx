@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./HorizontalListing.scss";
-import {SwatchItem} from "../data";
 import {Thumbnail} from "../general";
+import {SwatchItem} from "react-home-ar";
 
 type HorizontalListingProps = {
     visible: boolean,

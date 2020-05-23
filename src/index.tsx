@@ -7,6 +7,3 @@ export * from "./visualizer"
 
 //products / swatches, listings
 export * from "./products"
-
-//Data
-export * from "./data"
