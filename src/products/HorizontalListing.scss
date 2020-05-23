@@ -1,4 +1,4 @@
-.horizontalListing {
+.swatchListing {
   background-color: #efefef;
   padding-top: 10px;
   overflow-x: scroll;
@@ -6,37 +6,37 @@
   display: flex;
 }
 
-.horizontalListingContent {
+.swatchListingContent {
   flex: 0 0 auto;
   height: 100%;
   padding-left: 3px;
   padding-right: 3px;
 }
 
-.horizontalListingItem {
+.swatchListingItem {
   position: relative;
   display: inline-block;
   width: 100px;
   padding: 3px;
 }
 
-.horizontalListingItemSelected {
-  @extend .horizontalListingItem;
+.swatchListingItemSelected {
+  @extend .swatchListingItem;
   border: 1px solid #555555;
 }
 
-.horizontalListingDetails {
+.swatchListingDetails {
   display: flex;
   flex-direction: column;
 }
 
-.horizontalListingImage {
+.swatchListingImage {
   object-fit: cover;
   height: 95px;
   border: 1px solid #aeaeae;
 }
 
-.horizontalListingInfo {
+.swatchListingInfo {
   font-size: 14px;
   text-align: center;
 }

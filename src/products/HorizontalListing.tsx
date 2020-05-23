@@ -1,62 +1,35 @@
 import * as React from "react";
 import classes from "./HorizontalListing.scss";
 import {Thumbnail} from "../general";
+import {SwatchListing, SwatchListingProps} from "./SwatchListing";
 import {SwatchItem} from "react-home-ar";
+import {ReactNode} from "react";
+import {appendClassName} from "../internal/Utils";
 
-type HorizontalListingProps = {
-    visible: boolean,
-    className?:string
-    columns?:SwatchItem[]
-    selectedSwatch?:SwatchItem,
-    onClick:(item:SwatchItem)=>void
-    resolveThumbnailPath:(swatch:SwatchItem)=>string|undefined
-}
+export type HorizontalListingProps = SwatchListingProps
 
-function appendClassName(current:string, name:string|undefined) {
-    if (name) {
-        return `${current} ${name}`
+export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
+    protected constructor(props:HorizontalListingProps) {
+        super(props, "horizontal-swatch-listing", classes)
     }
-    return current
-}
 
-export const HorizontalListingCached = React.memo<HorizontalListingProps>(
-    (cProps) => {
-        if (cProps.visible && cProps.columns) {
-            let className = appendClassName("horizontal-swatch-listing", classes.horizontalListing)
-            className = appendClassName(className, cProps.className)
-            return (
-                <div className={className}>
-                    <div className={appendClassName("horizontal-swatch-listing-content", classes.horizontalListingContent)}>
-                        {cProps.columns.map((swatch) => {
-                            let className = appendClassName("horizontal-swatch-listing-item",
-                                cProps.selectedSwatch === swatch ? classes.horizontalListingItemSelected : classes.horizontalListingItem)
+    protected renderSwatch(swatch:SwatchItem): ReactNode {
+        let className = appendClassName("horizontal-swatch-listing-item",
+            this.props.selectedSwatch === swatch ? classes.swatchListingItemSelected : classes.swatchListingItem)
 
-                            if (cProps.selectedSwatch === swatch) {
-                                className = appendClassName(className, "selected")
-                            }
+        if (this.props.selectedSwatch === swatch) {
+            className = appendClassName(className, "selected")
+        }
 
-                            return (
-                                <div key={swatch.key} onClick={()=>cProps.onClick(swatch)} className={className}>
-                                    <div className={appendClassName("horizontal-swatch-listing-details", classes.horizontalListingDetails)}>
-                                        <Thumbnail className={appendClassName("horizontal-swatch-listing-image", classes.horizontalListingImage)} swatch={swatch} resolveThumbnailPath={cProps.resolveThumbnailPath} />
-                                        <div className={appendClassName("horizontal-swatch-listing-info", classes.horizontalListingInfo)}>
-                                            {swatch.displayName}
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        })}
+        return (
+            <div key={swatch.key} onClick={()=>this.props.onClick(swatch)} className={className}>
+                <div className={appendClassName("horizontal-swatch-listing-details", classes.swatchListingDetails)}>
+                    <Thumbnail className={appendClassName("horizontal-swatch-listing-image", classes.swatchListingImage)} swatch={swatch} resolveThumbnailPath={this.props.resolveThumbnailPath} />
+                    <div className={appendClassName("horizontal-swatch-listing-info", classes.swatchListingInfo)}>
+                        {swatch.displayName}
                     </div>
                 </div>
-            );
-        }
-        return (<aside />);
+            </div>
+        )
     }
-);
-
-export function HorizontalListing(props: HorizontalListingProps) {
-
-    return (
-        <HorizontalListingCached {...props} />
-    )
 }

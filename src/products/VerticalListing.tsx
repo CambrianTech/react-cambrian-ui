@@ -4,59 +4,41 @@ import {HorizontalListing} from "./HorizontalListing";
 import {Thumbnail} from "../general";
 import {appendClassName} from "../internal/Utils"
 import {SwatchItem} from "react-home-ar";
+import {ReactNode} from "react";
+import {SwatchListing, SwatchListingProps} from "./SwatchListing";
 
-type VerticalListingProps = {
-    visible: boolean,
-    className?:string
-    rows?:SwatchItem[]
-    selectedRow?:SwatchItem
-    selectedColumn?:SwatchItem
-    onClick:(item:SwatchItem)=>void
-    resolveThumbnailPath:(swatch:SwatchItem)=>string|undefined
+export type VerticalListingProps = SwatchListingProps & {
+    selectedSubSwatch?:SwatchItem
 }
 
-export const VerticalListingCached = React.memo<VerticalListingProps>(
-    (cProps) => {
-        if (cProps.visible && cProps.rows) {
-            let className = appendClassName("vertical-swatch-listing", classes.verticalListing)
-            className = appendClassName(className, cProps.className)
-
-            return (
-                <div className={className}>
-                    <div className={appendClassName("vertical-swatch-listing-content", classes.verticalListingContent)}>
-                        {cProps.rows.map((swatch) => {
-                            return (
-                                <div key={swatch.key} className={appendClassName("vertical-swatch-listing-item", classes.verticalListingItem)}>
-                                    <div onClick={()=>cProps.onClick(swatch)}
-                                         className={appendClassName("vertical-swatch-listing-details", classes.verticalListingDetails)}>
-
-                                        <Thumbnail className={appendClassName("vertical-swatch-listing-image", classes.verticalListingImage)} swatch={swatch} resolveThumbnailPath={cProps.resolveThumbnailPath} />
-
-                                        <div className={appendClassName("vertical-swatch-listing-info", classes.verticalListingInfo)}>
-                                            <div className={appendClassName("vertical-swatch-listing-title", classes.verticalListingTitle)}>{swatch.displayName}</div>
-                                            <div className={appendClassName("vertical-swatch-listing-description", classes.verticalListingDescription)}>{swatch.description}</div>
-                                        </div>
-
-                                    </div>
-                                    <HorizontalListing visible={swatch.hasColumns && cProps.selectedRow === swatch}
-                                                       selectedSwatch={cProps.selectedColumn}
-                                                       onClick={cProps.onClick}
-                                                       resolveThumbnailPath={cProps.resolveThumbnailPath}
-                                                       columns={swatch.children} />
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
-            );
-        }
-        return (<aside />);
+export class VerticalListing extends SwatchListing<VerticalListingProps> {
+    protected constructor(props:VerticalListingProps) {
+        super(props, "vertical-swatch-listing", classes)
     }
-);
 
-export function VerticalListing(props: VerticalListingProps) {
+    protected renderSwatch(swatch:SwatchItem): ReactNode {
+        return (
+            <div key={swatch.key} className={appendClassName("vertical-swatch-listing-item", classes.swatchListingItem)}>
+                <div onClick={()=>this.props.onClick(swatch)}
+                     className={appendClassName("vertical-swatch-listing-details", classes.swatchListingDetails)}>
 
-    return (
-        <VerticalListingCached {...props} />
-    )
+                    <Thumbnail className={appendClassName("vertical-swatch-listing-image", classes.swatchListingImage)} swatch={swatch} resolveThumbnailPath={this.props.resolveThumbnailPath} />
+
+                    <div className={appendClassName("vertical-swatch-listing-info", classes.swatchListingInfo)}>
+                        <div className={appendClassName("vertical-swatch-listing-title", classes.swatchListingTitle)}>{swatch.displayName}</div>
+                        <div className={appendClassName("vertical-swatch-listing-description", classes.swatchListingDescription)}>{swatch.description}</div>
+                    </div>
+
+                </div>
+
+                {swatch.hasColumns && this.props.selectedSwatch === swatch &&
+                <HorizontalListing
+                    selectedSwatch={this.props.selectedSubSwatch}
+                    onClick={this.props.onClick}
+                    resolveThumbnailPath={this.props.resolveThumbnailPath}
+                    swatches={swatch.children} />}
+
+            </div>
+        )
+    }
 }
