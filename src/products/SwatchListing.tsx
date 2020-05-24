@@ -51,7 +51,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     }
 
     private filtersChanged(nextProps: Readonly<T>) {
-        if (nextProps.filters !== this.props.filters) return true
+        if (nextProps.filters !== this.props.filters) return true;
         if (nextProps.filters && this.props.filters) {
             if (nextProps.filters.length !== this.props.filters.length) {
                 return true
@@ -61,10 +61,11 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         return false
     }
 
-    // shouldComponentUpdate(nextProps: Readonly<T>, nextState: Readonly<{}>, nextContext: any): boolean {
-    //     const selectedSwatchChanged = nextProps.selectedSwatch !== this.props.selectedSwatch
-    //     return selectedSwatchChanged || this.filtersChanged(nextProps)
-    // }
+    shouldComponentUpdate(nextProps: Readonly<T>, nextState: Readonly<{}>, nextContext: any): boolean {
+        //const selectedSwatchChanged = (nextProps.selectedSwatch !== this.props.selectedSwatch);
+
+        return this.filtersChanged(nextProps) || nextProps !== this.props
+    }
 
     render() {
         if (!this.props.swatches) {
