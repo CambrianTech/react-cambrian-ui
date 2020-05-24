@@ -1,9 +1,9 @@
 import * as React from "react";
-import {CBARAssetType, ProductBase, SwatchItem} from "react-home-ar";
+import {CBARAssetType, CBARSurfaceType, ProductBase, SwatchItem} from "react-home-ar";
 import {appendClassName} from "../internal/Utils";
 import {ReactNode} from "react";
 
-export interface SwatchListingProps {
+export type SwatchListingProps = {
     className?:string
     swatches?:SwatchItem[]
     selectedSwatch?:SwatchItem
@@ -12,8 +12,9 @@ export interface SwatchListingProps {
     filters?:SwatchListingFilter[]
 }
 
-export interface SwatchListingFilter {
+export type SwatchListingFilter = {
     assetType?:CBARAssetType
+    surfaceType?:CBARSurfaceType
 }
 
 export abstract class SwatchListing<T extends SwatchListingProps> extends React.Component<T> {
@@ -25,8 +26,15 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     protected matchesFilter(swatch:SwatchItem, filter:SwatchListingFilter) : boolean {
         const product = swatch as ProductBase
-        if (filter.assetType && product) {
-            return product.assetTypes.indexOf(filter.assetType) >= 0
+        if (product) {
+            let matches = true
+            if (filter.assetType) {
+                matches = matches && product.assetTypes.indexOf(filter.assetType) >= 0
+            }
+            if (filter.surfaceType) {
+                matches = matches && product.surfaceTypes.indexOf(filter.surfaceType) >= 0
+            }
+            return matches
         }
         return true
     }
