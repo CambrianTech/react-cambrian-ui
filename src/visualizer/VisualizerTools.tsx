@@ -2,7 +2,7 @@ import * as React from "react";
 import {Fab} from "@material/react-fab";
 import '@material/react-fab/dist/fab.css';
 import {useCallback} from "react";
-import {CBARContext} from "react-home-ar";
+import {CBARAsset, CBARContext, CBARSurface} from "react-home-ar";
 import MaterialIcon from "@material/react-material-icon";
 import {RotateTool} from "./RotateTool";
 import classes from "./VisualizerTools.scss";
@@ -17,10 +17,12 @@ export enum VisualizerToolMode {
 }
 
 type VisualizerToolsProperties = {
+    context:CBARContext | undefined
+    selectedAsset:CBARAsset | undefined
+    selectedSurface:CBARSurface | undefined
+
     visible:boolean
     className?:string
-
-    context:CBARContext|undefined
 
     mode:VisualizerToolMode
     historySize:number
@@ -68,9 +70,9 @@ export function VisualizerTools(props: VisualizerToolsProperties) {
             {props.visible && props.context && (
                 <div className={className}>
                     <Fab className={classes.toolButton} onClick={onChangeImage} icon={<MaterialIcon icon='add_a_photo' />} />
-                    {currentScene && currentScene.selectedAsset && <Fab className={classes.toolButton} onClick={rotateButtonClicked} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
-                    {currentScene && currentScene.selectedAsset && <Fab className={classes.toolButton} onClick={translateButtonClicked} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}
-                    {currentScene && currentScene.selectedSurface && currentScene.isEditable && <Fab className={classes.toolButton} icon={<MaterialIcon icon='edit' />} />}
+                    {props.selectedAsset && <Fab className={classes.toolButton} onClick={rotateButtonClicked} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
+                    {props.selectedAsset && <Fab className={classes.toolButton} onClick={translateButtonClicked} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}
+                    {props.selectedSurface && currentScene && currentScene.isEditable && <Fab className={classes.toolButton} icon={<MaterialIcon icon='edit' />} />}
 
                     <RotateTool visible={props.mode === VisualizerToolMode.Rotate}
                                 onRotationFinished={rotateFinished}
