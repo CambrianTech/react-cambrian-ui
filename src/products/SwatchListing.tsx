@@ -29,7 +29,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         if (product) {
             let matches = true
             if (filter.assetType) {
-                matches = matches && product.assetTypes.indexOf(filter.assetType) >= 0
+                matches = matches && product.assetType === filter.assetType
             }
             if (filter.surfaceType) {
                 matches = matches && product.surfaceTypes.indexOf(filter.surfaceType) >= 0
