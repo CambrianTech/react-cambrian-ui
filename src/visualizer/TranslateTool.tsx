@@ -34,36 +34,32 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
                     <div>
                         <div className={classes.translateToolSlider}>
                             <div className={classes.translateToolSliderLabels}>
-                                <div>-10</div>
+                                <div>-5</div>
                                 <div>|&nbsp;</div>
-                                <div>-5°</div>
+                                <div>-2.5</div>
                                 <div>|&nbsp;</div>
                                 <div>0</div>
                                 <div>|&nbsp;</div>
-                                <div>5</div>
+                                <div>2.5</div>
                                 <div>|&nbsp;</div>
-                                <div>10</div>
+                                <div>5</div>
                             </div>
                             <div className={classes.translateToolSliderBar}>
-                                <input type="range" min={-10} max={10} step={0.01} defaultValue={cProps.xPos + ""}
+                                <input type="range" min={-5} max={5} step={0.01} defaultValue={cProps.xPos + ""}
                                        onChange={e => cProps.onTranslationXChanged(Number(e.target.value))} list="range-values" />
                             </div>
 
                             <div className={classes.translateToolSliderBar}>
-                                <input type="range" min={-10} max={10} step={0.01} defaultValue={cProps.yPos + ""}
+                                <input type="range" min={-5} max={5} step={0.01} defaultValue={cProps.yPos + ""}
                                        onChange={e => cProps.onTranslationYChanged(Number(e.target.value))} list="range-values" />
                             </div>
 
                             <datalist id="range-values">
-                                <option value="-10" />
-                                <option value="-7.5" />
                                 <option value="-5" />
                                 <option value="-2.5" />
                                 <option value="0" />
                                 <option value="2.5" />
                                 <option value="5.0" />
-                                <option value="7.5" />
-                                <option value="10" />
                             </datalist>
                         </div>
                         <div className={classes.translateToolSliderFooter}>
