@@ -46,6 +46,7 @@ export class ContextMenu extends React.Component<ContextMenuProps, ContextMenuSt
         if (obj && event) {
             const menuSize = this.contextMenu.current.getBoundingClientRect()
             const parentSize = this.contextMenu.current.parentElement!.getBoundingClientRect()
+
             const xPos = Math.max(0, Math.min(event.mouseEvent.clientX - 20, parentSize.width - menuSize.width))
             const yPos = Math.max(0, Math.min(event.mouseEvent.clientY - 20, parentSize.height - menuSize.height))
 
