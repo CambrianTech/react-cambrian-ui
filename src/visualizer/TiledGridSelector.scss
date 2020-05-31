@@ -1,0 +1,43 @@
+.tiledGridSelector {
+  position: absolute;
+  z-index: 10;
+  top:30px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: white;
+  user-select: none;
+}
+
+.tiledGridSelectorElement {
+  display: flex;
+  flex-direction: row;
+
+  border: 1px solid #f0f0f0;
+  justify-content: space-between;
+  width: 200px;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+
+  color: #555555;
+}
+
+.tiledGridSelectorElement:hover {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+
+.tiledGridSelectorElement .selected {
+  background-color: #555555;
+  color: #ffffff;
+}
+
+.tiledGridSelectorElementText {
+
+}
+
+.tiledGridSelectorElementImage {
+  height: 60px;
+}
