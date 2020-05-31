@@ -22,16 +22,15 @@
   cursor: pointer;
 
   color: #555555;
+
+  &:hover {
+    background-color: #1f1f1f;
+    color: #ffffff;
+  }
 }
 
-.tiledGridSelectorElement:hover {
-  background-color: #1f1f1f;
-  color: #ffffff;
-}
-
-.tiledGridSelectorElement .selected {
-  background-color: #555555;
-  color: #ffffff;
+.tiledGridSelectorElement_Selected {
+  border: 2px solid #1f1f1f;
 }
 
 .tiledGridSelectorElementText {

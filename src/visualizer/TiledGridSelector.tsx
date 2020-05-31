@@ -1,4 +1,4 @@
-import {default as React, useCallback} from "react";
+import {default as React, useCallback, useEffect, useState} from "react";
 
 import {appendClassName} from "../internal/Utils";
 import classes from "./TiledGridSelector.scss";
@@ -7,8 +7,7 @@ import {CBARTiledAsset, TiledGridType} from "react-home-ar";
 type TiledGridSelectorProps = {
     visible: boolean
     className?:string
-    selectedGridType?: TiledGridType
-    tiledAsset?: CBARTiledAsset
+    tiledAsset: CBARTiledAsset | undefined
     onGridTypeSelected?: (type: TiledGridType) => void
     resolveImagePath: (name:string, type: TiledGridType) => string
 }
@@ -33,7 +32,9 @@ export const TiledGridSelectorCached = React.memo<TiledGridSelectorPropsInternal
                         const isSelected = type === props.internalSelectedGridType
                         let className = appendClassName("tiled-grid-selector-element", classes.tiledGridSelectorElement)
                         if (isSelected) {
-                            className = appendClassName("selected", className)
+                            //annoying that multiple class names didn't work: aka &.selected
+                            className = appendClassName(className, classes.tiledGridSelectorElement_Selected)
+                            className = appendClassName(className,"selected")
                         }
                         return (
                             <div key={name} className={className} onClick={()=>props.internalGridTypeSelected(type)}>
@@ -50,30 +51,31 @@ export const TiledGridSelectorCached = React.memo<TiledGridSelectorPropsInternal
             );
         }
         return (<aside />);
-    },
-    (prevProps, nextProps) => {
-        return prevProps.visible === nextProps.visible;
     }
 );
 
 export function TiledGridSelector(props: TiledGridSelectorProps) {
 
+    const [gridType, setGridType] = useState<TiledGridType>()
+
     const onGridTypeSelected = useCallback((type: TiledGridType) => {
         if (props.tiledAsset) {
-            console.log(`Set grid type to ${type}`)
             props.tiledAsset.gridType = type
+            setGridType(type)
         }
         if (props.onGridTypeSelected) {
             props.onGridTypeSelected(type)
         }
     }, [props])
 
-    const selectedType = props.tiledAsset ? props.tiledAsset.gridType : props.selectedGridType
+    useEffect(()=>{
+        setGridType(props.tiledAsset ? props.tiledAsset.gridType : undefined)
+    }, [props.tiledAsset])
 
     return (
         <TiledGridSelectorCached
             internalGridTypeSelected={onGridTypeSelected}
-            internalSelectedGridType={selectedType}
+            internalSelectedGridType={gridType}
             {...props} />
     )
 }
