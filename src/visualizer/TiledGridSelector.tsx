@@ -2,7 +2,7 @@ import {default as React, useCallback, useEffect, useState} from "react";
 
 import {appendClassName} from "../internal/Utils";
 import classes from "./TiledGridSelector.scss";
-import {CBARTiledAsset, TiledGridType} from "react-home-ar";
+import {CBARTiledAsset, TiledGridType, getEnumKeys} from "react-home-ar";
 
 type TiledGridSelectorProps = {
     visible: boolean
@@ -10,6 +10,7 @@ type TiledGridSelectorProps = {
     tiledAsset: CBARTiledAsset | undefined
     onGridTypeSelected?: (type: TiledGridType) => void
     resolveImagePath: (name:string, type: TiledGridType) => string
+    restrictToProduct?:boolean
 }
 
 type TiledGridSelectorPropsInternal = TiledGridSelectorProps & {
@@ -23,7 +24,12 @@ export const TiledGridSelectorCached = React.memo<TiledGridSelectorPropsInternal
             let className = appendClassName("tiled-grid-selector", classes.tiledGridSelector)
             className = appendClassName(className, props.className)
 
-            const types = Object.keys(TiledGridType).filter(key => !isNaN(Number(TiledGridType[key])));
+            let types = getEnumKeys(TiledGridType)
+
+            if (props.restrictToProduct && props.tiledAsset && props.tiledAsset.product) {
+                const availableTypes = props.tiledAsset.product.patterns
+                types = types.filter(type=>availableTypes.indexOf(TiledGridType[type]) >= 0)
+            }
 
             return (
                 <div className={className}>
