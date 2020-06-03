@@ -1,8 +1,10 @@
-import {default as React, useCallback, useEffect, useState} from "react";
+import {default as React, useCallback, useEffect, useRef, useState} from "react";
 
 import {appendClassName} from "../internal/Utils";
 import classes from "./TiledGridSelector.scss";
 import {CBARTiledAsset, TiledGridType, getEnumKeys} from "react-home-ar";
+import {Fab} from "@material/react-fab";
+import MaterialIcon from "@material/react-material-icon";
 
 type TiledGridSelectorProps = {
     visible: boolean
@@ -11,11 +13,15 @@ type TiledGridSelectorProps = {
     onGridTypeSelected?: (type: TiledGridType) => void
     resolveImagePath: (name:string, type: TiledGridType) => string
     restrictToProduct?:boolean
+    onClose:()=>void
+    timeout?:number
 }
 
 type TiledGridSelectorPropsInternal = TiledGridSelectorProps & {
     internalGridTypeSelected: (type: TiledGridType) => void
     internalSelectedGridType: TiledGridType|undefined
+    internalOnMouseOut:()=>void
+    internalOnMouseOver:()=>void
 }
 
 export const TiledGridSelectorCached = React.memo<TiledGridSelectorPropsInternal>(
@@ -32,7 +38,8 @@ export const TiledGridSelectorCached = React.memo<TiledGridSelectorPropsInternal
             }
 
             return (
-                <div className={className}>
+                <div className={className} onMouseOver={props.internalOnMouseOver} onMouseOut={props.internalOnMouseOut}>
+                    <Fab onClick={props.onClose} className={classes.tiledGridSelectorClose} icon={<MaterialIcon icon='close' />} />
                     {types.map((name) => {
                         const type = TiledGridType[name]
                         const isSelected = type === props.internalSelectedGridType
@@ -78,10 +85,28 @@ export function TiledGridSelector(props: TiledGridSelectorProps) {
         setGridType(props.tiledAsset ? props.tiledAsset.gridType : undefined)
     }, [props.tiledAsset])
 
+    const timeoutHandle = useRef<number>()
+    const onMouseOut = useCallback(() => {
+        if (props.timeout) {
+            timeoutHandle.current = window.setTimeout(()=>{
+                timeoutHandle.current = undefined
+                props.onClose()
+            }, props.timeout)
+        }
+    }, [timeoutHandle, props])
+
+    const onMouseOver = useCallback(() => {
+        if (timeoutHandle.current) {
+            window.clearInterval(timeoutHandle.current)
+        }
+    }, [timeoutHandle])
+
     return (
         <TiledGridSelectorCached
             internalGridTypeSelected={onGridTypeSelected}
             internalSelectedGridType={gridType}
+            internalOnMouseOver={onMouseOver}
+            internalOnMouseOut={onMouseOut}
             {...props} />
     )
 }

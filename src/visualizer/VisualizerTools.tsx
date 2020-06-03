@@ -2,17 +2,19 @@ import * as React from "react";
 import {Fab} from "@material/react-fab";
 import '@material/react-fab/dist/fab.css';
 import {useCallback} from "react";
-import {CBARContext, CBARSurface, CBARTangibleAsset} from "react-home-ar";
+import {CBARContext, CBARSurface, CBARTangibleAsset, CBARTiledAsset, TiledGridType} from "react-home-ar";
 import MaterialIcon from "@material/react-material-icon";
 import {RotateTool} from "./RotateTool";
 import classes from "./VisualizerTools.scss";
 import {appendClassName} from "../internal/Utils"
 import {TranslateTool} from "./TranslateTool";
+import {TiledGridSelector} from "./TiledGridSelector";
 
 export enum VisualizerToolMode {
     None,
     Rotate,
     Translate,
+    Pattern,
     Draw,
     Erase
 }
@@ -39,6 +41,9 @@ type VisualizerToolsProperties = {
     initialYPos:number
     onTranslationChanged: (xPos: number, yPos: number) => void
     onTranslationFinished: (commit: boolean, xPos: number, yPos: number) => void
+
+    patternSelectorImagePath?: (name:string, type: TiledGridType) => string
+    patternSelectorRestrictToProducts?: boolean
 
     changeMode: (mode:VisualizerToolMode) => void
 }
@@ -76,17 +81,31 @@ export function VisualizerTools(props: VisualizerToolsProperties) {
         props.changeMode(VisualizerToolMode.Translate)
     } , [props]);
 
+    const patternButtonClicked = useCallback(() => {
+        props.changeMode(props.mode === VisualizerToolMode.Pattern ? VisualizerToolMode.None : VisualizerToolMode.Pattern)
+    } , [props]);
+
     let className = appendClassName("visualizer-tools", classes.visualizerTools)
     className = appendClassName(className, props.className)
+
+    const tiledAsset = props.selectedAsset && props.selectedAsset instanceof CBARTiledAsset ? props.selectedAsset as CBARTiledAsset : undefined
+    const product = props.selectedAsset ? props.selectedAsset.product : undefined
+
+    const canMove = props.selectedAsset && props.selectedAsset.canMove;
+    const canRotate = props.selectedAsset && props.selectedAsset.canMove;
+
+    const canEditPattern = tiledAsset && product
+    const canEditSurface = props.selectedSurface && currentScene && currentScene.isEditable;
 
     return (
         <div>
             {props.visible && props.context && (
                 <div className={className}>
                     <Fab className={classes.toolButton} onClick={onChangeImage} icon={<MaterialIcon icon='add_a_photo' />} />
-                    {props.selectedAsset && props.selectedAsset.canMove && <Fab className={classes.toolButton} onClick={rotateButtonClicked} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
-                    {props.selectedAsset && props.selectedAsset.canMove && <Fab className={classes.toolButton} onClick={translateButtonClicked} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}
-                    {props.selectedSurface && currentScene && currentScene.isEditable && <Fab className={classes.toolButton} icon={<MaterialIcon icon='edit' />} />}
+                    {canMove && <Fab className={classes.toolButton} onClick={rotateButtonClicked} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
+                    {canRotate && <Fab className={classes.toolButton} onClick={translateButtonClicked} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}
+                    {canEditPattern && <Fab className={classes.toolButton} onClick={patternButtonClicked} icon={<MaterialIcon icon='view_compact'  className={classes.patternToolIcon} />} />}
+                    {canEditSurface && <Fab className={classes.toolButton} icon={<MaterialIcon icon='edit' />} />}
 
                     <RotateTool visible={props.mode === VisualizerToolMode.Rotate}
                                 onRotationFinished={rotateFinished}
@@ -97,6 +116,13 @@ export function VisualizerTools(props: VisualizerToolsProperties) {
                                    onTranslationFinished={translateFinished}
                                    onTranslationChanged={props.onTranslationChanged}
                                    xPos={props.initialXPos} yPos={props.initialYPos} />
+
+                    <TiledGridSelector visible={props.mode === VisualizerToolMode.Pattern}
+                                       resolveImagePath={props.patternSelectorImagePath!}
+                                       tiledAsset={tiledAsset}
+                                       onClose={patternButtonClicked}
+                                       timeout={2000}
+                                       restrictToProduct={props.patternSelectorRestrictToProducts} />
                 </div>
             )}
         </div>

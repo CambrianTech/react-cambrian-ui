@@ -10,6 +10,17 @@
   user-select: none;
 }
 
+.tiledGridSelectorClose {
+  position: absolute;
+  z-index: 10;
+
+  top:-15px;
+  left:-15px;
+
+  width: 30px;
+  height: 30px;
+}
+
 .tiledGridSelectorElement {
   display: flex;
   flex-direction: row;
