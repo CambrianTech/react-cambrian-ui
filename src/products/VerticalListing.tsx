@@ -27,7 +27,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                     <div className={appendClassName("vertical-swatch-listing-info", classes.swatchListingInfo)}>
                         <div className={appendClassName("vertical-swatch-listing-title", classes.swatchListingTitle)}>{swatch.displayName}</div>
                         <div className={appendClassName("vertical-swatch-listing-description", classes.swatchListingDescription)}>{swatch.description}</div>
-                        <div className={appendClassName("vertical-swatch-listing-count", classes.swatchListingColorCount)}>{swatch.children.length} Colors</div>
+                        <div className={appendClassName("vertical-swatch-listing-secondary-description", classes.swatchListingSecondaryDescription)}>{swatch.secondaryDescription}</div>
                     </div>
 
                 </div>
