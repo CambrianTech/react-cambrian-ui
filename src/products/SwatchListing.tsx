@@ -22,17 +22,11 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     protected get swatches() : SwatchItem[] {
 
         if (this.props.swatches) {
-            let swatches:SwatchItem[] = this.props.swatches as SwatchItem[]
-
-            if (this.props.filters) {
-                this.props.filters.forEach(filter => {
-                    swatches = swatches.filter((swatch)=>{
-                        return filter.matches(swatch as ProductBase)
-                    })
-                })
+            const items = this.props.swatches as ProductBase[]
+            if (this.props.filters && this.props.filters.length && items.length) {
+                return DataFilter.applyFilters(this.props.filters as DataFilter[], items)
             }
-
-            return swatches
+            return items
         }
 
         return []
