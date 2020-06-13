@@ -12,7 +12,7 @@ export type SwatchListingProps = {
     filters?:DataFilter[]
 }
 
-export abstract class SwatchListing<T extends SwatchListingProps> extends React.Component<T> {
+export abstract class SwatchListing<T extends SwatchListingProps> extends React.Component<T,any> {
     protected constructor(props:T, protected listingName:string, protected scss:any) {
         super(props)
     }
@@ -32,21 +32,32 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         return []
     }
 
+    private filtersToString(filters:DataFilter[]) {
+        let values:string[] = []
+        filters.forEach(filter=>values.push(filter.value))
+        return values.join(',')
+    }
+
     private filtersChanged(nextProps: Readonly<T>) {
         if (nextProps.filters !== this.props.filters) return true;
         if (nextProps.filters && this.props.filters) {
             if (nextProps.filters.length !== this.props.filters.length) {
                 return true
             }
-            return JSON.stringify(nextProps.filters) !== JSON.stringify(this.props.filters)
+            return this.filtersToString(nextProps.filters as DataFilter[]) !== this.filtersToString(this.props.filters as DataFilter[])
         }
         return false
     }
 
-    shouldComponentUpdate(nextProps: Readonly<T>, nextState: Readonly<{}>, nextContext: any): boolean {
-        //const selectedSwatchChanged = (nextProps.selectedSwatch !== this.props.selectedSwatch);
+    private dataChanged(nextProps: Readonly<T>) {
+        return nextProps.swatches !== this.props.swatches
+    }
 
-        return this.filtersChanged(nextProps) || nextProps !== this.props
+    shouldComponentUpdate(nextProps: Readonly<T>): boolean {
+        const dataDidChange = this.dataChanged(nextProps)
+        const selectedSwatchChanged = (nextProps.selectedSwatch !== this.props.selectedSwatch);
+        const filtersDidChange = this.filtersChanged(nextProps)
+        return dataDidChange || selectedSwatchChanged || filtersDidChange
     }
 
     render() {
@@ -57,10 +68,14 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         let className = appendClassName(this.listingName, this.scss.swatchListing)
         className = appendClassName(className, this.props.className)
 
+        const swatches = this.swatches
+
+        //console.log(`Rendering ${swatches.length} swatches`)
+
         return (
             <div className={className}>
                 <div className={appendClassName(`${this.listingName}-content`, this.scss.swatchListingContent)}>
-                    {this.swatches.map((swatch) => {
+                    {swatches.map((swatch) => {
                         return this.renderSwatch(swatch)
                     })}
                 </div>

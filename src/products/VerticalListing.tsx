@@ -16,6 +16,10 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         super(props, "vertical-swatch-listing", classes)
     }
 
+    // componentWillUpdate(nextProps: Readonly<VerticalListingProps>, nextState: Readonly<any>) {
+    //     console.log("Updating VerticalListing")
+    // }
+
     protected renderSwatch(swatch:SwatchItem): ReactNode {
         return (
             <div key={swatch.key} className={appendClassName("vertical-swatch-listing-item", classes.swatchListingItem)}>
