@@ -16,6 +16,10 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         super(props, "vertical-swatch-listing", classes)
     }
 
+    shouldComponentUpdate(nextProps: Readonly<VerticalListingProps>): boolean {
+        return super.shouldComponentUpdate(nextProps) || nextProps.selectedSubSwatch != this.props.selectedSubSwatch
+    }
+
     // componentWillUpdate(nextProps: Readonly<VerticalListingProps>, nextState: Readonly<any>) {
     //     console.log("Updating VerticalListing")
     // }
