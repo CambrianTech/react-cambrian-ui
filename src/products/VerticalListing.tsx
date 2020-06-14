@@ -5,7 +5,7 @@ import {Thumbnail} from "../general";
 import {appendClassName} from "../internal/Utils"
 import {SwatchItem} from "react-home-ar";
 import {ReactNode} from "react";
-import {SwatchListing, SwatchListingProps, SwatchListingState} from "./SwatchListing";
+import {SwatchListing, SwatchListingProps} from "./SwatchListing";
 
 export type VerticalListingProps = SwatchListingProps & {
     selectedSubSwatch?:SwatchItem
@@ -18,7 +18,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
 
     shouldComponentUpdate(nextProps: Readonly<VerticalListingProps>): boolean {
         const shouldUpdate = super.shouldComponentUpdate(nextProps) || nextProps.selectedSubSwatch != this.props.selectedSubSwatch
-        console.log(`Should update? ${shouldUpdate}`)
+        //console.log(`Should update? ${shouldUpdate}`)
         return shouldUpdate
     }
 

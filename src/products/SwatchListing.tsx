@@ -82,7 +82,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
         const swatches = this.swatches
 
-        console.log(`Rendering ${swatches.length} swatches`)
+        //console.log(`Rendering ${swatches.length} swatches`)
 
         return (
             <div className={className}>
