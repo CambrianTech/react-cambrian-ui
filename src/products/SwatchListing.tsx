@@ -12,25 +12,26 @@ export type SwatchListingProps = {
     filters?:DataFilter[]
 }
 
-export abstract class SwatchListing<T extends SwatchListingProps> extends React.Component<T,any> {
+export type SwatchListingState = {
+    filterString:string|undefined
+}
+
+export abstract class SwatchListing<T extends SwatchListingProps> extends React.Component<T,SwatchListingState> {
     protected constructor(props:T, protected listingName:string, protected scss:any) {
         super(props)
+        this.state = {
+            filterString:undefined,
+        }
     }
 
     protected abstract renderSwatch(swatch:SwatchItem): ReactNode;
 
     protected get swatches() : SwatchItem[] {
+        return DataFilter.applyFilters(this.filters, this.props.swatches as ProductBase[])
+    }
 
-        if (this.props.swatches) {
-            //todo: maybe cache this on filter changes
-            const items = this.props.swatches as ProductBase[]
-            const filters:DataFilter[] = this.props.filters ? this.props.filters as DataFilter[] : []
-            const filtered =  DataFilter.applyFilters(filters, items)
-            console.log(`Has ${filtered.length} swatches`)
-            return filtered
-        }
-
-        return []
+    protected get filters() : DataFilter[] {
+        return this.props.filters ? this.props.filters as DataFilter[] : []
     }
 
     private filtersToString(filters:DataFilter[]) {
@@ -39,15 +40,16 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         return values.join(',')
     }
 
-    private filtersChanged(nextProps: Readonly<T>) {
-        if (nextProps.filters !== this.props.filters) return true;
+    private filtersChanged(nextProps: Readonly<SwatchListingProps>) {
         if (nextProps.filters && this.props.filters) {
             if (nextProps.filters.length !== this.props.filters.length) {
                 return true
             }
-            return this.filtersToString(nextProps.filters as DataFilter[]) !== this.filtersToString(this.props.filters as DataFilter[])
+            const nextValue = this.filtersToString(nextProps.filters)
+            return nextValue !== this.state.filterString
         }
-        return false
+        //check each are defined
+        return !nextProps.filters === !this.props.filters
     }
 
     private dataChanged(nextProps: Readonly<T>) {
@@ -59,6 +61,15 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         const selectedSwatchChanged = (nextProps.selectedSwatch !== this.props.selectedSwatch);
         const filtersDidChange = this.filtersChanged(nextProps)
         return dataDidChange || selectedSwatchChanged || filtersDidChange
+    }
+
+    componentDidUpdate(prevProps: Readonly<T>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
+        const filterString = this.filtersToString(this.filters)
+        if (filterString !== this.state.filterString) {
+            this.setState({
+                filterString:filterString,
+            })
+        }
     }
 
     render() {
