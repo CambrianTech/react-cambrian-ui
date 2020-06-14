@@ -22,11 +22,12 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     protected get swatches() : SwatchItem[] {
 
         if (this.props.swatches) {
+            //todo: maybe cache this on filter changes
             const items = this.props.swatches as ProductBase[]
-            if (this.props.filters && this.props.filters.length && items.length) {
-                return DataFilter.applyFilters(this.props.filters as DataFilter[], items)
-            }
-            return items
+            const filters:DataFilter[] = this.props.filters ? this.props.filters as DataFilter[] : []
+            const filtered =  DataFilter.applyFilters(filters, items)
+            console.log(`Has ${filtered.length} swatches`)
+            return filtered
         }
 
         return []
@@ -70,7 +71,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
         const swatches = this.swatches
 
-        //console.log(`Rendering ${swatches.length} swatches`)
+        console.log(`Rendering ${swatches.length} swatches`)
 
         return (
             <div className={className}>

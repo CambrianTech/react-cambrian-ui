@@ -17,12 +17,14 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
     }
 
     shouldComponentUpdate(nextProps: Readonly<VerticalListingProps>): boolean {
-        return super.shouldComponentUpdate(nextProps) || nextProps.selectedSubSwatch != this.props.selectedSubSwatch
+        const shouldUpdate = super.shouldComponentUpdate(nextProps) || nextProps.selectedSubSwatch != this.props.selectedSubSwatch
+        console.log(`Should update? ${shouldUpdate}`)
+        return shouldUpdate
     }
 
-    // componentWillUpdate(nextProps: Readonly<VerticalListingProps>, nextState: Readonly<any>) {
-    //     console.log("Updating VerticalListing")
-    // }
+    componentWillUpdate(nextProps: Readonly<VerticalListingProps>, nextState: Readonly<any>) {
+        console.log("Updating VerticalListing")
+    }
 
     protected renderSwatch(swatch:SwatchItem): ReactNode {
         return (
