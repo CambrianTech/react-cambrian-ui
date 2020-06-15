@@ -5,7 +5,7 @@ import {Thumbnail} from "../general";
 import {appendClassName} from "../internal/Utils"
 import {SwatchItem} from "react-home-ar";
 import {ReactNode} from "react";
-import {SwatchListing, SwatchListingProps} from "./SwatchListing";
+import {SwatchListing, SwatchListingProps, SwatchListingState} from "./SwatchListing";
 
 export type VerticalListingProps = SwatchListingProps & {
     selectedSubSwatch?:SwatchItem
@@ -16,10 +16,14 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         super(props, "vertical-swatch-listing", classes)
     }
 
-    shouldComponentUpdate(nextProps: Readonly<VerticalListingProps>): boolean {
-        const shouldUpdate = super.shouldComponentUpdate(nextProps) || nextProps.selectedSubSwatch != this.props.selectedSubSwatch
-        //console.log(`Should update? ${shouldUpdate}`)
-        return shouldUpdate
+    protected dataChanged(nextProps: Readonly<VerticalListingProps>) {
+
+        return nextProps.selectedSubSwatch != this.props.selectedSubSwatch || super.dataChanged(nextProps)
+    }
+
+    componentDidUpdate(prevProps: Readonly<SwatchListingProps & { selectedSubSwatch?: SwatchItem }>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
+        super.componentDidUpdate(prevProps, prevState, snapshot);
+        console.log("Vertical listing updated")
     }
 
     protected renderSwatch(swatch:SwatchItem): ReactNode {
@@ -35,7 +39,6 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                         <div className={appendClassName("vertical-swatch-listing-description", classes.swatchListingDescription)}>{swatch.description}</div>
                         <div className={appendClassName("vertical-swatch-listing-secondary-description", classes.swatchListingSecondaryDescription)}>{swatch.secondaryDescription}</div>
                     </div>
-
                 </div>
 
                 {swatch.hasColumns && this.props.selectedSwatch === swatch &&

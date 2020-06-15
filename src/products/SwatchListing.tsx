@@ -52,7 +52,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         return !nextProps.filters === !this.props.filters
     }
 
-    private dataChanged(nextProps: Readonly<T>) {
+    protected dataChanged(nextProps: Readonly<T>) {
         return nextProps.swatches !== this.props.swatches
     }
 
@@ -82,6 +82,16 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
         const swatches = this.swatches
 
+        if (swatches.length) {
+            const parent = swatches[0].parent
+            if (parent instanceof ProductBase) {
+                const parentItem = parent as ProductBase
+                //todo:handle existing declared onUpdate?
+                parentItem.onUpdate = ()=>{
+                    this.forceUpdate()
+                }
+            }
+        }
         //console.log(`Rendering ${swatches.length} swatches`)
 
         return (
