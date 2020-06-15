@@ -27,6 +27,15 @@
   cursor: pointer;
 }
 
+.subSwatchListingContainer {
+  height: 0;
+  transition: height;
+}
+
+.subSwatchListingContainerSelected {
+  height: 100px;
+}
+
 .swatchListingImage {
   border: 1px solid #cfcfcf;
   height: 100px;

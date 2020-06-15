@@ -27,6 +27,13 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
     }
 
     protected renderSwatch(swatch:SwatchItem): ReactNode {
+        const isChildSelected = swatch.hasColumns && this.props.selectedSwatch === swatch
+        let childClassName = appendClassName("vertical-swatch-listing-child", classes.subSwatchListingContainer)
+        if (isChildSelected) {
+            childClassName = appendClassName(childClassName, classes.subSwatchListingContainerSelected)
+            childClassName = appendClassName(childClassName, "selected")
+        }
+
         return (
             <div key={swatch.key} className={appendClassName("vertical-swatch-listing-item", classes.swatchListingItem)}>
                 <div onClick={()=>this.props.onClick(swatch)}
@@ -41,12 +48,14 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                     </div>
                 </div>
 
-                {swatch.hasColumns && this.props.selectedSwatch === swatch &&
-                <HorizontalListing
-                    selectedSwatch={this.props.selectedSubSwatch}
-                    onClick={this.props.onClick}
-                    resolveThumbnailPath={this.props.resolveThumbnailPath}
-                    swatches={swatch.children} />}
+                <div className={childClassName}>
+                    {isChildSelected &&
+                    <HorizontalListing
+                        selectedSwatch={this.props.selectedSubSwatch}
+                        onClick={this.props.onClick}
+                        resolveThumbnailPath={this.props.resolveThumbnailPath}
+                        swatches={swatch.children} />}
+                </div>
 
             </div>
         )
