@@ -30,6 +30,10 @@
   flex-direction: column;
 }
 
+.swatchListingImageContainer {
+  position: relative;
+}
+
 .swatchListingImage {
   object-fit: cover;
   height: 95px;

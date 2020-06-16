@@ -27,6 +27,10 @@
   cursor: pointer;
 }
 
+.swatchListingImageContainer {
+  position: relative;
+}
+
 .subSwatchListingContainer {
   height: 0;
   transition: height;

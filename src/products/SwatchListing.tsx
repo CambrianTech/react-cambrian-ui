@@ -10,6 +10,8 @@ export type SwatchListingProps = {
     onClick:(item:SwatchItem)=>void
     resolveThumbnailPath:(swatch:SwatchItem)=>string|undefined
     filters?:DataFilter[]
+    getSwatchChildren?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
+    getSwatchInfo?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
 }
 
 export type SwatchListingState = {
