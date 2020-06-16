@@ -11,6 +11,7 @@ export type VerticalListingProps = SwatchListingProps & {
     selectedSubSwatch?:SwatchItem
     getSubSwatchChildren?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
     getSubSwatchInfo?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
+    willRenderSubSwatches?:(swatches:SwatchItem[])=>void
 }
 
 export class VerticalListing extends SwatchListing<VerticalListingProps> {
@@ -18,12 +19,11 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         super(props, "vertical-swatch-listing", classes)
     }
 
-    protected dataChanged(nextProps: Readonly<VerticalListingProps>) {
-
-        return nextProps.selectedSubSwatch != this.props.selectedSubSwatch || super.dataChanged(nextProps)
+    protected didDataChange(nextProps: Readonly<VerticalListingProps>) {
+        return nextProps.selectedSubSwatch != this.props.selectedSubSwatch || super.didDataChange(nextProps)
     }
 
-    componentDidUpdate(prevProps: Readonly<SwatchListingProps & { selectedSubSwatch?: SwatchItem }>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
+    componentDidUpdate(prevProps: Readonly<VerticalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
         super.componentDidUpdate(prevProps, prevState, snapshot);
         console.log("Vertical listing updated")
     }
@@ -41,6 +41,14 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         )
     }
 
+    private willRenderSubSwatches(swatches:SwatchItem[]) {
+        if (swatches.length && this.props.willRenderSubSwatches) {
+            if (this.props.willRenderSubSwatches) {
+                this.props.willRenderSubSwatches(swatches)
+            }
+        }
+    }
+
     protected renderSwatch(swatch:SwatchItem): ReactNode {
         const isChildSelected = swatch.hasColumns && this.props.selectedSwatch === swatch
         let childClassName = appendClassName("vertical-swatch-listing-child", classes.subSwatchListingContainer)
@@ -49,7 +57,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             childClassName = appendClassName(childClassName, "selected")
         }
 
-        const swatchChildren = this.props.getSwatchChildren ? this.props.getSwatchChildren(swatch, isChildSelected) : null
+        const swatchChildElements = this.props.getSwatchChildren ? this.props.getSwatchChildren(swatch, isChildSelected) : null
 
         return (
             <div key={swatch.key} className={appendClassName("vertical-swatch-listing-item", classes.swatchListingItem)}>
@@ -57,7 +65,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                      className={appendClassName("vertical-swatch-listing-details", classes.swatchListingDetails)}>
                     <div className={appendClassName("vertical-swatch-listing-image-container", classes.swatchListingImageContainer)}>
                         <Thumbnail className={appendClassName("vertical-swatch-listing-image", classes.swatchListingImage)} swatch={swatch} resolveThumbnailPath={this.props.resolveThumbnailPath} />
-                        {swatchChildren}
+                        {swatchChildElements}
                     </div>
                     {this.getSwatchInfo(swatch,isChildSelected)}
                 </div>
@@ -71,6 +79,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                         swatches={swatch.children}
                         getSwatchChildren={this.props.getSubSwatchChildren}
                         getSwatchInfo={this.props.getSubSwatchInfo}
+                        willRenderSwatches={this.willRenderSubSwatches}
                     />}
                 </div>
 

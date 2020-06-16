@@ -12,6 +12,8 @@ export type SwatchListingProps = {
     filters?:DataFilter[]
     getSwatchChildren?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
     getSwatchInfo?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
+
+    willRenderSwatches?:(swatches:SwatchItem[])=>void
 }
 
 export type SwatchListingState = {
@@ -54,12 +56,12 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         return !nextProps.filters === !this.props.filters
     }
 
-    protected dataChanged(nextProps: Readonly<T>) {
+    protected didDataChange(nextProps: Readonly<T>) {
         return nextProps.swatches !== this.props.swatches
     }
 
     shouldComponentUpdate(nextProps: Readonly<T>): boolean {
-        const dataDidChange = this.dataChanged(nextProps)
+        const dataDidChange = this.didDataChange(nextProps)
         const selectedSwatchChanged = (nextProps.selectedSwatch !== this.props.selectedSwatch);
         const filtersDidChange = this.filtersChanged(nextProps)
         return dataDidChange || selectedSwatchChanged || filtersDidChange
@@ -84,6 +86,10 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
         const swatches = this.swatches
 
+        if (this.props.willRenderSwatches) {
+            this.props.willRenderSwatches(swatches)
+        }
+
         if (swatches.length) {
             const parent = swatches[0].parent
             if (parent instanceof ProductBase) {
@@ -94,6 +100,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
                 }
             }
         }
+
         //console.log(`Rendering ${swatches.length} swatches`)
 
         return (
