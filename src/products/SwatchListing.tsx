@@ -8,10 +8,11 @@ export type SwatchListingProps = {
     swatches?:SwatchItem[]
     selectedSwatch?:SwatchItem
     onClick:(item:SwatchItem)=>void
-    resolveThumbnailPath:(swatch:SwatchItem)=>string|undefined
+    resolveThumbnailPath:(swatch:SwatchItem, subSwatches?:SwatchItem[])=>string|undefined
     filters?:DataFilter[]
+    applyFilters?:boolean
     getSwatchChildren?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
-    getSwatchInfo?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
+    getSwatchInfo?:(swatch:SwatchItem, isSelected:boolean, childCount:number|undefined)=>ReactNode|null
 
     willRenderSwatches?:(swatches:SwatchItem[])=>void
 }
@@ -28,10 +29,13 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         }
     }
 
+    protected abstract getSwatchInfo(swatch:SwatchItem, isSelected:boolean, childCount:number|undefined) : ReactNode
+
     protected abstract renderSwatch(swatch:SwatchItem): ReactNode;
 
     protected get swatches() : SwatchItem[] {
-        return DataFilter.applyFilters(this.filters, this.props.swatches as ProductBase[])
+        const swatches = this.props.swatches as ProductBase[]
+        return this.props.applyFilters ? DataFilter.applyFilters(this.filters, swatches) : swatches
     }
 
     protected get filters() : DataFilter[] {
@@ -56,12 +60,12 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         return !nextProps.filters === !this.props.filters
     }
 
-    protected didDataChange(nextProps: Readonly<T>) {
+    protected didDataChange(nextProps: Readonly<T>, nextState: Readonly<SwatchListingState>) {
         return nextProps.swatches !== this.props.swatches
     }
 
-    shouldComponentUpdate(nextProps: Readonly<T>): boolean {
-        const dataDidChange = this.didDataChange(nextProps)
+    shouldComponentUpdate(nextProps: Readonly<T>, nextState: Readonly<SwatchListingState>): boolean {
+        const dataDidChange = this.didDataChange(nextProps, nextState)
         const selectedSwatchChanged = (nextProps.selectedSwatch !== this.props.selectedSwatch);
         const filtersDidChange = this.filtersChanged(nextProps)
         return dataDidChange || selectedSwatchChanged || filtersDidChange

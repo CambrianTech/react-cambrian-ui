@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./HorizontalListing.scss";
 import {Thumbnail} from "../general";
-import {SwatchListing, SwatchListingProps} from "./SwatchListing";
+import {SwatchListing, SwatchListingProps, SwatchListingState} from "./SwatchListing";
 import {SwatchItem} from "react-home-ar";
 import {ReactNode} from "react";
 import {appendClassName} from "../internal/Utils";
@@ -15,15 +15,20 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
         super(props, "horizontal-swatch-listing", classes)
     }
 
-    private getSwatchInfo(swatch:SwatchItem, isSelected:boolean) {
+    protected getSwatchInfo(swatch:SwatchItem, isSelected:boolean, childCount:number|undefined) {
         if (this.props.getSwatchInfo) {
-            return this.props.getSwatchInfo(swatch, isSelected)
+            return this.props.getSwatchInfo(swatch, isSelected, childCount)
         }
         return (
             <div className={appendClassName("horizontal-swatch-listing-info", classes.swatchListingInfo)}>
                 {swatch.displayName}
             </div>
         )
+    }
+
+    componentDidUpdate(prevProps: Readonly<HorizontalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
+        super.componentDidUpdate(prevProps, prevState, snapshot);
+        console.log("Horizontal listing updated")
     }
 
     protected renderSwatch(swatch:SwatchItem): ReactNode {
@@ -47,7 +52,7 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
                                    swatch={swatch} resolveThumbnailPath={this.props.resolveThumbnailPath} />
                         {swatchChildren}
                     </div>
-                    {this.getSwatchInfo(swatch, isSelected)}
+                    {this.getSwatchInfo(swatch, isSelected, swatch.children.length)}
                 </div>
             </div>
         )

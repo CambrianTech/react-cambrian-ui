@@ -4,7 +4,8 @@ import {SwatchItem} from "react-home-ar";
 type ThumbnailProps = {
     swatch:SwatchItem
     className?:string,
-    resolveThumbnailPath:(swatch:SwatchItem)=>string|undefined
+    subSwatches?:SwatchItem[]
+    resolveThumbnailPath:(swatch:SwatchItem, subSwatches?:SwatchItem[])=>string|undefined
 }
 
 export function Thumbnail(props: ThumbnailProps) {
@@ -13,7 +14,7 @@ export function Thumbnail(props: ThumbnailProps) {
     }
     return (
             <img className={props.className}
-                 src={props.resolveThumbnailPath(props.swatch)}
+                 src={props.resolveThumbnailPath(props.swatch, props.subSwatches)}
                  alt={props.swatch.displayName}
                  style={{backgroundColor:props.swatch.color}} />
     )
