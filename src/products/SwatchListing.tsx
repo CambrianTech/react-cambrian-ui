@@ -12,13 +12,20 @@ export type SwatchListingProps = {
     filters?:DataFilter[]
     applyFilters?:boolean
     getSwatchChildren?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
-    getSwatchInfo?:(swatch:SwatchItem, isSelected:boolean, childCount:number|undefined)=>ReactNode|null
+    getSwatchInfo?:(params:SwatchInfoParams)=>ReactNode|null
 
     willRenderSwatches?:(swatches:SwatchItem[])=>void
 }
 
 export type SwatchListingState = {
     filterString:string|undefined
+}
+
+export type SwatchInfoParams = {
+    swatch:SwatchItem,
+    isSelected:boolean,
+    isFiltered:boolean,
+    childCount:number|undefined
 }
 
 export abstract class SwatchListing<T extends SwatchListingProps> extends React.Component<T,SwatchListingState> {
@@ -29,7 +36,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         }
     }
 
-    protected abstract getSwatchInfo(swatch:SwatchItem, isSelected:boolean, childCount:number|undefined) : ReactNode
+    protected abstract getSwatchInfo(params:SwatchInfoParams) : ReactNode
 
     protected abstract renderSwatch(swatch:SwatchItem): ReactNode;
 
