@@ -85,7 +85,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                     </div>
                     {this.getSwatchInfo({swatch, isSelected:isChildSelected,
                         isFiltered:!!this.props.filters && this.props.filters.length > 0,
-                        childCount:swatch.children.length
+                        childCount:subSwatches.length
                     })}
                 </div>
 
