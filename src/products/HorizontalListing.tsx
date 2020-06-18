@@ -26,10 +26,10 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
         )
     }
 
-    componentDidUpdate(prevProps: Readonly<HorizontalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
-        super.componentDidUpdate(prevProps, prevState, snapshot);
-        console.log("Horizontal listing updated")
-    }
+    // componentDidUpdate(prevProps: Readonly<HorizontalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
+    //     super.componentDidUpdate(prevProps, prevState, snapshot);
+    //     console.log("Horizontal listing updated")
+    // }
 
     protected renderSwatch(swatch:SwatchItem): ReactNode {
 

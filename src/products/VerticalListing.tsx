@@ -23,10 +23,10 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         return nextProps.selectedSubSwatch != this.props.selectedSubSwatch || super.didDataChange(nextProps, nextState)
     }
 
-    componentDidUpdate(prevProps: Readonly<VerticalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
-        super.componentDidUpdate(prevProps, prevState, snapshot);
-        console.log("Vertical listing updated")
-    }
+    // componentDidUpdate(prevProps: Readonly<VerticalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
+    //     super.componentDidUpdate(prevProps, prevState, snapshot);
+    //     console.log("Vertical listing updated")
+    // }
 
     protected getSwatchInfo(params:SwatchInfoParams) {
         if (this.props.getSwatchInfo) {
@@ -39,7 +39,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             <div className={appendClassName("vertical-swatch-listing-info", classes.swatchListingInfo)}>
                 <div className={appendClassName("vertical-swatch-listing-title", classes.swatchListingTitle)}>{params.swatch.displayName}</div>
                 <div className={appendClassName("vertical-swatch-listing-description", classes.swatchListingDescription)}>{params.swatch.description}</div>
-                <div className={appendClassName("vertical-swatch-listing-secondary-num-colors", classes.swatchListingNumColors)}>{numColorsText}</div>
+                <div className={appendClassName("vertical-swatch-listing-num-colors", classes.swatchListingNumColors)}>{numColorsText}</div>
             </div>
         )
     }
