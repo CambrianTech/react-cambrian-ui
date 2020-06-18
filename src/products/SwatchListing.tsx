@@ -15,6 +15,7 @@ export type SwatchListingProps = {
     getSwatchInfo?:(params:SwatchInfoParams)=>ReactNode|null
 
     willRenderSwatches?:(swatches:SwatchItem[])=>void
+    willRenderSwatch?:(params:SwatchInfoParams)=>void
 }
 
 export type SwatchListingState = {
@@ -26,6 +27,7 @@ export type SwatchInfoParams = {
     isSelected:boolean,
     isFiltered:boolean,
     childCount:number|undefined
+    children?:ReactNode|undefined
 }
 
 export abstract class SwatchListing<T extends SwatchListingProps> extends React.Component<T,SwatchListingState> {

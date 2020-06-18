@@ -39,7 +39,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             <div className={appendClassName("vertical-swatch-listing-info", classes.swatchListingInfo)}>
                 <div className={appendClassName("vertical-swatch-listing-title", classes.swatchListingTitle)}>{params.swatch.displayName}</div>
                 <div className={appendClassName("vertical-swatch-listing-description", classes.swatchListingDescription)}>{params.swatch.description}</div>
-                <div className={appendClassName("vertical-swatch-listing-secondary-description", classes.swatchListingSecondaryDescription)}>{numColorsText}</div>
+                <div className={appendClassName("vertical-swatch-listing-secondary-num-colors", classes.swatchListingNumColors)}>{numColorsText}</div>
             </div>
         )
     }
@@ -63,10 +63,13 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         }
 
         const isChildSelected = swatch.hasColumns && this.props.selectedSwatch === swatch;
+
+        let className = appendClassName("vertical-swatch-listing-item", classes.swatchListingItem);
         let childClassName = appendClassName("vertical-swatch-listing-child", classes.subSwatchListingContainer);
         if (isChildSelected && subSwatches.length !== 1) {
+            className = appendClassName(className, "selected");
             childClassName = appendClassName(childClassName, classes.subSwatchListingContainerSelected);
-            childClassName = appendClassName(childClassName, "selected")
+            childClassName = appendClassName(childClassName, "selected");
         }
 
         const swatchChildElements = this.props.getSwatchChildren ? this.props.getSwatchChildren(swatch, isChildSelected) : null;
@@ -75,18 +78,28 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             this.props.onClick(subSwatches[0])
         }
 
+        const params:SwatchInfoParams = {
+            swatch,
+            isSelected:isChildSelected,
+            isFiltered:!!this.props.filters && this.props.filters.length > 0,
+            childCount:subSwatches.length
+        };
+
+        if (this.props.willRenderSwatch) {
+            this.props.willRenderSwatch(params)
+        }
+
         return (
-            <div key={swatch.key} className={appendClassName("vertical-swatch-listing-item", classes.swatchListingItem)}>
-                <div onClick={()=>this.props.onClick(swatch)}
-                     className={appendClassName("vertical-swatch-listing-details", classes.swatchListingDetails)}>
+            <div key={swatch.key} className={className}>
+
+                <div className={appendClassName("vertical-swatch-listing-details", classes.swatchListingDetails)}
+                     onClick={()=>this.props.onClick(swatch)}>
                     <div className={appendClassName("vertical-swatch-listing-image-container", classes.swatchListingImageContainer)}>
                         <Thumbnail className={appendClassName("vertical-swatch-listing-image", classes.swatchListingImage)} swatch={swatch} subSwatches={subSwatches} resolveThumbnailPath={this.props.resolveThumbnailPath} />
                         {swatchChildElements}
                     </div>
-                    {this.getSwatchInfo({swatch, isSelected:isChildSelected,
-                        isFiltered:!!this.props.filters && this.props.filters.length > 0,
-                        childCount:subSwatches.length
-                    })}
+                    {this.getSwatchInfo(params)}
+                    {params.children}
                 </div>
 
                 <div className={childClassName}>
