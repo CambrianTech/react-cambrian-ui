@@ -42,6 +42,8 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     protected abstract renderSwatch(swatch:SwatchItem): ReactNode;
 
+    protected abstract scrollSwatchIntoView(swatch:SwatchItem, behavior?:ScrollBehavior, prevSwatch?:SwatchItem) : void;
+
     protected listing = createRef<HTMLDivElement>()
     protected listingContent = createRef<HTMLDivElement>()
 
@@ -89,6 +91,14 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             this.setState({
                 filterString:filterString,
             })
+        }
+
+        if (this.props.selectedSwatch && prevProps.selectedSwatch !== this.props.selectedSwatch) {
+            const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
+            if (swatchDiv) {
+                console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
+                this.scrollSwatchIntoView(this.props.selectedSwatch as SwatchItem, "smooth", prevProps.selectedSwatch)
+            }
         }
     }
 

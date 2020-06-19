@@ -26,7 +26,7 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
         )
     }
 
-    private scrollSwatchIntoView(swatch:SwatchItem, behavior?:ScrollBehavior) {
+    protected scrollSwatchIntoView(swatch:SwatchItem, behavior?:ScrollBehavior, prevSwatch?:SwatchItem) {
 
         const swatchDiv = document.getElementById(swatch.key) as HTMLDivElement;
         if (swatchDiv && this.listingContent.current && this.listing.current) {
@@ -44,15 +44,6 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
                 options.behavior = behavior
             }
             this.listing.current.scroll(options);
-        }
-    }
-
-    componentDidUpdate(prevProps: Readonly<HorizontalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
-        super.componentDidUpdate(prevProps, prevState, snapshot);
-
-        if (this.props.selectedSwatch && prevProps.selectedSwatch !== this.props.selectedSwatch) {
-            console.log(`Horizontal swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
-            this.scrollSwatchIntoView(this.props.selectedSwatch, "smooth")
         }
     }
 
