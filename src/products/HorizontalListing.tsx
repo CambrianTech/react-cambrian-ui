@@ -26,24 +26,33 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
         )
     }
 
+    private scrollSwatchIntoView(swatch:SwatchItem, behavior?:ScrollBehavior) {
+
+        const swatchDiv = document.getElementById(swatch.key) as HTMLDivElement;
+        if (swatchDiv && this.listingContent.current && this.listing.current) {
+            const swatchRect = swatchDiv.getBoundingClientRect();
+            const listingRect = this.listing.current.getBoundingClientRect();
+            const contentRect = this.listingContent.current.getBoundingClientRect();
+
+            const leftOfSwatch = swatchRect.left - contentRect.left;
+            let newLeft = leftOfSwatch - 0.5 * listingRect.width + 0.5 * swatchRect.width
+
+            const options:ScrollToOptions = {
+                left: newLeft
+            }
+            if (behavior) {
+                options.behavior = behavior
+            }
+            this.listing.current.scroll(options);
+        }
+    }
+
     componentDidUpdate(prevProps: Readonly<HorizontalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
         super.componentDidUpdate(prevProps, prevState, snapshot);
 
-        if (prevProps.selectedSwatch !== this.props.selectedSwatch && this.props.selectedSwatch
-            && this.listingContent.current && this.listing.current) {
-            const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
-            if (swatchDiv) {
-                const swatchRect = swatchDiv.getBoundingClientRect();
-                const listingRect = this.listing.current.getBoundingClientRect();
-                const contentRect = this.listingContent.current.getBoundingClientRect();
-
-                const leftOfSwatch = swatchRect.left - contentRect.left;
-                let newLeft = leftOfSwatch - 0.5 * listingRect.width + 0.5 * swatchRect.width
-
-                this.listing.current.scroll({ left: newLeft, behavior: "smooth" });
-
-                //console.log(`Selected swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
-            }
+        if (this.props.selectedSwatch && prevProps.selectedSwatch !== this.props.selectedSwatch) {
+            console.log(`Horizontal swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
+            this.scrollSwatchIntoView(this.props.selectedSwatch, "smooth")
         }
     }
 

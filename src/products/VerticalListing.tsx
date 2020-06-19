@@ -23,33 +23,46 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         return nextProps.selectedSubSwatch != this.props.selectedSubSwatch || super.didDataChange(nextProps, nextState)
     }
 
+    private scrollSwatchIntoView(swatch:SwatchItem, behavior?:ScrollBehavior, prevSwatch?:SwatchItem) {
+        const swatchDiv = document.getElementById(swatch.key) as HTMLDivElement;
+        if (swatchDiv && this.listingContent.current && this.listing.current) {
+            const swatchRect = swatchDiv.getBoundingClientRect();
+            const listingRect = this.listing.current.getBoundingClientRect();
+            const contentRect = this.listingContent.current.getBoundingClientRect();
+
+            const topOfSwatch = swatchRect.top - contentRect.top;
+            let newTop = topOfSwatch - 0.5 * listingRect.height + 0.5 * swatchRect.height
+
+            if (prevSwatch) {
+                const prevDiv = document.getElementById(prevSwatch.key) as HTMLDivElement;
+                if (prevDiv) {
+                    const prevRect = prevDiv.getBoundingClientRect();
+                    if (prevRect.top > swatchRect.top) {
+                        newTop += prevRect.height - swatchRect.height
+                    }
+                }
+            }
+
+            const options:ScrollToOptions = {
+                top: newTop
+            }
+
+            if (behavior) {
+                options.behavior = behavior
+            }
+
+            this.listing.current.scroll(options);
+        }
+    }
+
     componentDidUpdate(prevProps: Readonly<HorizontalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
         super.componentDidUpdate(prevProps, prevState, snapshot);
 
-        if (prevProps.selectedSwatch !== this.props.selectedSwatch && this.props.selectedSwatch
-            && this.listingContent.current && this.listing.current) {
+        if (prevProps.selectedSwatch !== this.props.selectedSwatch && this.props.selectedSwatch) {
             const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
             if (swatchDiv) {
-                const swatchRect = swatchDiv.getBoundingClientRect();
-                const listingRect = this.listing.current.getBoundingClientRect();
-                const contentRect = this.listingContent.current.getBoundingClientRect();
-
-                const topOfSwatch = swatchRect.top - contentRect.top;
-                let newTop = topOfSwatch - 0.5 * listingRect.height + 0.5 * swatchRect.height
-
-                if (prevProps.selectedSwatch) {
-                    const prevDiv = document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement;
-                    if (prevDiv) {
-                        const prevRect = prevDiv.getBoundingClientRect();
-                        if (prevRect.top > swatchRect.top) {
-                            newTop += prevRect.height - swatchRect.height
-                        }
-                    }
-                }
-
-                this.listing.current.scroll({ top: newTop, behavior: "smooth" });
-
-                //console.log(`Selected swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
+                console.log(`Vertical swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
+                this.scrollSwatchIntoView(this.props.selectedSwatch, "smooth", prevProps.selectedSwatch)
             }
         }
     }
