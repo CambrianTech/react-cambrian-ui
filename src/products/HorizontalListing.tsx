@@ -26,9 +26,8 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
         )
     }
 
-    protected scrollSwatchIntoView(swatch:SwatchItem, behavior?:ScrollBehavior, prevSwatch?:SwatchItem) {
+    protected scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) {
 
-        const swatchDiv = document.getElementById(swatch.key) as HTMLDivElement;
         if (swatchDiv && this.listingContent.current && this.listing.current) {
             const swatchRect = swatchDiv.getBoundingClientRect();
             const listingRect = this.listing.current.getBoundingClientRect();

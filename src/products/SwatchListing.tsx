@@ -42,7 +42,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     protected abstract renderSwatch(swatch:SwatchItem): ReactNode;
 
-    protected abstract scrollSwatchIntoView(swatch:SwatchItem, behavior?:ScrollBehavior, prevSwatch?:SwatchItem) : void;
+    protected abstract scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) : void;
 
     protected listing = createRef<HTMLDivElement>()
     protected listingContent = createRef<HTMLDivElement>()
@@ -82,7 +82,29 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         const dataDidChange = this.didDataChange(nextProps, nextState)
         const selectedSwatchChanged = (nextProps.selectedSwatch !== this.props.selectedSwatch);
         const filtersDidChange = this.filtersChanged(nextProps)
+
         return dataDidChange || selectedSwatchChanged || filtersDidChange
+    }
+
+    private _swatchLengthChanged = false
+
+    private get isBound() : boolean {
+        return !!this.listingContent.current && !!this.listing.current
+    }
+
+    private scrollWhenReady(swatchDiv:HTMLDivElement, content:HTMLDivElement) {
+
+        const sizeThen = content.getBoundingClientRect().height
+
+        window.setTimeout(()=>{
+            const sizeNow = content.getBoundingClientRect().height
+            if (sizeNow === sizeThen) {
+                this.scrollSwatchIntoView(swatchDiv, undefined, "smooth")
+            } else {
+                console.log("Delaying", sizeNow, sizeThen)
+                this.scrollWhenReady(swatchDiv, content)
+            }
+        },2000)
     }
 
     componentDidUpdate(prevProps: Readonly<T>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
@@ -93,12 +115,26 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             })
         }
 
-        if (this.props.selectedSwatch && prevProps.selectedSwatch !== this.props.selectedSwatch) {
-            const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
-            if (swatchDiv) {
-                console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
-                this.scrollSwatchIntoView(this.props.selectedSwatch as SwatchItem, "smooth", prevProps.selectedSwatch)
-            }
+        const swatchLengthChanged = this.props.swatches && (this.props.swatches !== prevProps.swatches || (prevProps.swatches && this.props.swatches.length != prevProps.swatches.length))
+
+        if (swatchLengthChanged) {
+            this._swatchLengthChanged = true
+        }
+
+        if (!this.isBound || !this.props.selectedSwatch) return
+
+        const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement
+        const prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined
+
+        if (!swatchDiv) return
+
+        if (this._swatchLengthChanged && this.props.swatches && this.props.swatches.length > 1 && this.props.selectedSwatch && this.listingContent.current) {
+            this._swatchLengthChanged = false
+            this.scrollWhenReady(swatchDiv, this.listingContent.current)
+        }
+        else if (prevProps.selectedSwatch !== this.props.selectedSwatch) {
+            console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
+            this.scrollSwatchIntoView(swatchDiv, prevSwatchDiv, "smooth")
         }
     }
 

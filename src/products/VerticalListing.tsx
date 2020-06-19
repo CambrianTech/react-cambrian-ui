@@ -23,8 +23,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         return nextProps.selectedSubSwatch != this.props.selectedSubSwatch || super.didDataChange(nextProps, nextState)
     }
 
-    protected scrollSwatchIntoView(swatch:SwatchItem, behavior?:ScrollBehavior, prevSwatch?:SwatchItem) {
-        const swatchDiv = document.getElementById(swatch.key) as HTMLDivElement;
+    protected scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) {
         if (swatchDiv && this.listingContent.current && this.listing.current) {
             const swatchRect = swatchDiv.getBoundingClientRect();
             const listingRect = this.listing.current.getBoundingClientRect();
@@ -33,14 +32,13 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             const topOfSwatch = swatchRect.top - contentRect.top;
             let newTop = topOfSwatch - 0.5 * listingRect.height + 0.5 * swatchRect.height
 
-            if (prevSwatch) {
-                const prevDiv = document.getElementById(prevSwatch.key) as HTMLDivElement;
-                if (prevDiv) {
-                    const prevRect = prevDiv.getBoundingClientRect();
-                    if (prevRect.top > swatchRect.top) {
-                        newTop += prevRect.height - swatchRect.height
-                    }
+            if (prevSwatchDiv) {
+                const prevRect = prevSwatchDiv.getBoundingClientRect();
+                if (prevRect.top > swatchRect.top) {
+                    newTop += prevRect.height - swatchRect.height
                 }
+            } else {
+                newTop += 0.5 * swatchRect.height
             }
 
             const options:ScrollToOptions = {
