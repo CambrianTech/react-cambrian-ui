@@ -26,10 +26,12 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
         )
     }
 
-    // componentDidUpdate(prevProps: Readonly<HorizontalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
-    //     super.componentDidUpdate(prevProps, prevState, snapshot);
-    //     console.log("Horizontal listing updated")
-    // }
+    componentDidUpdate(prevProps: Readonly<HorizontalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
+        super.componentDidUpdate(prevProps, prevState, snapshot);
+        if (prevProps.selectedSwatch !== this.props.selectedSwatch && this.props.selectedSwatch) {
+            console.log(`Selected swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
+        }
+    }
 
     protected renderSwatch(swatch:SwatchItem): ReactNode {
 

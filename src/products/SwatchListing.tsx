@@ -1,7 +1,7 @@
 import * as React from "react";
 import {ProductBase, SwatchItem, DataFilter} from "react-home-ar";
 import {appendClassName} from "../internal/Utils";
-import {ReactNode} from "react";
+import {createRef, ReactNode} from "react";
 
 export type SwatchListingProps = {
     className?:string
@@ -41,6 +41,9 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     protected abstract getSwatchInfo(params:SwatchInfoParams) : ReactNode
 
     protected abstract renderSwatch(swatch:SwatchItem): ReactNode;
+
+    protected listing = createRef<HTMLDivElement>()
+    protected listingContent = createRef<HTMLDivElement>()
 
     protected get swatches() : SwatchItem[] {
         const swatches = this.props.swatches as ProductBase[]
@@ -117,8 +120,8 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         //console.log(`Rendering ${swatches.length} swatches`)
 
         return (
-            <div className={className}>
-                <div className={appendClassName(`${this.listingName}-content`, this.scss.swatchListingContent)}>
+            <div ref={this.listing} className={className}>
+                <div ref={this.listingContent} className={appendClassName(`${this.listingName}-content`, this.scss.swatchListingContent)}>
                     {swatches.map((swatch) => {
                         return this.renderSwatch(swatch)
                     })}

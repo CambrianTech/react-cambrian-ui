@@ -1,9 +1,9 @@
 import * as React from "react";
 import classes from "./VerticalListing.scss";
-import {HorizontalListing} from "./HorizontalListing";
+import {HorizontalListing, HorizontalListingProps} from "./HorizontalListing";
 import {Thumbnail} from "../general";
 import {appendClassName} from "../internal/Utils"
-import {DataFilter, Product, ProductBase, SwatchItem} from "react-home-ar";
+import {DataFilter, ProductBase, SwatchItem} from "react-home-ar";
 import {ReactNode} from "react";
 import {SwatchInfoParams, SwatchListing, SwatchListingProps, SwatchListingState} from "./SwatchListing";
 
@@ -23,10 +23,36 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         return nextProps.selectedSubSwatch != this.props.selectedSubSwatch || super.didDataChange(nextProps, nextState)
     }
 
-    // componentDidUpdate(prevProps: Readonly<VerticalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
-    //     super.componentDidUpdate(prevProps, prevState, snapshot);
-    //     console.log("Vertical listing updated")
-    // }
+    componentDidUpdate(prevProps: Readonly<HorizontalListingProps>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
+        super.componentDidUpdate(prevProps, prevState, snapshot);
+
+        if (prevProps.selectedSwatch !== this.props.selectedSwatch && this.props.selectedSwatch
+            && this.listingContent.current && this.listing.current) {
+            const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
+            if (swatchDiv) {
+                const swatchRect = swatchDiv.getBoundingClientRect();
+                const listingRect = this.listing.current.getBoundingClientRect();
+                const contentRect = this.listingContent.current.getBoundingClientRect();
+
+                const topOfSwatch = swatchRect.top - contentRect.top;
+                let newTop = topOfSwatch - 0.5 * listingRect.height + 0.5 * swatchRect.height
+
+                if (prevProps.selectedSwatch) {
+                    const prevDiv = document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement;
+                    if (prevDiv) {
+                        const prevRect = prevDiv.getBoundingClientRect();
+                        if (prevRect.top > swatchRect.top) {
+                            newTop += prevRect.height - swatchRect.height
+                        }
+                    }
+                }
+
+                this.listing.current.scroll({ top: newTop, behavior: "smooth" });
+
+                //console.log(`Selected swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
+            }
+        }
+    }
 
     protected getSwatchInfo(params:SwatchInfoParams) {
         if (this.props.getSwatchInfo) {
@@ -90,7 +116,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         }
 
         return (
-            <div key={swatch.key} className={className}>
+            <div key={swatch.key} id={swatch.key} className={className}>
 
                 <div className={appendClassName("vertical-swatch-listing-details", classes.swatchListingDetails)}
                      onClick={()=>this.props.onClick(swatch)}>
