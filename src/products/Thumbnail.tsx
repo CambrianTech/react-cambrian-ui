@@ -1,5 +1,6 @@
 import {default as React} from "react";
 import {SwatchItem} from "react-home-ar";
+import {LazyImage} from "react-lazy-elements";
 
 type ThumbnailProps = {
     swatch:SwatchItem
@@ -13,9 +14,8 @@ export function Thumbnail(props: ThumbnailProps) {
         return <div className={props.className} style={{backgroundColor:props.swatch.color}} />
     }
     return (
-            <img className={props.className}
+            <LazyImage className={props.className}
                  src={props.resolveThumbnailPath(props.swatch, props.subSwatches)}
-                 alt={props.swatch.displayName}
-                 style={{backgroundColor:props.swatch.color}} />
+                 alt={props.swatch.displayName} />
     )
 }
