@@ -110,6 +110,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         if (this._realScrollPossible) {
             this._realScroll = true;
         }
+        window.clearInterval(this.scrollInterval)
     }
 
     componentDidUpdate(prevProps: Readonly<T>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
@@ -129,7 +130,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         if (!this.isBound || !this.props.selectedSwatch || !this.listing.current || !this.listingContent.current) return
 
         const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement
-        const prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined
+
 
         if (!swatchDiv) return
 
@@ -152,6 +153,10 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
                 if (this.scrollInterval) window.clearInterval(this.scrollInterval)
             })
 
+            this.listing.current.addEventListener('touchmove', ()=>{
+                if (this.scrollInterval) window.clearInterval(this.scrollInterval)
+            })
+
             this.scrollInterval = window.setInterval(()=>{
                 if (!this.lastAutoScrollTime || (performance.now() - this.lastAutoScrollTime) > 500) {
                     this.scrollSwatchIntoView(swatchDiv, undefined, "smooth")
@@ -160,6 +165,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         }
 
         if (prevProps.selectedSwatch !== this.props.selectedSwatch) {
+            const prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined
             //console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
             this.scrollSwatchIntoView(swatchDiv, prevSwatchDiv, "smooth")
         }
