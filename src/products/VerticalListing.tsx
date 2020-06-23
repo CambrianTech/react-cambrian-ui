@@ -1,6 +1,6 @@
 import * as React from "react";
 import classes from "./VerticalListing.scss";
-import {HorizontalListing, HorizontalListingProps} from "./HorizontalListing";
+import {HorizontalListing} from "./HorizontalListing";
 import {Thumbnail} from "../general";
 import {appendClassName} from "../internal/Utils"
 import {DataFilter, ProductBase, SwatchItem} from "react-home-ar";
@@ -12,6 +12,7 @@ export type VerticalListingProps = SwatchListingProps & {
     getSubSwatchChildren?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
     getSubSwatchInfo?:(params:SwatchInfoParams)=>ReactNode|null
     willRenderSubSwatches?:(swatches:SwatchItem[])=>void
+    collapseSelection?:boolean
 }
 
 export class VerticalListing extends SwatchListing<VerticalListingProps> {
@@ -20,7 +21,9 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
     }
 
     protected didDataChange(nextProps: Readonly<VerticalListingProps>, nextState: Readonly<SwatchListingState>) {
-        return nextProps.selectedSubSwatch != this.props.selectedSubSwatch || super.didDataChange(nextProps, nextState)
+        return nextProps.selectedSubSwatch != this.props.selectedSubSwatch
+            || nextProps.collapseSelection != this.props.collapseSelection
+            ||  super.didDataChange(nextProps, nextState)
     }
 
     protected scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) {
@@ -87,7 +90,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             return null
         }
 
-        const isChildSelected = swatch.hasColumns && this.props.selectedSwatch === swatch;
+        const isChildSelected = swatch.hasColumns && this.props.selectedSwatch === swatch && !this.props.collapseSelection;
 
         let className = appendClassName("vertical-swatch-listing-item", classes.swatchListingItem);
         let childClassName = appendClassName("vertical-swatch-listing-child", classes.subSwatchListingContainer);
