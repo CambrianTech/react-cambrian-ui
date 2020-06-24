@@ -94,10 +94,11 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
     protected renderSwatch(swatch:SwatchItem): ReactNode {
 
         const filters = this.filters;
+
         const subSwatches = DataFilter.applyFilters(filters, swatch.children as ProductBase[]);
         const numSwatches:number|undefined = swatch.children ? subSwatches.length : undefined;
 
-        if (numSwatches === 0) {
+        if (filters.length && numSwatches === 0) {
             return null
         }
 
