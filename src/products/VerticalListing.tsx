@@ -106,7 +106,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
 
         let className = appendClassName("vertical-swatch-listing-item", classes.swatchListingItem);
         let childClassName = appendClassName("vertical-swatch-listing-child", classes.subSwatchListingContainer);
-        if (isChildSelected && subSwatches.length > 0) {
+        if (isChildSelected) {
             className = appendClassName(className, "selected");
             childClassName = appendClassName(childClassName, classes.subSwatchListingContainerSelected);
             childClassName = appendClassName(childClassName, "selected");
