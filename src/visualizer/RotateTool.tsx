@@ -7,6 +7,7 @@ import classes from "./RotateTool.scss";
 import MaterialIcon from "@material/react-material-icon";
 
 import {appendClassName} from "../internal/Utils"
+import {useEffect} from "react";
 
 type RotateToolProps = {
     visible: boolean
@@ -87,6 +88,12 @@ export function RotateTool(props: RotateToolProps) {
     function rotateFinished(commit: boolean) {
         props.onRotationFinished(commit, rotationControlValue.current)
     }
+
+    useEffect(()=>{
+        if (props.visible) {
+            rotationControlValue.current = props.rotation
+        }
+    }, [props.visible])
 
     return (
         <RotateToolCached visible={props.visible}

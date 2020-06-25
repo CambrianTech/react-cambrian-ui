@@ -39,6 +39,9 @@ type VisualizerToolsProperties = {
 
     initialXPos:number
     initialYPos:number
+    minTranslation?:number
+    maxTranslation?:number
+
     onTranslationChanged: (xPos: number, yPos: number) => void
     onTranslationFinished: (commit: boolean, xPos: number, yPos: number) => void
 
@@ -115,7 +118,8 @@ export function VisualizerTools(props: VisualizerToolsProperties) {
                     <TranslateTool visible={props.mode === VisualizerToolMode.Translate}
                                    onTranslationFinished={translateFinished}
                                    onTranslationChanged={props.onTranslationChanged}
-                                   xPos={props.initialXPos} yPos={props.initialYPos} />
+                                   xPos={props.initialXPos} yPos={props.initialYPos}
+                                   min={props.minTranslation} max={props.maxTranslation} />
 
                     <TiledGridSelector visible={props.mode === VisualizerToolMode.Pattern}
                                        resolveImagePath={props.patternSelectorImagePath!}

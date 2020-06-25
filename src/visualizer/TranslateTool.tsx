@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Fab} from "@material/react-fab";
 import '@material/react-fab/dist/fab.css';
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 
 import classes from "./TranslateTool.scss";
 import MaterialIcon from "@material/react-material-icon";
@@ -13,6 +13,8 @@ type TranslateToolProps = {
     className?:string
     xPos: number
     yPos: number
+    min?: number
+    max?: number
     onTranslationFinished: (commit: boolean, xPos: number, yPos: number) => void
     onTranslationChanged: (xPos: number, yPos: number) => void
 }
@@ -26,40 +28,48 @@ type TranslateToolCachedProps = TranslateToolProps & {
 export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
     (cProps) => {
         if (cProps.visible) {
+
             let className = appendClassName("translate-tool", classes.translateTool)
             className = appendClassName(className, cProps.className)
+
+            const min = cProps.min !== undefined ? cProps.min : -5
+            const max = cProps.max !== undefined ? cProps.max : -5
+            const range = max - min
+            const middle = min + range / 2
+            const minMiddle = min + range / 4
+            const maxMiddle = max - range / 4
 
             return (
                 <div className={className}>
                     <div>
                         <div className={classes.translateToolSlider}>
                             <div className={classes.translateToolSliderLabels}>
-                                <div>-5</div>
+                                <div>{min}</div>
                                 <div>|&nbsp;</div>
-                                <div>-2.5</div>
+                                <div>{minMiddle}</div>
                                 <div>|&nbsp;</div>
-                                <div>0</div>
+                                <div>{middle}</div>
                                 <div>|&nbsp;</div>
-                                <div>2.5</div>
+                                <div>{maxMiddle}</div>
                                 <div>|&nbsp;</div>
-                                <div>5</div>
+                                <div>{max}</div>
                             </div>
                             <div className={classes.translateToolSliderBar}>
-                                <input type="range" min={-5} max={5} step={0.01} defaultValue={cProps.xPos + ""}
+                                <input type="range" min={min} max={max} step={0.01} defaultValue={cProps.xPos + ""}
                                        onChange={e => cProps.onTranslationXChanged(Number(e.target.value))} list="range-values" />
                             </div>
 
                             <div className={classes.translateToolSliderBar}>
-                                <input type="range" min={-5} max={5} step={0.01} defaultValue={cProps.yPos + ""}
+                                <input type="range" min={min} max={max} step={0.01} defaultValue={cProps.yPos + ""}
                                        onChange={e => cProps.onTranslationYChanged(Number(e.target.value))} list="range-values" />
                             </div>
 
                             <datalist id="range-values">
-                                <option value="-5" />
-                                <option value="-2.5" />
-                                <option value="0" />
-                                <option value="2.5" />
-                                <option value="5.0" />
+                                <option value={min} />
+                                <option value={minMiddle} />
+                                <option value={middle} />
+                                <option value={maxMiddle} />
+                                <option value={max} />
                             </datalist>
                         </div>
                         <div className={classes.translateToolSliderFooter}>
@@ -95,6 +105,13 @@ export function TranslateTool(props: TranslateToolProps) {
         console.log(`translationFinished: ${commit}, ${translationControl_xPos.current}, ${translationControl_yPos.current}`)
         props.onTranslationFinished(commit, translationControl_xPos.current, translationControl_yPos.current)
     }
+
+    useEffect(()=>{
+        if (props.visible) {
+            translationControl_xPos.current = props.xPos
+            translationControl_yPos.current = props.yPos
+        }
+    }, [props.visible])
 
     return (
         <TranslateToolCached onTranslationXChanged={translationXChanged}
