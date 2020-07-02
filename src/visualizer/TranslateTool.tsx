@@ -102,7 +102,6 @@ export function TranslateTool(props: TranslateToolProps) {
     }
 
     function translationFinished(commit: boolean) {
-        console.log(`translationFinished: ${commit}, ${translationControl_xPos.current}, ${translationControl_yPos.current}`)
         props.onTranslationFinished(commit, translationControl_xPos.current, translationControl_yPos.current)
     }
 
