@@ -157,11 +157,16 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
                 if (this.scrollInterval) window.clearInterval(this.scrollInterval)
             })
 
-            this.scrollInterval = window.setInterval(()=>{
-                if (!this.lastAutoScrollTime || (performance.now() - this.lastAutoScrollTime) > 500) {
-                    this.scrollSwatchIntoView(swatchDiv, undefined, "smooth")
-                }
-            },500)
+            if (!this.scrollInterval) {
+                this.scrollInterval = window.setInterval(()=>{
+                    if (!this.lastAutoScrollTime || (performance.now() - this.lastAutoScrollTime) > 500) {
+                        this.scrollSwatchIntoView(swatchDiv, undefined, "smooth")
+                    }
+                },200)
+                window.setTimeout(()=>{
+                    window.clearInterval(this.scrollInterval)
+                }, 5000)
+            }
         }
 
         if (prevProps.selectedSwatch !== this.props.selectedSwatch) {

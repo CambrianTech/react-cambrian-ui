@@ -31,16 +31,20 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             const swatchRect = swatchDiv.getBoundingClientRect();
             const listingRect = this.listing.current.getBoundingClientRect();
             const contentRect = this.listingContent.current.getBoundingClientRect();
+            const subSwatches = document.getElementById(`${swatchDiv.id}-swatches`) as HTMLDivElement
 
             const topOfSwatch = swatchRect.top - contentRect.top;
             let newTop = topOfSwatch - 0.5 * listingRect.height + 0.5 * Math.min(swatchRect.height, listingRect.height)
-            
+
             if (prevSwatchDiv) {
                 const prevRect = prevSwatchDiv.getBoundingClientRect()
                 if (prevRect.top > swatchRect.top) {
                     const amount = prevRect.height - swatchRect.height
                     newTop += amount
                 }
+            } else if (subSwatches) {
+                const amount = subSwatches.getBoundingClientRect().height / 2.0
+                newTop += amount
             }
 
             const options:ScrollToOptions = {
@@ -130,7 +134,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                     {params.children}
                 </div>
 
-                <div className={childClassName}>
+                <div id={`${swatch.key}-swatches`} className={childClassName}>
                     {isChildSelected && subSwatches.length > 0 &&
                     <HorizontalListing
                         selectedSwatch={this.props.selectedSubSwatch}
