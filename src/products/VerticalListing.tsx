@@ -37,28 +37,22 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
 
             let newTop = topOfSwatch - 0.5 * listingRect.height
 
-            if (swatchRect.height * 2.5 > listingRect.height) {
-                if (prevSwatchDiv) {
-                    const prevRect = prevSwatchDiv.getBoundingClientRect()
-                    if (prevRect.top > swatchRect.top) {
-                        const amount = prevRect.height - swatchRect.height
-                        newTop += amount
-                    }
-                }
-            } else {
-                newTop += 0.5 * Math.min(swatchRect.height, listingRect.height)
-                if (prevSwatchDiv) {
-                    const prevRect = prevSwatchDiv.getBoundingClientRect()
-                    if (prevRect.top > swatchRect.top) {
-                        const amount = prevRect.height - swatchRect.height
-                        newTop += amount
-                    }
-                } else if (subSwatches) {
-                    const amount = subSwatches.getBoundingClientRect().height / 2.0
+            if (prevSwatchDiv) {
+                const prevRect = prevSwatchDiv.getBoundingClientRect()
+                if (prevRect.top > swatchRect.top) {
+                    const amount = prevRect.height - swatchRect.height
                     newTop += amount
                 }
             }
 
+            if (swatchRect.height * 2.5 < listingRect.height) {
+                //desktop only:
+                newTop += 0.5 * Math.min(swatchRect.height, listingRect.height)
+                if (!prevSwatchDiv && subSwatches) {
+                    const amount = subSwatches.getBoundingClientRect().height / 2.0
+                    newTop += amount
+                }
+            }
 
             const options:ScrollToOptions = {
                 top: newTop
