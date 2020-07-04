@@ -52,7 +52,11 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                     const amount = subSwatches.getBoundingClientRect().height / 2.0
                     newTop += amount
                 }
+            } else if (!prevSwatchDiv && subSwatches) {
+                const amount = subSwatches.getBoundingClientRect().height
+                newTop += amount
             }
+
 
             const options:ScrollToOptions = {
                 top: newTop
