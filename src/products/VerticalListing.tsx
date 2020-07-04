@@ -44,9 +44,16 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                     newTop += amount
                 }
             } else {
-                const amount = subSwatches.getBoundingClientRect().height / 2.0
-                newTop += amount
+                let subSwatchesHeight = subSwatches.getBoundingClientRect().height
+                if (!subSwatchesHeight) {
+                    //issue here is that the subSwatches is closed, so we need to know the height beforehand
+                    subSwatchesHeight = swatchRect.height
+                    behavior = undefined
+                }
+                newTop += subSwatchesHeight / 2.0
             }
+
+            
 
             const options:ScrollToOptions = {
                 top: newTop
