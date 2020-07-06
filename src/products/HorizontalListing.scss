@@ -5,6 +5,11 @@
   width:100%;
   display: flex;
   -ms-overflow-style: -ms-autohiding-scrollbar;
+  scrollbar-width:auto;/*mozilla*/
+}
+
+.swatchListing::-webkit-scrollbar {
+  display: block;
 }
 
 .swatchListingContent {
