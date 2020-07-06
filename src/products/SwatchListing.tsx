@@ -94,9 +94,10 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     private scrollInterval = 0
     private lastAutoScrollTime = 0
+    protected autoScrollTimeout = 2000
 
     private _addedOnScroll = false
-    private onScroll = () => {
+    private onScroll = (e:any) => {
         if (!this._realScroll) {
             this.lastAutoScrollTime = performance.now()
         } else if (this.scrollInterval) {
@@ -134,6 +135,8 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
         if (!swatchDiv) return
 
+        const prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined
+
         if (!this._addedOnScroll) {
             this._addedOnScroll = true;
             this.listing.current.addEventListener('scroll', this.onScroll)
@@ -157,20 +160,20 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
                 if (this.scrollInterval) window.clearInterval(this.scrollInterval)
             })
 
-            if (!this.scrollInterval) {
+            if (!this.scrollInterval && !this._realScroll) {
                 this.scrollInterval = window.setInterval(()=>{
                     if (!this.lastAutoScrollTime || (performance.now() - this.lastAutoScrollTime) > 500) {
-                        this.scrollSwatchIntoView(swatchDiv, undefined, "smooth")
+                        this.scrollSwatchIntoView(swatchDiv, prevSwatchDiv, "smooth")
                     }
                 },200)
                 window.setTimeout(()=>{
                     window.clearInterval(this.scrollInterval)
-                }, 5000)
+                }, this.autoScrollTimeout)
             }
         }
 
         if (prevProps.selectedSwatch !== this.props.selectedSwatch) {
-            const prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined
+
             //console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
             this.scrollSwatchIntoView(swatchDiv, prevSwatchDiv, "smooth")
         }

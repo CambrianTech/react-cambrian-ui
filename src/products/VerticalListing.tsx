@@ -40,7 +40,6 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             if (!subSwatchesHeight) {
                 //issue here is that the subSwatches is closed, so we need to know the height beforehand
                 subSwatchesHeight = swatchRect.height
-                behavior = undefined
             }
 
             if (prevSwatchDiv) {

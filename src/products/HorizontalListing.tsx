@@ -13,6 +13,8 @@ export type HorizontalListingProps = SwatchListingProps & {
 export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
     protected constructor(props:HorizontalListingProps) {
         super(props, "horizontal-swatch-listing", classes)
+
+        this.autoScrollTimeout = 500;
     }
 
     protected getSwatchInfo(params:SwatchInfoParams) {
