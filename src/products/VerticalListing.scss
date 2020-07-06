@@ -48,7 +48,7 @@
   width: 180px;
   flex-grow: 0;
   flex-shrink: 0;
-  object-fit: cover;
+  object-fit: cover; font-family: 'object-fit: cover';
 }
 
 .swatchListingInfo {
@@ -70,4 +70,8 @@
 
 .swatchListingNumColors {
 
+}
+
+.swatchListing::-webkit-scrollbar {
+  display: none;
 }
