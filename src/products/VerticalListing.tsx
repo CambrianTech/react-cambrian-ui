@@ -69,7 +69,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             return this.props.getSwatchInfo(params)
         }
         const numColors = params.childCount ? params.childCount : (params.swatch.numChildren ? params.swatch.numChildren : 0);
-        const colorsPlural = `Color${numColors > 1 ? 's' : ''}`;
+        const colorsPlural = `Color${numColors > 1 || numColors === 0 ? 's' : ''}`;
         const numColorsText = `${numColors} ${params.isFiltered ? "Matching" : ""} ${colorsPlural}`;
         return (
             <div className={appendClassName("vertical-swatch-listing-info", classes.swatchListingInfo)}>

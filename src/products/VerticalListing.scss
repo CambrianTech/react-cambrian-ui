@@ -38,10 +38,11 @@
 .subSwatchListingContainer {
   height: 0;
   transition: height;
+  overflow-y: hidden;
 }
 
 .subSwatchListingContainerSelected {
-  height: 100px;
+  height: 140px;
 }
 
 .swatchListingImage {
