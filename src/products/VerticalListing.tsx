@@ -111,10 +111,6 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
 
         const swatchChildElements = this.props.getSwatchChildren ? this.props.getSwatchChildren(swatch, isChildSelected) : null;
 
-        if (subSwatches.length === 1 && isChildSelected) {
-            this.props.onClick(subSwatches[0])
-        }
-
         const params:SwatchInfoParams = {
             swatch,
             isSelected:isChildSelected,
