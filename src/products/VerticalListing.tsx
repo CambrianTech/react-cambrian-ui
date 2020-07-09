@@ -3,7 +3,7 @@ import classes from "./VerticalListing.scss";
 import {HorizontalListing} from "./HorizontalListing";
 import {Thumbnail} from "../general";
 import {appendClassName} from "../internal/Utils"
-import {DataFilter, ProductBase, SwatchItem} from "react-home-ar";
+import {DataFilter, DataItem, SwatchItem} from "react-home-ar";
 import {ReactNode} from "react";
 import {SwatchInfoParams, SwatchListing, SwatchListingProps, SwatchListingState} from "./SwatchListing";
 
@@ -92,7 +92,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
 
         const filters = this.filters;
 
-        const subSwatches = DataFilter.applyFilters(filters, swatch.children as ProductBase[]);
+        const subSwatches = DataFilter.applyFilters(filters, swatch.children as DataItem[]);
         const numSwatches:number|undefined = swatch.children ? subSwatches.length : undefined;
 
         if (filters.length && numSwatches === 0) {

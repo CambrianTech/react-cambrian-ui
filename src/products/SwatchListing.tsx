@@ -1,9 +1,10 @@
 import * as React from "react";
-import {ProductBase, SwatchItem, DataFilter} from "react-home-ar";
+import {DataItem, SwatchItem, DataFilter} from "react-home-ar";
 import {appendClassName} from "../internal/Utils";
 import {createRef, ReactNode} from "react";
 
 export type SwatchListingProps = {
+    visible?:boolean
     className?:string
     swatches?:SwatchItem[]
     selectedSwatch?:SwatchItem
@@ -48,7 +49,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     protected listingContent = createRef<HTMLDivElement>()
 
     protected get swatches() : SwatchItem[] {
-        const swatches = this.props.swatches as ProductBase[]
+        const swatches = this.props.swatches as DataItem[]
         return this.props.applyFilters ? DataFilter.applyFilters(this.filters, swatches) : swatches
     }
 
@@ -132,7 +133,6 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
         const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement
 
-
         if (!swatchDiv) return
 
         const prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined
@@ -180,7 +180,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     }
 
     render() {
-        if (!this.props.swatches) {
+        if (!this.props.swatches || this.props.visible===false) {
             return null
         }
 
@@ -195,8 +195,8 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
         if (swatches.length) {
             const parent = swatches[0].parent
-            if (parent instanceof ProductBase) {
-                const parentItem = parent as ProductBase
+            if (parent instanceof DataItem) {
+                const parentItem = parent as DataItem
                 //todo:handle existing declared onUpdate?
                 parentItem.onUpdate = ()=>{
                     this.forceUpdate()
