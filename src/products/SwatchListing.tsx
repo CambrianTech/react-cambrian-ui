@@ -76,7 +76,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     }
 
     protected didDataChange(nextProps: Readonly<T>, nextState: Readonly<SwatchListingState>) {
-        return nextProps.swatches !== this.props.swatches
+        return nextProps.swatches !== this.props.swatches || nextProps.visible !== this.props.visible
     }
 
     shouldComponentUpdate(nextProps: Readonly<T>, nextState: Readonly<SwatchListingState>): boolean {
