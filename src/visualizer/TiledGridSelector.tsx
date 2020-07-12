@@ -37,6 +37,10 @@ export const TiledGridSelectorCached = React.memo<TiledGridSelectorPropsInternal
                 types = types.filter(type=>availableTypes.indexOf(TiledGridType[type]) >= 0)
             }
 
+            if (types.length <= 1) {
+                return null
+            }
+
             return (
                 <div className={className} onMouseOver={props.internalOnMouseOver} onMouseOut={props.internalOnMouseOut}>
                     <Fab onClick={props.onClose} className={classes.tiledGridSelectorClose} icon={<MaterialIcon icon='close' />} />
@@ -63,7 +67,7 @@ export const TiledGridSelectorCached = React.memo<TiledGridSelectorPropsInternal
                 </div>
             );
         }
-        return (<aside />);
+        return null;
     }
 );
 

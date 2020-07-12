@@ -33,7 +33,7 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
             className = appendClassName(className, cProps.className)
 
             const min = cProps.min !== undefined ? cProps.min : -5
-            const max = cProps.max !== undefined ? cProps.max : -5
+            const max = cProps.max !== undefined ? cProps.max : 5
             const range = max - min
             const middle = min + range / 2
             const minMiddle = min + range / 4
