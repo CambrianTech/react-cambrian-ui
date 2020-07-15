@@ -12,7 +12,7 @@ import {TiledGridSelector} from "./TiledGridSelector";
 
 export enum VisualizerToolMode {
     None,
-    PhotoUpload,
+    ChoosePhoto,
     ChooseScene,
     Rotate,
     Translate,
@@ -30,9 +30,6 @@ type VisualizerToolsProperties = {
     isModePermitted:(mode:VisualizerToolMode)=>boolean;
     selectedAsset?:CBARTangibleAsset|undefined
     historySize?:number
-
-    onChoosePhoto?:()=>void
-    onChooseScene?:()=>void
 
     onShowHideButtons: (show: boolean) => void
 
@@ -73,14 +70,19 @@ export const VisualizerToolsCached = React.memo<VisualizerToolsCachedProps>(
             let className = appendClassName("visualizer-tools", classes.visualizerTools)
             className = appendClassName(className, props.className)
 
+            const buttonsVisible = props.mode !== VisualizerToolMode.Rotate && props.mode !== VisualizerToolMode.Translate && props.mode !== VisualizerToolMode.Pattern;
+
             return (
                 <div className={className}>
-                    {props.isModePermitted(VisualizerToolMode.PhotoUpload) && <Fab className={classes.toolButton} onClick={props.onChoosePhoto} icon={<MaterialIcon icon='add_a_photo' />} />}
-                    {props.isModePermitted(VisualizerToolMode.ChooseScene) && <Fab className={classes.toolButton} onClick={props.onChooseScene} icon={<MaterialIcon icon='insert_photo' />} />}
-                    {props.isModePermitted(VisualizerToolMode.Rotate) && <Fab className={classes.toolButton} onClick={props.rotateButtonClicked} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
-                    {props.isModePermitted(VisualizerToolMode.Translate) && <Fab className={classes.toolButton} onClick={props.translateButtonClicked} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}
-                    {props.hasPatterns && <Fab className={classes.toolButton} onClick={props.patternButtonClicked} icon={<MaterialIcon icon='view_compact'  className={classes.patternToolIcon} />} />}
-                    {props.isModePermitted(VisualizerToolMode.DrawSurface) && props.isModePermitted(VisualizerToolMode.EraseSurface) && <Fab className={classes.toolButton} icon={<MaterialIcon icon='edit' />} />}
+
+                    {buttonsVisible && <div className={appendClassName("visualizer-tools-buttons", classes.visualizerToolsButtons)}>
+                        {props.isModePermitted(VisualizerToolMode.ChoosePhoto) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChoosePhoto)} icon={<MaterialIcon icon='add_a_photo' />} />}
+                        {props.isModePermitted(VisualizerToolMode.ChooseScene) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChooseScene)} icon={<MaterialIcon icon='insert_photo' />} />}
+                        {props.isModePermitted(VisualizerToolMode.Rotate) && <Fab className={classes.toolButton} onClick={props.rotateButtonClicked} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
+                        {props.isModePermitted(VisualizerToolMode.Translate) && <Fab className={classes.toolButton} onClick={props.translateButtonClicked} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}
+                        {props.hasPatterns && <Fab className={classes.toolButton} onClick={props.patternButtonClicked} icon={<MaterialIcon icon='view_compact'  className={classes.patternToolIcon} />} />}
+                        {props.isModePermitted(VisualizerToolMode.DrawSurface) && props.isModePermitted(VisualizerToolMode.EraseSurface) && <Fab className={classes.toolButton} icon={<MaterialIcon icon='edit' />} />}
+                    </div>}
 
                     {props.onRotationChanged && (
                         <RotateTool visible={props.mode === VisualizerToolMode.Rotate}
