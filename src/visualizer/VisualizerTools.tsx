@@ -27,6 +27,8 @@ type VisualizerToolsProperties = {
     className?:string
 
     mode:VisualizerToolMode
+    customModes?:string[]
+
     isModePermitted:(mode:VisualizerToolMode)=>boolean;
     selectedAsset?:CBARTangibleAsset|undefined
     historySize?:number

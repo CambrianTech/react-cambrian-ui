@@ -1,5 +1,5 @@
 .rotateTool {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right:0;
@@ -49,4 +49,13 @@
 .rotateToolSliderButton {
   margin-right:50px;
   margin-left:50px;
+}
+
+.rotateToolSliderCancel {
+  @extend .rotateToolSliderButton;
+  background-color:#555
+}
+
+.rotateToolSliderConfirm {
+  @extend .rotateToolSliderButton;
 }

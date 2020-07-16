@@ -17,6 +17,9 @@ type TranslateToolProps = {
     max?: number
     onTranslationFinished: (commit: boolean, xPos: number, yPos: number) => void
     onTranslationChanged: (xPos: number, yPos: number) => void
+
+    cancelIcon?:React.ReactElement<HTMLElement>
+    confirmIcon?:React.ReactElement<HTMLElement>
 }
 
 type TranslateToolCachedProps = TranslateToolProps & {
@@ -73,14 +76,14 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
                             </datalist>
                         </div>
                         <div className={classes.translateToolSliderFooter}>
-                            <Fab className={classes.translateToolSliderButton} icon={<MaterialIcon icon='close' />} style={{backgroundColor:"#555"}} onClick={() => cProps.onTranslationFinishedInternal(false)}  />
-                            <Fab className={classes.translateToolSliderButton} icon={<MaterialIcon icon='check' />} onClick={() => cProps.onTranslationFinishedInternal(true)} />
+                            <Fab className={appendClassName("cancel", classes.translateToolSliderCancel)} icon={cProps.cancelIcon ? cProps.cancelIcon : <MaterialIcon icon='close' />} style={{backgroundColor:"#555"}} onClick={() => cProps.onTranslationFinishedInternal(false)}  />
+                            <Fab className={appendClassName("confirm", classes.translateToolSliderConfirm)} icon={cProps.confirmIcon ? cProps.confirmIcon : <MaterialIcon icon='check' />} onClick={() => cProps.onTranslationFinishedInternal(true)} />
                         </div>
                     </div>
                 </div>
             );
         }
-        return (<aside />);
+        return null;
     },
     (prevProps, nextProps) => {
         return prevProps.visible === nextProps.visible;
@@ -113,9 +116,10 @@ export function TranslateTool(props: TranslateToolProps) {
     }, [props.visible])
 
     return (
-        <TranslateToolCached onTranslationXChanged={translationXChanged}
+        <TranslateToolCached {...props}
+                             onTranslationXChanged={translationXChanged}
                              onTranslationYChanged={translationYChanged}
                              onTranslationFinishedInternal={translationFinished}
-                             {...props} />
+                             />
     )
 }

@@ -15,6 +15,8 @@ type RotateToolProps = {
     rotation: number
     onRotationFinished: (commit: boolean, rotation: number) => void
     onRotationChanged: (rotation: number) => void
+    cancelIcon?:React.ReactElement<HTMLElement>
+    confirmIcon?:React.ReactElement<HTMLElement>
 }
 
 function toDegrees(radians: number) {
@@ -63,14 +65,14 @@ export const RotateToolCached = React.memo<RotateToolProps>(
                             </div>
                         </div>
                         <div className={classes.rotateToolSliderFooter}>
-                            <Fab className={classes.rotateToolSliderButton} icon={<MaterialIcon icon='close' />} style={{backgroundColor:"#555"}} onClick={() => cProps.onRotationFinished(false, 0)}  />
-                            <Fab className={classes.rotateToolSliderButton} icon={<MaterialIcon icon='check' />} onClick={() => cProps.onRotationFinished(true, 0)} />
+                            <Fab className={appendClassName("cancel", classes.rotateToolSliderCancel)} icon={cProps.cancelIcon ? cProps.cancelIcon : <MaterialIcon icon='close' />} onClick={() => cProps.onRotationFinished(false, 0)}  />
+                            <Fab className={appendClassName("confirm", classes.rotateToolSliderConfirm)} icon={cProps.confirmIcon ? cProps.confirmIcon : <MaterialIcon icon='check' />} onClick={() => cProps.onRotationFinished(true, 0)} />
                         </div>
                     </div>
                 </div>
             );
         }
-        return (<aside />);
+        return null;
     },
     (prevProps, nextProps) => {
         return prevProps.visible === nextProps.visible;
@@ -96,8 +98,7 @@ export function RotateTool(props: RotateToolProps) {
     }, [props.visible])
 
     return (
-        <RotateToolCached visible={props.visible}
-                          rotation={props.rotation}
+        <RotateToolCached {...props}
                           onRotationChanged={rotateChanged}
                           onRotationFinished={rotateFinished} />
     )
