@@ -8,6 +8,7 @@ import MaterialIcon from "@material/react-material-icon";
 
 import {appendClassName} from "../internal/Utils"
 import {useEffect} from "react";
+import {useCallback} from "react";
 
 type RotateToolProps = {
     visible: boolean
@@ -19,6 +20,11 @@ type RotateToolProps = {
     confirmIcon?:React.ReactElement<HTMLElement>
 }
 
+type RotateToolCachedProps = RotateToolProps & {
+    onMouseDown:()=>void
+    onMouseUp:()=>void
+}
+
 function toDegrees(radians: number) {
     return radians * 180 / Math.PI
 }
@@ -27,7 +33,7 @@ function toRadians(degrees: number) {
     return degrees * Math.PI / 180
 }
 
-export const RotateToolCached = React.memo<RotateToolProps>(
+export const RotateToolCached = React.memo<RotateToolCachedProps>(
     (cProps) => {
         if (cProps.visible) {
             let className = appendClassName("rotate-tool", classes.rotateTool)
@@ -49,7 +55,8 @@ export const RotateToolCached = React.memo<RotateToolProps>(
                                 <div>180°</div>
                             </div>
                             <div className={classes.rotateToolSliderBar}>
-                                <input type="range" min={-180} max={180} step={0.5} defaultValue={toDegrees(cProps.rotation) + ""}
+                                <input id={"rotate-input"} type="range" min={-180} max={180} step={0.5} defaultValue={toDegrees(cProps.rotation) + ""}
+                                       onMouseDown={()=>cProps.onMouseDown()} onMouseUp={()=>cProps.onMouseUp()}
                                        onChange={e => cProps.onRotationChanged(toRadians(Number(e.target.value)))} list="range-values" />
                                 <datalist id="range-values">
                                     <option value="-180" />
@@ -62,6 +69,10 @@ export const RotateToolCached = React.memo<RotateToolProps>(
                                     <option value="135" />
                                     <option value="180" />
                                 </datalist>
+                            </div>
+
+                            <div className={classes.rotateToolInstructions}>
+                                Click and drag objects or adjust the slider.
                             </div>
                         </div>
                         <div className={classes.rotateToolSliderFooter}>
@@ -80,25 +91,39 @@ export const RotateToolCached = React.memo<RotateToolProps>(
 );
 
 export function RotateTool(props: RotateToolProps) {
-    const rotationControlValue = useRef(0)
+    const rotationControlValue = useRef(0);
+    const isActive = useRef(false);
 
-    function rotateChanged(radians: number) {
-        rotationControlValue.current = radians
-        props.onRotationChanged(radians)
-    }
+    const [rotation, visible, onRotationChanged, onRotationFinished] = [props.rotation, props.visible, props.onRotationChanged, props.onRotationFinished]
 
-    function rotateFinished(commit: boolean) {
-        props.onRotationFinished(commit, rotationControlValue.current)
-    }
+    const rotateChanged = useCallback((radians: number) => {
+        rotationControlValue.current = radians;
+        if (isActive.current) {
+            onRotationChanged(rotationControlValue.current);
+        }
+    }, [rotationControlValue, isActive, onRotationChanged]);
+
+    const rotateFinished = useCallback((commit: boolean) => {
+        onRotationFinished(commit, rotationControlValue.current)
+    }, [onRotationFinished, rotationControlValue]);
 
     useEffect(()=>{
-        if (props.visible) {
-            rotationControlValue.current = props.rotation
+        if (visible) {
+            rotationControlValue.current = rotation;
+
+            if (!isActive.current) {
+                const rotateInput = document.getElementById("rotate-input") as HTMLInputElement;
+                if (rotateInput) {
+                    rotateInput.value = `${rotation}`
+                }
+            }
         }
-    }, [props.visible])
+    }, [visible, rotationControlValue, isActive, rotation]);
 
     return (
         <RotateToolCached {...props}
+                          onMouseDown={()=>isActive.current = true}
+                          onMouseUp={()=>isActive.current = false}
                           onRotationChanged={rotateChanged}
                           onRotationFinished={rotateFinished} />
     )

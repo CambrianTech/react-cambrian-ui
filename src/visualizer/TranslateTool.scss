@@ -5,6 +5,7 @@
   right:0;
   background: rgba(0, 0, 0, 0.5);
   padding-top: 20px;
+  user-select: none;
 }
 
 .translateToolSlider {
@@ -54,8 +55,9 @@
 }
 
 .translateToolInstructions {
-  width: 70%;
+  width: 100%;
   color: #ffffff;
+  margin-top: 10px;
 }
 
 .translateToolSliderCancel {

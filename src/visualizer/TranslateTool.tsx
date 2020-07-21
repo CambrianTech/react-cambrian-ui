@@ -99,7 +99,7 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
                                        onChange={e => cProps.onTranslationYChanged(Number(e.target.value))} list="range-values-1" />
                             </div>
 
-                            <div className={classes.translateToolSliderBar}>
+                            <div className={classes.translateToolInstructions}>
                                 Click and drag objects or adjust sliders.
                             </div>
                         </div>
