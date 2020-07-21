@@ -114,7 +114,7 @@ export function RotateTool(props: RotateToolProps) {
             if (!isActive.current) {
                 const rotateInput = document.getElementById("rotate-input") as HTMLInputElement;
                 if (rotateInput) {
-                    rotateInput.value = `${rotation}`
+                    rotateInput.value = `${toDegrees(rotation)}`
                 }
             }
         }
