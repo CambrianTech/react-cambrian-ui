@@ -57,7 +57,7 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
                             <div className={classes.rotateToolSliderBar}>
                                 <input id={"rotate-input"} type="range" min={-180} max={180} step={0.5} defaultValue={toDegrees(cProps.rotation) + ""}
                                        onMouseDown={()=>cProps.onMouseDown()} onMouseUp={()=>cProps.onMouseUp()}
-                                       onChange={e => cProps.onRotationChanged(toRadians(Number(e.target.value)))} list="range-values" />
+                                       onChange={e => cProps.onRotationChanged(-1.0 * toRadians(Number(e.target.value)))} list="range-values" />
                                 <datalist id="range-values">
                                     <option value="-180" />
                                     <option value="-135" />
@@ -114,7 +114,7 @@ export function RotateTool(props: RotateToolProps) {
             if (!isActive.current) {
                 const rotateInput = document.getElementById("rotate-input") as HTMLInputElement;
                 if (rotateInput) {
-                    rotateInput.value = `${toDegrees(rotation)}`
+                    rotateInput.value = `${toDegrees(-1.0 * rotation)}`
                 }
             }
         }
