@@ -41,8 +41,8 @@ type VisualizerToolsProperties = {
 
     initialXPos?:number
     initialYPos?:number
-    minTranslation?:number
-    maxTranslation?:number
+    minTranslation?:[number, number]
+    maxTranslation?:[number, number]
 
     onTranslationChanged?: (xPos: number, yPos: number) => void
     onTranslationFinished?: (commit: boolean, xPos: number, yPos: number) => void

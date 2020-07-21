@@ -13,8 +13,8 @@ type TranslateToolProps = {
     className?:string
     xPos: number
     yPos: number
-    min?: number
-    max?: number
+    min?: [number, number]
+    max?: [number, number]
     onTranslationFinished: (commit: boolean, xPos: number, yPos: number) => void
     onTranslationChanged: (xPos: number, yPos: number) => void
 
@@ -38,47 +38,70 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
             let className = appendClassName("translate-tool", classes.translateTool);
             className = appendClassName(className, cProps.className);
 
-            const min = cProps.min !== undefined ? cProps.min : -5;
-            const max = cProps.max !== undefined ? cProps.max : 5;
-            const range = max - min;
-            const middle = min + range / 2;
-            const minMiddle = min + range / 4;
-            const maxMiddle = max - range / 4;
+            const min = cProps.min !== undefined ? cProps.min : [-5, -5];
+            const max = cProps.max !== undefined ? cProps.max : [5, 5];
+            const range = [max[0] - min[0], max[1] - min[1]];
+            const middle = [min[0] + range[0] / 2, min[1] + range[1] / 2];
+            const minMiddle = [min[0] + range[0] / 4, min[1] + range[1] / 4];
+            const maxMiddle = [max[0] - range[0] / 4, max[1] - range[1] / 4];
 
             return (
                 <div className={className}>
                     <div>
                         <div className={classes.translateToolSlider}>
                             <div className={classes.translateToolSliderLabels}>
-                                <div>{min}</div>
+                                <div>{min[0]}</div>
                                 <div>|&nbsp;</div>
-                                <div>{minMiddle}</div>
+                                <div>{minMiddle[0]}</div>
                                 <div>|&nbsp;</div>
-                                <div>{middle}</div>
+                                <div>{middle[0]}</div>
                                 <div>|&nbsp;</div>
-                                <div>{maxMiddle}</div>
+                                <div>{maxMiddle[0]}</div>
                                 <div>|&nbsp;</div>
-                                <div>{max}</div>
+                                <div>{max[0]}</div>
                             </div>
-                            <div className={classes.translateToolSliderBar}>
-                                <input id={"translate-x"} type="range" min={min} max={max} step={0.01} defaultValue={cProps.xPos + ""}
-                                       onMouseDown={()=>cProps.onMouseDown()} onMouseUp={()=>cProps.onMouseUp()}
-                                       onChange={e => cProps.onTranslationXChanged(Number(e.target.value))} list="range-values" />
-                            </div>
-
-                            <div className={classes.translateToolSliderBar}>
-                                <input id={"translate-y"} type="range" min={min} max={max} step={0.01} defaultValue={cProps.yPos + ""}
-                                       onMouseDown={()=>cProps.onMouseDown()} onMouseUp={()=>cProps.onMouseUp()}
-                                       onChange={e => cProps.onTranslationYChanged(Number(e.target.value))} list="range-values" />
-                            </div>
-
-                            <datalist id="range-values">
-                                <option value={min} />
-                                <option value={minMiddle} />
-                                <option value={middle} />
-                                <option value={maxMiddle} />
-                                <option value={max} />
+                            <datalist id="range-values-0">
+                                <option value={min[0]} />
+                                <option value={minMiddle[0]} />
+                                <option value={middle[0]} />
+                                <option value={maxMiddle[0]} />
+                                <option value={max[0]} />
                             </datalist>
+
+                            <div className={classes.translateToolSliderBar}>
+                                <input id={"translate-x"} type="range" min={min[0]} max={max[0]} step={0.01} defaultValue={cProps.xPos + ""}
+                                       onMouseDown={()=>cProps.onMouseDown()} onMouseUp={()=>cProps.onMouseUp()}
+                                       onChange={e => cProps.onTranslationXChanged(Number(e.target.value))} list="range-values-0" />
+                            </div>
+
+                            <div className={classes.translateToolSliderLabels}>
+                                <div>{min[1]}</div>
+                                <div>|&nbsp;</div>
+                                <div>{minMiddle[1]}</div>
+                                <div>|&nbsp;</div>
+                                <div>{middle[1]}</div>
+                                <div>|&nbsp;</div>
+                                <div>{maxMiddle[1]}</div>
+                                <div>|&nbsp;</div>
+                                <div>{max[1]}</div>
+                            </div>
+                            <datalist id="range-values-1">
+                                <option value={min[1]} />
+                                <option value={minMiddle[1]} />
+                                <option value={middle[1]} />
+                                <option value={maxMiddle[1]} />
+                                <option value={max[1]} />
+                            </datalist>
+
+                            <div className={classes.translateToolSliderBar}>
+                                <input id={"translate-y"} type="range" min={min[1]} max={max[1]} step={0.01} defaultValue={cProps.yPos + ""}
+                                       onMouseDown={()=>cProps.onMouseDown()} onMouseUp={()=>cProps.onMouseUp()}
+                                       onChange={e => cProps.onTranslationYChanged(Number(e.target.value))} list="range-values-1" />
+                            </div>
+
+                            <div className={classes.translateToolSliderBar}>
+                                Click and drag objects or adjust sliders.
+                            </div>
                         </div>
                         <div className={classes.translateToolSliderFooter}>
                             <Fab className={appendClassName("cancel", classes.translateToolSliderCancel)} icon={cProps.cancelIcon ? cProps.cancelIcon : <MaterialIcon icon='close' />} style={{backgroundColor:"#555"}} onClick={() => cProps.onTranslationFinishedInternal(false)}  />
