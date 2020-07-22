@@ -89,6 +89,19 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         }
     }
 
+    private clickedRow(swatch:SwatchItem) {
+        const row = document.getElementById(swatch.key) as HTMLDivElement
+        const rowChild = document.getElementById(`${swatch.key}-swatches`) as HTMLDivElement
+        if (row && rowChild) {
+            row.classList.toggle("selected")
+            rowChild.classList.toggle("selected")
+            rowChild.classList.toggle(classes.subSwatchListingContainerSelected)
+        }
+        window.setTimeout(()=>{
+            this.props.onClick(swatch)
+        }, 200);
+    }
+
     protected renderSwatch(swatch:SwatchItem): ReactNode {
 
         const filters = this.filters;
@@ -106,8 +119,8 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         let childClassName = appendClassName("vertical-swatch-listing-child", classes.subSwatchListingContainer);
         if (isChildSelected) {
             className = appendClassName(className, "selected");
-            childClassName = appendClassName(childClassName, classes.subSwatchListingContainerSelected);
             childClassName = appendClassName(childClassName, "selected");
+            childClassName = appendClassName(childClassName, classes.subSwatchListingContainerSelected);
         }
 
         const swatchChildElements = this.props.getSwatchChildren ? this.props.getSwatchChildren(swatch, isChildSelected) : null;
@@ -127,7 +140,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             <div key={swatch.key} id={swatch.key} className={className}>
 
                 <div className={appendClassName("vertical-swatch-listing-details", classes.swatchListingDetails)}
-                     onClick={()=>this.props.onClick(swatch)}>
+                     onClick={()=>this.clickedRow(swatch)}>
                     <div className={appendClassName("vertical-swatch-listing-image-container", classes.swatchListingImageContainer)}>
                         <Thumbnail className={appendClassName("vertical-swatch-listing-image", classes.swatchListingImage)} swatch={swatch} subSwatches={subSwatches} resolveThumbnailPath={this.props.resolveThumbnailPath} />
                         {swatchChildElements}
