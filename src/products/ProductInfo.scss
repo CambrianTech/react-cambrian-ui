@@ -6,6 +6,19 @@
   justify-content: space-around;
 }
 
+.productName {
+  display: flex;
+  flex-direction: column;
+}
+
+.productTitle {
+  font-size: 25px;
+}
+
+.productSubTitle {
+  font-size: 20px;
+}
+
 .preview {
   height: 30vh;
   object-fit: cover;
@@ -13,11 +26,11 @@
 }
 
 .specs {
-  padding: 20px;
+  padding: 12px;
 }
 
 .field {
-  font-size: 20px;
+
 }
 
 .fieldName {
