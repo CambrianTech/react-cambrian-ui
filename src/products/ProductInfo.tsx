@@ -28,9 +28,9 @@ export const ProductInfoCached = React.memo<ProductInfoProps>(
                                                    src={props.resolveUrl("preview", details.preview)} />}
                     <ul className={appendClassName("specs", classes.specs)}>
                         {Object.keys(specs).map((field) => {
-                            return <li key={field}>
-                                <span className={"field"}>{field}</span>
-                                <span className={"value"}>{specs[field]}</span>
+                            return <li key={field} className={appendClassName("field", classes.field)}>
+                                <div className={appendClassName("fieldName", classes.fieldName)}>{field}</div>
+                                <div className={appendClassName("fieldValue", classes.fieldValue)}>{specs[field]}</div>
                             </li>
                         })}
                     </ul>

@@ -1,6 +1,9 @@
 
 .productInfo {
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .preview {
@@ -10,5 +13,13 @@
 }
 
 .specs {
+  padding: 20px;
+}
 
+.field {
+  font-size: 20px;
+}
+
+.fieldName {
+  font-weight: 600;
 }
