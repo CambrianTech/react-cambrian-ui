@@ -43,7 +43,7 @@ export const ProductInfoCached = React.memo<ProductInfoProps>(
                         })}
                     </ul>
                     <div>
-                        <a href={details.url}>More details...</a>
+                        <a href={details.url} target={"_blank"}>More details...</a>
                     </div>
                 </div>
             );
