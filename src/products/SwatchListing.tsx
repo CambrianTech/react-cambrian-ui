@@ -19,6 +19,7 @@ export type SwatchListingProps = {
     willRenderSwatch?:(params:SwatchInfoParams)=>void
 
     noResultsNode?:ReactNode|undefined
+    swatchVisibilityChanged?:(swatch:SwatchItem, visible: boolean) => void;
 }
 
 export type SwatchListingState = {
@@ -79,6 +80,12 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     protected didDataChange(nextProps: Readonly<T>, nextState: Readonly<SwatchListingState>) {
         return nextProps.swatches !== this.props.swatches || nextProps.visible !== this.props.visible
+    }
+
+    protected thumbnailVisibilityChanged(swatch:SwatchItem, visible:boolean) {
+        if (this.props.swatchVisibilityChanged) {
+            this.props.swatchVisibilityChanged(swatch, visible)
+        }
     }
 
     shouldComponentUpdate(nextProps: Readonly<T>, nextState: Readonly<SwatchListingState>): boolean {

@@ -142,7 +142,9 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                 <div className={appendClassName("vertical-swatch-listing-details", classes.swatchListingDetails)}
                      onClick={()=>this.clickedRow(swatch)}>
                     <div className={appendClassName("vertical-swatch-listing-image-container", classes.swatchListingImageContainer)}>
-                        <Thumbnail className={appendClassName("vertical-swatch-listing-image", classes.swatchListingImage)} swatch={swatch} subSwatches={subSwatches} resolveThumbnailPath={this.props.resolveThumbnailPath} />
+                        <Thumbnail className={appendClassName("vertical-swatch-listing-image", classes.swatchListingImage)} swatch={swatch}
+                                   visibilityWillChange={(visible)=>this.thumbnailVisibilityChanged(swatch, visible)}
+                                   subSwatches={subSwatches} resolveThumbnailPath={this.props.resolveThumbnailPath} />
                         {swatchChildElements}
                     </div>
                     {this.getSwatchInfo(params)}
@@ -159,6 +161,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                         getSwatchChildren={this.props.getSubSwatchChildren}
                         getSwatchInfo={this.props.getSubSwatchInfo}
                         willRenderSwatches={(swatches)=>this.willRenderSubSwatches(swatches)}
+                        swatchVisibilityChanged={this.props.swatchVisibilityChanged}
                     />}
                 </div>
 

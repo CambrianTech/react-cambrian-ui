@@ -6,7 +6,8 @@ type ThumbnailProps = {
     swatch:SwatchItem
     className?:string,
     subSwatches?:SwatchItem[]
-    resolveThumbnailPath:(swatch:SwatchItem, subSwatches?:SwatchItem[])=>string|undefined
+    resolveThumbnailPath:(swatch:SwatchItem, subSwatches?:SwatchItem[])=>string|undefined;
+    visibilityWillChange?: (visible: boolean) => void;
 }
 
 export function Thumbnail(props: ThumbnailProps) {
@@ -16,6 +17,6 @@ export function Thumbnail(props: ThumbnailProps) {
     return (
             <LazyImage className={props.className}
                  src={props.resolveThumbnailPath(props.swatch, props.subSwatches)}
-                 alt={props.swatch.displayName} />
+                 alt={props.swatch.displayName} visibilityWillChange={props.visibilityWillChange} />
     )
 }

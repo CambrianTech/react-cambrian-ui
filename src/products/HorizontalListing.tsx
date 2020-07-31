@@ -66,6 +66,7 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
                 <div className={appendClassName("horizontal-swatch-listing-details", classes.swatchListingDetails)}>
                     <div className={appendClassName("horizontal-swatch-listing-image-container", classes.swatchListingImageContainer)}>
                         <Thumbnail className={appendClassName("horizontal-swatch-listing-image", classes.swatchListingImage)}
+                                   visibilityWillChange={(visible)=>{this.thumbnailVisibilityChanged(swatch, visible)}}
                                    swatch={swatch} resolveThumbnailPath={this.props.resolveThumbnailPath} />
                         {swatchChildren}
                     </div>
