@@ -5,6 +5,7 @@ import {appendClassName} from "../internal/Utils";
 import {LazyImage} from "react-lazy-elements";
 
 type ProductInfoProps = {
+    visible:boolean
     product?:ProductItem
     className?:string
     resolveUrl:(name:string, url:string|undefined)=>string
@@ -33,8 +34,7 @@ export const ProductInfoCached = React.memo<ProductInfoProps>(
                             {props.product.displayName}
                         </div>
                     </div>
-                    <LazyImage className={appendClassName("preview", classes.preview)}
-                                                   src={props.resolveUrl("preview", details.preview)} />
+                    {props.visible && <img className={appendClassName("preview", classes.preview)} src={props.resolveUrl("preview", details.preview)} />}
                     <ul className={appendClassName("specs", classes.specs)}>
                         {Object.keys(specs).map((field) => {
                             return <li key={field} className={appendClassName("field", classes.field)}>
@@ -52,7 +52,7 @@ export const ProductInfoCached = React.memo<ProductInfoProps>(
         return null;
     },
     (prevProps, nextProps) => {
-        return prevProps.product === nextProps.product;
+        return prevProps.visible === nextProps.visible && prevProps.product === nextProps.product;
     }
 );
 
