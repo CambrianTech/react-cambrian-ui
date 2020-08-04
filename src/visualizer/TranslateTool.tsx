@@ -70,7 +70,8 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
 
                             <div className={classes.translateToolSliderBar}>
                                 <input id={"translate-x"} type="range" min={min[0]} max={max[0]} step={0.01} defaultValue={cProps.xPos + ""}
-                                       onMouseDown={()=>cProps.onMouseDown()} onMouseUp={()=>cProps.onMouseUp()}
+                                       onMouseDown={()=>cProps.onMouseDown()} onTouchStart={()=>cProps.onMouseDown()}
+                                       onMouseUp={()=>cProps.onMouseUp()} onTouchEnd={()=>cProps.onMouseUp()}
                                        onChange={e => cProps.onTranslationXChanged(Number(e.target.value))} list="range-values-0" />
                             </div>
 
