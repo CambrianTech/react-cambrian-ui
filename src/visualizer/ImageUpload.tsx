@@ -50,11 +50,11 @@ export function ImageUpload(props: ImageUploadProperties) {
         if (props.onProgress) {
             props.onProgress(progress)
         }
-    }, [props])
+    }, [props]);
 
     async function upload(acceptedFiles: File[]) {
 
-        const inputs = Array.from(document.getElementsByTagName("input"))
+        const inputs = Array.from(document.getElementsByTagName("input"));
         const input = inputs.find(element => element.type === "file") as HTMLInputElement;
         if (input) {
             (input as any).value = null
@@ -65,42 +65,67 @@ export function ImageUpload(props: ImageUploadProperties) {
         if (!firstFile)
             return;
 
-        const messageMinDurationMS = 4000
+        const messageMinDurationMS = 4000;
         const startTime = new Date();
-        setProgress({visible:true, progress:0, message:"Your photo is being uploaded"})
+        setProgress({visible:true, progress:0, message:"Your photo is being uploaded"});
 
-        const uploadFile = await getRotatedFile(firstFile, props.maxImageSize ? Math.max(props.maxImageSize, 2048) : 2048)
-        const firstFilePreviewPath = URL.createObjectURL(uploadFile)
+        const uploadFile = await getRotatedFile(firstFile, props.maxImageSize ? Math.max(props.maxImageSize, 2048) : 2048);
+        const firstFilePreviewPath = URL.createObjectURL(uploadFile);
 
-        CBContentManager.default.resetScene()
+        CBContentManager.default.resetScene();
 
         const results = await CBContentManager.default.uploadRoom(uploadFile, ((progress, status) => {
             setProgress({visible:true, progress:progress, message:status})
-        })).catch((error)=>handleError(error))
+        })).catch((error)=>handleError(error));
 
-        const roomId = CBContentManager.default.roomId
+        const roomId = CBContentManager.default.roomId;
+
+        console.log("results:", results);
 
         if (results && roomId) {
 
-            setProgress({visible:true, progress:1, message:"Complete"})
+            setProgress({visible:true, progress:1, message:"Complete"});
 
             if (results.dataUrl != null) {
                 fetch(results.dataUrl).then(res => res.json()).then(data => {
-                    //TODO: something maybe on the server for main,preview,thumbnail?
-                    data.images.main = firstFilePreviewPath
-                    props.onImageChosen(data)
+
+                    if (data.hasOwnProperty("main")) {
+                        //TODO: something maybe on the server for main,preview,thumbnail?
+                        data.images.main = firstFilePreviewPath;
+                    } else {
+                        //legacy
+                        data['anchorPoint'] = [0.5,1.0];
+                        data['images'] = {
+                            main: results.semanticUrl.replace("mask.png", "background"),
+                            lighting: results.lightingUrl,
+                            superpixels: results.superpixelsUrl,
+                            masks: {
+                                "floor": results.semanticUrl
+                            },
+                            roomId: roomId
+                        };
+
+                        console.log("legacy API detected, converting data", data);
+                    }
+
+                    props.onImageChosen(data);
+                    console.log("props.onImageChosen");
                 })
-            } else {
+            }
+            else {
+                console.warn("Upload failed, no dataUrl");
                 setProgress({visible:true, progress:0, message:"Upload failed", error:new Error("Upload failed")})
             }
         } else {
+            console.warn("Upload failed, no room ID");
             setProgress({visible:true, progress:0, message:"Upload failed", error:new Error("Upload failed")})
         }
 
-        const elapsed = new Date().getTime() - startTime.getTime()
+        const elapsed = new Date().getTime() - startTime.getTime();
         window.setTimeout(() => {
             if (_isMounted.current) {
-                setProgress({visible:false})
+                setProgress({visible:false});
+                console.log("timeout");
             }
         }, Math.max(messageMinDurationMS - elapsed, 100))
     }
