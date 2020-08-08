@@ -76,18 +76,18 @@ export const VisualizerToolsCached = React.memo<VisualizerToolsCachedProps>(
                 else {
                     switch (mode) {
                         case VisualizerToolMode.Pattern:
-                            return "Pattern";
+                            return "Choose Pattern";
                         case VisualizerToolMode.Rotate:
-                            return "Rotate";
+                            return "Rotate Surface";
                         case VisualizerToolMode.Translate:
-                            return "Move";
+                            return "Move Surface";
                         case VisualizerToolMode.ChooseScene:
                             return "Choose Scene";
                         case VisualizerToolMode.ChoosePhoto:
-                            return "Photo";
+                            return "Choose Photo";
                         case VisualizerToolMode.EraseSurface:
                         case VisualizerToolMode.DrawSurface:
-                            return "Edit";
+                            return "Edit Surface";
                     }
                 }
             }
