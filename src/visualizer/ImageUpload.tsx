@@ -80,7 +80,7 @@ export function ImageUpload(props: ImageUploadProperties) {
 
         const roomId = CBContentManager.default.roomId;
 
-        console.log("results:", results);
+        //console.log("results:", results);
 
         if (results && roomId) {
 
@@ -105,11 +105,10 @@ export function ImageUpload(props: ImageUploadProperties) {
                             roomId: roomId
                         };
 
-                        console.log("legacy API detected, converting data", data);
+                        //console.log("legacy API detected, converting data", data);
                     }
 
                     props.onImageChosen(data);
-                    console.log("props.onImageChosen");
                 })
             }
             else {
@@ -125,7 +124,6 @@ export function ImageUpload(props: ImageUploadProperties) {
         window.setTimeout(() => {
             if (_isMounted.current) {
                 setProgress({visible:false});
-                console.log("timeout");
             }
         }, Math.max(messageMinDurationMS - elapsed, 100))
     }
