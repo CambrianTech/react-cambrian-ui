@@ -94,7 +94,6 @@ export function ImageUpload(props: ImageUploadProperties) {
                         data.images.main = firstFilePreviewPath;
                     } else {
                         //legacy
-                        data['anchorPoint'] = [0.5,1.0];
                         data['images'] = {
                             main: results.semanticUrl.replace("mask.png", "background"),
                             lighting: results.lightingUrl,
@@ -104,8 +103,6 @@ export function ImageUpload(props: ImageUploadProperties) {
                             },
                             roomId: roomId
                         };
-
-                        //console.log("legacy API detected, converting data", data);
                     }
 
                     props.onImageChosen(data);
