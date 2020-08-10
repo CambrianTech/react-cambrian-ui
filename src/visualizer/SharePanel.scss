@@ -1,0 +1,38 @@
+
+.productInfo {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.productName {
+  display: flex;
+  flex-direction: column;
+}
+
+.productTitle {
+  font-size: 25px;
+}
+
+.productSubTitle {
+  font-size: 20px;
+}
+
+.preview {
+  height: 30vh;
+  object-fit: cover;
+  width: 100%;
+}
+
+.specs {
+  padding: 12px;
+}
+
+.field {
+
+}
+
+.fieldName {
+  font-weight: 600;
+}
