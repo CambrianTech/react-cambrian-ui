@@ -1,21 +1,21 @@
 
-.productInfo {
+.share {
   background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
 
-.productName {
+.shareName {
   display: flex;
   flex-direction: column;
 }
 
-.productTitle {
+.shareTitle {
   font-size: 25px;
 }
 
-.productSubTitle {
+.shareSubTitle {
   font-size: 20px;
 }
 
@@ -23,16 +23,4 @@
   height: 30vh;
   object-fit: cover;
   width: 100%;
-}
-
-.specs {
-  padding: 12px;
-}
-
-.field {
-
-}
-
-.fieldName {
-  font-weight: 600;
 }

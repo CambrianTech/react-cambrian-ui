@@ -2,7 +2,6 @@ import {default as React} from "react";
 import {ProductItem} from "react-home-ar";
 import classes from "./ProductInfo.scss";
 import {appendClassName} from "../internal/Utils";
-import {LazyImage} from "react-lazy-elements";
 
 type ProductInfoProps = {
     visible:boolean
@@ -14,7 +13,7 @@ type ProductInfoProps = {
 export const ProductInfoCached = React.memo<ProductInfoProps>(
 
     (props) => {
-        if (props.product && props.product.details) {
+        if (props.visible && props.product && props.product.details) {
 
             let className = appendClassName("product-info", classes.productInfo);
             if (props.className) {
