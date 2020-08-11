@@ -1,5 +1,5 @@
 import {createRef, default as React, useCallback, useEffect, useState} from "react";
-import {CBMethods, CBSceneData, CBSceneProperties, ProductItem, CBServerFile} from "react-home-ar";
+import {CBMethods, CBSceneData, CBSceneProperties, ProductItem, CBServerFile, CBContentManager} from "react-home-ar";
 import classes from "./SharePanel.scss";
 import {appendClassName} from "../internal/Utils";
 import {
@@ -25,7 +25,6 @@ type SharePanelProps = {
     getShareUrl:(socialNetwork:string)=>string
     socialClicked?:(socialNetwork:string)=>void
 
-    uploadFile:(canvas:HTMLCanvasElement, type:CBServerFile)=>Promise<string | null> | undefined,
     onProgress:(visible:boolean, status:string, percentage:number)=>void,
     onCompleted:(success:boolean)=>void
 
@@ -38,11 +37,11 @@ const PINTEREST_UPLOAD_TIMEOUT = 10000;
 export const SharePanelCached = React.memo<SharePanelProps>(
 
     (props) => {
-        if (props.visible && props.product && props.product.details) {
+        if (props.visible && props.product) {
 
-            const { onClose } = props
+            const { onClose } = props;
 
-            const shareLinkTextBox = createRef<HTMLInputElement>()
+            const shareLinkTextBox = createRef<HTMLInputElement>();
 
             const socialClicked = useCallback((socialNetwork:string) => {
                 if (props.socialClicked) {
@@ -80,7 +79,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                     const shareImage = await getShareImage(props.api);
 
                     if (shareImage) {
-                        const maskUrl = await props.uploadFile(props.data.maskCanvas, CBServerFile.Mask);
+                        const maskUrl = await CBContentManager.default.uploadFile(props.data.maskCanvas, CBServerFile.Mask);
                         if (!maskUrl) {
                             props.onCompleted(false);
                             return
@@ -93,7 +92,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                         }
 
                         const pinterestImage = await addSwatchBranding(pinterest, product);
-                        const pinterestUrl = await props.uploadFile(pinterestImage.canvas, CBServerFile.Pinterest);
+                        const pinterestUrl = await CBContentManager.default.uploadFile(pinterestImage.canvas, CBServerFile.Pinterest);
                         if (!pinterestUrl) {
                             props.onCompleted(false);
                             return
@@ -109,7 +108,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                             setShareImageUrl(image)
                         });
 
-                        const previewUrl = await props.uploadFile(shareImage.canvas, CBServerFile.Preview);
+                        const previewUrl = await CBContentManager.default.uploadFile(shareImage.canvas, CBServerFile.Preview);
                         if (!previewUrl) {
                             props.onCompleted(false);
                             return
@@ -126,7 +125,8 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
             useEffect(() => {
                 if (props.needsUpload) {
-                    setPerformUpload(true)
+                    setPerformUpload(true);
+                    console.log("performUpload");
                 }
             }, [props.needsUpload]);
 
@@ -305,8 +305,7 @@ function addProductText(ctx:CanvasRenderingContext2D, product:ProductItem, image
     currentY = ctx.canvas.height - topMargin;
     ctx.fillText(url, currentX, currentY)
 
-};
-
+}
 function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:ProductItem) {
 
     return new Promise<CanvasRenderingContext2D>((resolve, reject)=>{
@@ -354,8 +353,7 @@ function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:Produc
         }
     })
 
-};
-
+}
 function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
 
     return new Promise<CanvasRenderingContext2D>((resolve, reject)=>{
@@ -372,7 +370,7 @@ function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
                 ctx.drawImage(imageContext.canvas, 0, imageContext.canvas.height);
                 const img = new Image();
                 img.crossOrigin = "";
-                img.src = sceneData.backgroundUrl
+                img.src = sceneData.backgroundUrl;
 
                 img.onload = () => {
                     if (ctx) {
@@ -426,8 +424,7 @@ function isFileReady(url: string) {
         };
         http.send()
     })
-};
-
+}
 function whenFileAvailable(url: string, timeoutMS:number = 30) {
     return new Promise<boolean>((resolve, reject)=>{
         const startTime = performance.now();
@@ -452,8 +449,7 @@ function whenFileAvailable(url: string, timeoutMS:number = 30) {
             })
         }, 3000)
     })
-};
-
+}
 export function SharePanel(props: SharePanelProps) {
     return <SharePanelCached {...props} />
 }

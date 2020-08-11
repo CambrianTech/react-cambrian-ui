@@ -66,7 +66,7 @@
     "rollup-plugin-typescript2": "^0.24.3",
     "typescript": "^3.8.3",
     "typescript-plugin-css-modules": "^2.3.0",
-    "react-home-ar": "^0.0.123"
+    "react-home-ar": "^0.0.124"
   },
   "peerDependencies": {
     "@types/react": ">=16.9.35",
@@ -78,6 +78,6 @@
     "@material/react-fab": ">=0.15.0",
     "@material/react-icon-button": ">=0.15.0",
     "@material/react-material-icon": ">=0.15.0",
-    "react-home-ar": ">=0.0.118"
+    "react-home-ar": ">=0.0.124"
   }
 }
