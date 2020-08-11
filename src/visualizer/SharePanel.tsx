@@ -15,7 +15,6 @@ type SharePanelProps = {
     visible:boolean
     className?:string
     product?:ProductItem
-    methods:CBMethods,
     api:CBMethods,
     scene:CBSceneProperties,
     data:CBSceneData,
@@ -25,7 +24,7 @@ type SharePanelProps = {
     getShareUrl:(socialNetwork:string)=>string
     socialClicked?:(socialNetwork:string)=>void
 
-    uploadFile:(canvas:HTMLCanvasElement, type:CBServerFile)=>string,
+    uploadFile:(canvas:HTMLCanvasElement, type:CBServerFile)=>Promise<string | null> | undefined,
     onProgress:(visible:boolean, status:string, percentage:number)=>void,
     onCompleted:(success:boolean)=>void
 
@@ -83,7 +82,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                             return
                         }
 
-                        const pinterest = props.isUploadedImage ? await generateBeforeAfter(props.methods, props.scene) : await getShareImage(props.api);
+                        const pinterest = props.isUploadedImage ? await generateBeforeAfter(props.api, props.scene) : await getShareImage(props.api);
 
                         if (!pinterest) {
                             return
@@ -224,7 +223,7 @@ export async function getShareImage(api:CBMethods) {
     return null
 }
 
-const addProductText = useCallback((ctx:CanvasRenderingContext2D, product:ProductItem, imageWidth:number, imageHeight:number, bottomHeight:number) => {
+function addProductText(ctx:CanvasRenderingContext2D, product:ProductItem, imageWidth:number, imageHeight:number, bottomHeight:number) {
 
     const fontFamily = "Lato,Avenir Next,Roboto,Verdana,serif";
 
@@ -291,9 +290,9 @@ const addProductText = useCallback((ctx:CanvasRenderingContext2D, product:Produc
     currentY = ctx.canvas.height - topMargin;
     ctx.fillText(url, currentX, currentY)
 
-}, []);
+};
 
-export function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:ProductItem) {
+function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:ProductItem) {
 
     return new Promise<CanvasRenderingContext2D>((resolve, reject)=>{
 
@@ -342,7 +341,7 @@ export function addSwatchBranding(imageContext:CanvasRenderingContext2D, product
 
 };
 
-export function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
+function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
 
     return new Promise<CanvasRenderingContext2D>((resolve, reject)=>{
 
