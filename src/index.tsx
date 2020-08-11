@@ -7,9 +7,3 @@ export * from "./visualizer"
 
 //products / swatches, listings
 export * from "./products"
-
-export enum ServerFile {
-    Mask = "mask",
-    Preview = "preview",
-    Pinterest = "pinterest",
-}

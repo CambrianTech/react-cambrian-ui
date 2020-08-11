@@ -1,5 +1,5 @@
 import {createRef, default as React, useCallback, useState} from "react";
-import {CBMethods, CBSceneData, CBSceneProperties, ProductItem} from "react-home-ar";
+import {CBMethods, CBSceneData, CBSceneProperties, ProductItem, CBServerFile} from "react-home-ar";
 import classes from "./SharePanel.scss";
 import {appendClassName} from "../internal/Utils";
 import {
@@ -10,7 +10,6 @@ import {
     PinterestShareButton, TwitterIcon,
     TwitterShareButton
 } from "react-share";
-import {ServerFile} from "../index";
 
 type SharePanelProps = {
     visible:boolean
@@ -26,7 +25,7 @@ type SharePanelProps = {
     getShareUrl:(socialNetwork:string)=>string
     socialClicked?:(socialNetwork:string)=>void
 
-    uploadFile:(canvas:HTMLCanvasElement, type:ServerFile)=>string,
+    uploadFile:(canvas:HTMLCanvasElement, type:CBServerFile)=>string,
     onProgress:(visible:boolean, status:string, percentage:number)=>void,
     onCompleted:(success:boolean)=>void
 
@@ -78,7 +77,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                     const shareImage = await getShareImage(props.api);
 
                     if (shareImage) {
-                        const maskUrl = await props.uploadFile(props.data.maskCanvas, ServerFile.Mask);
+                        const maskUrl = await props.uploadFile(props.data.maskCanvas, CBServerFile.Mask);
                         if (!maskUrl) {
                             props.onCompleted(false);
                             return
@@ -91,7 +90,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                         }
 
                         const pinterestImage = await addSwatchBranding(pinterest, product);
-                        const pinterestUrl = await props.uploadFile(pinterestImage.canvas, ServerFile.Pinterest);
+                        const pinterestUrl = await props.uploadFile(pinterestImage.canvas, CBServerFile.Pinterest);
                         if (!pinterestUrl) {
                             props.onCompleted(false);
                             return
@@ -107,7 +106,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                             setShareImageUrl(image)
                         });
 
-                        const previewUrl = await props.uploadFile(shareImage.canvas, ServerFile.Preview);
+                        const previewUrl = await props.uploadFile(shareImage.canvas, CBServerFile.Preview);
                         if (!previewUrl) {
                             props.onCompleted(false);
                             return
