@@ -1,4 +1,4 @@
-import {createRef, default as React, useCallback, useState} from "react";
+import {createRef, default as React, useCallback, useEffect, useState} from "react";
 import {CBMethods, CBSceneData, CBSceneProperties, ProductItem, CBServerFile} from "react-home-ar";
 import classes from "./SharePanel.scss";
 import {appendClassName} from "../internal/Utils";
@@ -20,6 +20,7 @@ type SharePanelProps = {
     data:CBSceneData,
     isUploadedImage:boolean,
     shareSubject:string
+    needsUpload:boolean
 
     getShareUrl:(socialNetwork:string)=>string
     socialClicked?:(socialNetwork:string)=>void
@@ -68,9 +69,12 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
             const [shareImageUrl, setShareImageUrl] = useState<string>();
             const [beforeAfterImageUrl, setBeforeAfterImageUrl] = useState<string>();
+            const [performUpload, setPerformUpload] = useState(false);
 
             const doShareUpload = useCallback((product:ProductItem) => {
                 (async () => {
+
+                    setPerformUpload(false);
 
                     props.onProgress(true, "Contacting server", 0.3);
                     const shareImage = await getShareImage(props.api);
@@ -120,6 +124,17 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                 })()
             }, []);
 
+            useEffect(() => {
+                if (props.needsUpload) {
+                    setPerformUpload(true)
+                }
+            }, [props.needsUpload]);
+
+            useEffect(() => {
+                if (performUpload && props.scene && props.product && props.visible) {
+                    doShareUpload(props.product)
+                }
+            }, [performUpload, props.scene, props.product, props.visible]);
 
             let className = appendClassName("share-project", classes.share);
             if (props.className) {
