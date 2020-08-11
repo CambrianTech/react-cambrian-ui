@@ -79,37 +79,47 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                     const shareImage = await getShareImage(props.api);
 
                     if (shareImage) {
+                        console.log("upload mask");
+
                         const maskUrl = await CBContentManager.default.uploadFile(props.data.maskCanvas, CBServerFile.Mask);
                         if (!maskUrl) {
+                            console.error("Could not upload mask image!");
                             props.onCompleted(false);
                             return
                         }
 
+                        console.log("generate before/after");
                         const pinterest = props.isUploadedImage ? await generateBeforeAfter(props.api, props.scene) : await getShareImage(props.api);
 
                         if (!pinterest) {
                             return
                         }
 
+                        console.log("add branding");
                         const pinterestImage = await addSwatchBranding(pinterest, product);
                         const pinterestUrl = await CBContentManager.default.uploadFile(pinterestImage.canvas, CBServerFile.Pinterest);
                         if (!pinterestUrl) {
+                            console.error("Could not upload pinterest image!");
                             props.onCompleted(false);
                             return
                         }
 
+                        console.log("wait on pinterest");
                         //takes a few seconds to get to aws
                         whenFileAvailable(pinterestUrl, PINTEREST_UPLOAD_TIMEOUT).then(()=>{
                             setBeforeAfterImageUrl(pinterestUrl)
                         });
 
+                        console.log("finish share image");
                         addSwatchBranding(shareImage, product).then(ctx=>{
                             const image = ctx.canvas.toDataURL("image/png");
                             setShareImageUrl(image)
                         });
 
+                        console.log("upload share as preview");
                         const previewUrl = await CBContentManager.default.uploadFile(shareImage.canvas, CBServerFile.Preview);
                         if (!previewUrl) {
+                            console.error("Could not upload preview image!");
                             props.onCompleted(false);
                             return
                         }
@@ -118,6 +128,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                         //setShareUrl(updateUrl());
                     } else {
+                        console.error("Could not generate share image!");
                         props.onCompleted(false);
                     }
                 })()
