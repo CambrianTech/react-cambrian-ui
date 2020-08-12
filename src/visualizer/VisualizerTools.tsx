@@ -17,6 +17,7 @@ export enum VisualizerToolMode {
     Rotate,
     Translate,
     Pattern,
+    Share,
     DrawSurface,
     EraseSurface
 }
@@ -77,6 +78,8 @@ export const VisualizerToolsCached = React.memo<VisualizerToolsCachedProps>(
                     switch (mode) {
                         case VisualizerToolMode.Pattern:
                             return "Choose Pattern";
+                        case VisualizerToolMode.Share:
+                            return "Share Project";
                         case VisualizerToolMode.Rotate:
                             return "Rotate Surface";
                         case VisualizerToolMode.Translate:
@@ -106,6 +109,7 @@ export const VisualizerToolsCached = React.memo<VisualizerToolsCachedProps>(
                     {buttonsVisible && <div className={appendClassName(className, classes.visualizerToolsButtons)}>
                         {props.isModePermitted(VisualizerToolMode.ChoosePhoto) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChoosePhoto)} textLabel={getModeLabel(VisualizerToolMode.ChoosePhoto)} icon={<MaterialIcon icon='add_a_photo' />} />}
                         {props.isModePermitted(VisualizerToolMode.ChooseScene) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChooseScene)} textLabel={getModeLabel(VisualizerToolMode.ChooseScene)} icon={<MaterialIcon icon='insert_photo' />} />}
+                        {props.isModePermitted(VisualizerToolMode.Share) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.Share)} textLabel={getModeLabel(VisualizerToolMode.Share)} icon={<MaterialIcon icon='share' />} />}
                         {props.isModePermitted(VisualizerToolMode.Rotate) && <Fab className={classes.toolButton} onClick={props.rotateButtonClicked} textLabel={getModeLabel(VisualizerToolMode.Rotate)} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
                         {props.isModePermitted(VisualizerToolMode.Translate) && <Fab className={classes.toolButton} onClick={props.translateButtonClicked} textLabel={getModeLabel(VisualizerToolMode.Translate)} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}
                         {props.hasPatterns && <Fab className={classes.toolButton} onClick={props.patternButtonClicked} textLabel={getModeLabel(VisualizerToolMode.Pattern)} icon={<MaterialIcon icon='view_compact'  className={classes.patternToolIcon} />} />}

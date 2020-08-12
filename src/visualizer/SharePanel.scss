@@ -1,0 +1,68 @@
+
+.share {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.shareName {
+  display: flex;
+  flex-direction: column;
+}
+
+.shareTitle {
+  font-size: 25px;
+}
+
+.shareSubTitle {
+  font-size: 20px;
+}
+
+.preview {
+  width: 100%;
+}
+
+.shareContainer {
+  height: 100%;
+}
+
+.shareContent {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+.previewContainer {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 50vh;
+
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.previewImage {
+  object-fit: cover; font-family: 'object-fit: cover';
+  object-position: 100% 100%;
+  image-rendering: crisp-edges;
+
+  width: 100%;
+  height: 100%;
+  max-height: 70vh;
+}
+
+.mainButtons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.socialButtons {
+  display: flex;
+}
+
+.urlText {
+  width: 70%;
+}
