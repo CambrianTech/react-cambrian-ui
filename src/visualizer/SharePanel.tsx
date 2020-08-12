@@ -281,7 +281,6 @@ function addProductText(ctx:CanvasRenderingContext2D, product:ProductItem, image
 
     const primaryFontSize = bottomHeight * 0.2;
     const secondaryFontSize = primaryFontSize * 0.8;
-    const styleFontSize = primaryFontSize * 0.6;
 
     const topMargin = (0.2 * bottomHeight);
     const leftMargin = (0.2 * bottomHeight);
@@ -289,47 +288,28 @@ function addProductText(ctx:CanvasRenderingContext2D, product:ProductItem, image
     const lineHeight = 1.5;
 
     const startY = imageHeight;
-    let currentX = leftMargin;
-    let currentY = startY + topMargin;
+    let currentX: number;
+    let currentY: number;
 
     //Left color and style info
     let leftColorInfoWidth = 0;
 
-    ctx.font = `200 ${styleFontSize}px ${fontFamily}`;
-    {
-        const text = `Style No. ${product.json['SellingStyleNbr']}`;
-        ctx.fillText(text, currentX, currentY);
-        currentY += styleFontSize * lineHeight;
-        leftColorInfoWidth = Math.max(leftColorInfoWidth, ctx.measureText(text).width)
-    }
-
-    {
-        const text = `Color No. ${product.json['SellingColorNbr']}`;
-        ctx.fillText(text, currentX, currentY);
-        leftColorInfoWidth = Math.max(leftColorInfoWidth, ctx.measureText(text).width)
-    }
-
-    //draw vertical line
-    const verticalPadding = 20;
-    currentX = leftMargin + leftColorInfoWidth + verticalPadding;
-    currentY = startY + topMargin;
-    ctx.beginPath();
-    ctx.moveTo(currentX, currentY);
-    ctx.lineTo(currentX, currentY + bottomHeight / 2);
-    ctx.stroke();
-
     //Draw primary product info
     ctx.font = `200 ${primaryFontSize}px ${fontFamily}`;
-    const primaryTextStartX = leftMargin + leftColorInfoWidth + 2 * verticalPadding;
+    const primaryTextStartX = leftMargin + leftColorInfoWidth;
     currentX = primaryTextStartX;
     currentY = startY + topMargin;
 
-    ctx.fillText(product.json['SellingStyleName'], currentX, currentY);
+    if (product.parent && product.parent.displayName) {
+        ctx.fillText(product.parent.displayName, currentX, currentY);
+    }
 
     currentY += primaryFontSize * lineHeight;
 
     ctx.font = `500 ${secondaryFontSize}px ${fontFamily}`;
-    ctx.fillText(product.name!, currentX, currentY);
+    if (product.displayName) {
+        ctx.fillText(product.displayName, currentX, currentY);
+    }
 
     ctx.font = `100 ${secondaryFontSize}px ${fontFamily}`;
 
