@@ -182,23 +182,16 @@ export const SharePanelCached = React.memo<SharePanelProps>(
             return (
                 <div id={"share-project"} className={className}>
                     <div className={"share-project-container"}>
-                        <button className={"share-project-close"} onClick={() => onClose()}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 20 19">
-                                <g fill="none" fillRule="evenodd" stroke="#1a1919" strokeWidth="1.5">
-                                    <path d="M18.627.873L1.373 18.127M1.515 1.015l16.97 16.97" />
-                                </g>
-                            </svg>
-                        </button>
 
                         <div className="share-project-content">
                             {shareImageUrl ?
                                 <img alt={"Share preview"}
-                                     className={"share-project-preview-image"}
+                                     className={appendClassName("share-project-preview-image", classes.previewImage)}
                                      src={shareImageUrl} /> :
                                 <div className={"share-project-preview-placeholder"}/>}
 
-                            <div className="share-project-buttons disabled">
-                                <div className="social-share-buttons">
+                            <div className={appendClassName("share-project-buttons disabled", classes.mainButtons)}>
+                                <div className={appendClassName("social-share-buttons", classes.socialButtons)}>
                                     <FacebookShareButton onClick={()=>socialClicked("facebook")}
                                                          url={getShareUrl("facebook")}
                                                          quote={props.shareSubject}>
@@ -234,7 +227,8 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                     </LinkedinShareButton>
                                 </div>
 
-                                <input className={"share-project-url-text"} ref={shareLinkTextBox} type={'text'}
+                                <input ref={shareLinkTextBox} type={'text'}
+                                       className={appendClassName("share-project-url-text", classes.urlText)}
                                        defaultValue={getShareUrl("text")} />
 
                                 {/*<div className={"primary-buttons"}>*/}

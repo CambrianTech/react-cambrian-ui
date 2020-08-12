@@ -24,3 +24,22 @@
   object-fit: cover;
   width: 100%;
 }
+
+.previewImage {
+  width: 100%;
+  object-fit: contain;
+}
+
+.mainButtons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.socialButtons {
+  display: flex;
+}
+
+.urlText {
+  width: 70%;
+}
