@@ -18,6 +18,7 @@ import {
     PinterestShareButton, TwitterIcon,
     TwitterShareButton
 } from "react-share";
+import {Button} from "@material-ui/core";
 
 type SharePanelProps = {
     visible:boolean
@@ -151,7 +152,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                             props.onProgress(true, "Uploading Pinterest image", 0.7);
                         }
 
-                        props.onProgress(true, "Upload Successful", 1.0);
+                        props.onProgress(false, "Upload Successful", 1.0);
 
                         //setShareUrl(updateUrl());
                     } else {
@@ -181,14 +182,16 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
             return (
                 <div id={"share-project"} className={className}>
-                    <div className={"share-project-container"}>
+                    <div className={appendClassName("share-project-container", classes.shareContainer)}>
 
-                        <div className="share-project-content">
+                        <div className={appendClassName("share-project-content", classes.shareContent)}>
+                            <div className={appendClassName("share-project-preview-container", classes.previewContainer)}>
                             {shareImageUrl ?
                                 <img alt={"Share preview"}
                                      className={appendClassName("share-project-preview-image", classes.previewImage)}
                                      src={shareImageUrl} /> :
                                 <div className={"share-project-preview-placeholder"}/>}
+                            </div>
 
                             <div className={appendClassName("share-project-buttons disabled", classes.mainButtons)}>
                                 <div className={appendClassName("social-share-buttons", classes.socialButtons)}>
@@ -228,15 +231,22 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                 </div>
 
                                 <input ref={shareLinkTextBox} type={'text'}
+                                       onFocus={(e)=>{e.target.setSelectionRange(0, e.target.value.length);}}
                                        className={appendClassName("share-project-url-text", classes.urlText)}
                                        defaultValue={getShareUrl("text")} />
 
-                                {/*<div className={"primary-buttons"}>*/}
-                                {/*    <PrimaryButton touchImageUrl={props.shareImageUrl} className={"mobile-save"}>Tap & Hold to Copy Image</PrimaryButton>*/}
-                                {/*    <PrimaryButton className={"web-save"} onClick={props.onSave}>Save Image</PrimaryButton>*/}
-                                {/*    <PrimaryButton disabled={!props.shareUrl} className={"send"} onClick={shareProject}>Copy Link</PrimaryButton>*/}
-                                {/*    <PrimaryButton white className={"cancel"} onClick={() => onClose()}>Cancel</PrimaryButton>*/}
-                                {/*</div>*/}
+                                <div className={"primary-buttons"}>
+                                    {/*https://material.io/components/buttons#usage*/}
+                                    <Button variant="contained">Tap & Hold to Copy Image</Button>
+                                    <Button variant="contained" onClick={props.onSave}>Save Image</Button>
+                                    <Button variant="contained" onClick={shareProject}>Copy Link</Button>
+                                    <Button variant="contained" onClick={() => onClose()}>Cancel</Button>
+
+                                    {/*<PrimaryButton touchImageUrl={props.shareImageUrl} className={"mobile-save"}>Tap & Hold to Copy Image</PrimaryButton>*/}
+                                    {/*<PrimaryButton className={"web-save"} onClick={props.onSave}>Save Image</PrimaryButton>*/}
+                                    {/*<PrimaryButton disabled={!props.shareUrl} className={"send"} onClick={shareProject}>Copy Link</PrimaryButton>*/}
+                                    {/*<PrimaryButton white className={"cancel"} onClick={() => onClose()}>Cancel</PrimaryButton>*/}
+                                </div>
 
                             </div>
 
@@ -458,7 +468,7 @@ function whenFileAvailable(url: string, timeoutMS:number = 30) {
                     window.clearInterval(interval);
                     resolve(false)
                 } else {
-                    console.clear();
+                    //console.clear();
                     console.log("Waiting for uploaded file " + url)
                 }
             }).catch((error)=>{
