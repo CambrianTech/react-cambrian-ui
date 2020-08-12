@@ -9,7 +9,7 @@ import {
     SwatchItem, getConfig
 } from "react-home-ar";
 import classes from "./SharePanel.scss";
-import {appendClassName} from "../internal/Utils";
+import {appendClassName, isMobile} from "../internal/Utils";
 import {
     FacebookIcon,
     FacebookShareButton,
@@ -31,6 +31,8 @@ type SharePanelProps = {
     shareSubject:string
     needsUpload:boolean
 
+    downloadName?:string
+
     getShareUrl:(socialNetwork:string)=>string
     socialClicked?:(socialNetwork:string)=>void
 
@@ -39,7 +41,6 @@ type SharePanelProps = {
     onCompleted:(success:boolean)=>void
 
     onClose: () => void
-    onSave: () => void
 }
 
 const PINTEREST_UPLOAD_TIMEOUT = 10000;
@@ -180,6 +181,8 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                 className = appendClassName(className, props.className);
             }
 
+            const downloadName = props.downloadName ? props.downloadName : props.product.displayName;
+
             return (
                 <div id={"share-project"} className={className}>
                     <div className={appendClassName("share-project-container", classes.shareContainer)}>
@@ -237,9 +240,15 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                                 <div className={"primary-buttons"}>
                                     {/*https://material.io/components/buttons#usage*/}
-                                    <Button variant="contained">Tap & Hold to Copy Image</Button>
-                                    <Button variant="contained" onClick={props.onSave}>Save Image</Button>
+                                    {shareImageUrl && isMobile && downloadName && (
+                                        <Button variant="contained">Tap & Hold to Copy Image</Button>
+                                    )}
+                                    {shareImageUrl && !isMobile && downloadName && (
+                                        <Button variant="contained" onClick={()=>deliverRenderedImage(downloadName, shareImageUrl)}>Save Image</Button>
+                                    )}
+
                                     <Button variant="contained" onClick={shareProject}>Copy Link</Button>
+
                                     <Button variant="contained" onClick={() => onClose()}>Cancel</Button>
 
                                     {/*<PrimaryButton touchImageUrl={props.shareImageUrl} className={"mobile-save"}>Tap & Hold to Copy Image</PrimaryButton>*/}
@@ -479,6 +488,21 @@ function whenFileAvailable(url: string, timeoutMS:number = 30) {
         }, 3000)
     })
 }
+
+function deliverRenderedImage(filename:string, dataUrl:string) {
+
+    if (isMobile) {
+        //showDownloadOverlay(true, dataUrl)
+    } else {
+        const tag = document.createElement('a');
+        tag.href = dataUrl;
+        tag.download = filename;
+        document.body.appendChild(tag);
+        tag.click();
+        document.body.removeChild(tag);
+    }
+};
+
 export function SharePanel(props: SharePanelProps) {
     return <SharePanelCached {...props} />
 }
