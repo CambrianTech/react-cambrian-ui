@@ -37,8 +37,8 @@ type SharePanelProps = {
     socialClicked?:(socialNetwork:string)=>void
 
     resolveThumbnailPath?: (swatch: SwatchItem) => string | undefined;
-    onProgress:(visible:boolean, status:string, percentage:number)=>void,
-    onCompleted:(success:boolean)=>void
+    onProgress?:(visible:boolean, status:string, percentage:number)=>void,
+    onCompleted?:(success:boolean)=>void
 
     onClose: () => void
 }
@@ -53,6 +53,18 @@ export const SharePanelCached = React.memo<SharePanelProps>(
             const { onClose } = props;
 
             const shareLinkTextBox = createRef<HTMLInputElement>();
+
+            const onProgress = useCallback((visible:boolean, status:string, percentage:number) => {
+                if (props.onProgress) {
+                    props.onProgress(visible, status, percentage)
+                }
+            }, [props.onProgress]);
+
+            const onCompleted = useCallback((success:boolean) => {
+                if (props.onCompleted) {
+                    props.onCompleted(success)
+                }
+            }, [props.onCompleted]);
 
             const socialClicked = useCallback((socialNetwork:string) => {
                 if (props.socialClicked) {
@@ -91,7 +103,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                     setPerformUpload(false);
 
-                    props.onProgress(true, "Contacting server", 0.3);
+                    onProgress(true, "Contacting server", 0.3);
                     const shareImage = await getShareImage(props.api);
 
                     if (shareImage) {
@@ -101,13 +113,13 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                         const maskUrl = await CBContentManager.default.uploadFile(props.data.maskCanvas, CBServerFile.Mask);
                         if (!maskUrl) {
                             console.error("Could not upload mask image!");
-                            props.onCompleted(false);
+                            onCompleted(false);
                             return
                         }
-                        props.onProgress(true, "Uploading Pinterest image", 0.2);
+                        onProgress(true, "Uploading Pinterest image", 0.2);
 
                         console.log("finish share image");
-                        props.onProgress(true, "Uploading Pinterest image", 0.3);
+                        onProgress(true, "Uploading Pinterest image", 0.3);
 
                         addSwatchBranding(shareImage, product, props.resolveThumbnailPath).then(ctx=>{
                             const image = ctx.canvas.toDataURL("image/png");
@@ -115,12 +127,12 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                         });
 
                         console.log("upload share as preview");
-                        props.onProgress(true, "Uploading Pinterest image", 0.5);
+                        onProgress(true, "Uploading Pinterest image", 0.5);
 
                         const previewUrl = await CBContentManager.default.uploadFile(shareImage.canvas, CBServerFile.Preview);
                         if (!previewUrl) {
                             console.error("Could not upload preview image!");
-                            props.onCompleted(false);
+                            onCompleted(false);
                             return
                         }
 
@@ -132,7 +144,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                 return
                             }
 
-                            props.onProgress(true, "Uploading Pinterest image", 0.6);
+                            onProgress(true, "Uploading Pinterest image", 0.6);
 
                             console.log("add branding");
                             const pinterestImage = await addSwatchBranding(pinterest, product, props.resolveThumbnailPath);
@@ -140,7 +152,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                             const pinterestUrl = await CBContentManager.default.uploadFile(pinterestImage.canvas, CBServerFile.Pinterest);
                             if (!pinterestUrl) {
                                 console.error("Could not upload pinterest image!");
-                                props.onCompleted(false);
+                                onCompleted(false);
                                 return
                             }
 
@@ -150,18 +162,18 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                 setBeforeAfterImageUrl(pinterestUrl)
                             });
 
-                            props.onProgress(true, "Uploading Pinterest image", 0.7);
+                            onProgress(true, "Uploading Pinterest image", 0.7);
                         }
 
-                        props.onProgress(false, "Upload Successful", 1.0);
+                        onProgress(false, "Upload Successful", 1.0);
 
                         //setShareUrl(updateUrl());
                     } else {
                         console.error("Could not generate share image!");
-                        props.onCompleted(false);
+                        onCompleted(false);
                     }
                 })()
-            }, [hasUpload]);
+            }, [hasUpload, onProgress, onCompleted, whenFileAvailable, getShareImage, generateBeforeAfter, addSwatchBranding, props.resolveThumbnailPath]);
 
             useEffect(() => {
                 if (props.needsUpload) {
