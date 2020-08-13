@@ -394,7 +394,7 @@ function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:Produc
 
         if (thumbnail) {
             const img = new Image();
-            img.crossOrigin = "Anonymous";
+            img.crossOrigin = "";
             img.src = thumbnail;
 
             img.onload = () => {
@@ -413,7 +413,7 @@ function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:Produc
                 resolve(ctx)
             };
             img.onerror = () => {
-                reject()
+                //skip it.
             }
         } else {
             resolve(ctx)
