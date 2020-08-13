@@ -186,7 +186,6 @@ export const SharePanelCached = React.memo<SharePanelProps>(
             useEffect(() => {
                 if (props.needsUpload) {
                     setPerformUpload(true);
-                    console.log("performUpload");
                 }
             }, [props.needsUpload]);
 
@@ -210,7 +209,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                         <div className={appendClassName("share-project-content", classes.shareContent)}>
                             <div className={appendClassName("share-project-preview-container", classes.previewContainer)}>
                             {shareImageUrl ?
-                                <img alt={"Share preview"}
+                                <img alt={"Share preview"} crossOrigin=""
                                      className={appendClassName("share-project-preview-image", classes.previewImage)}
                                      src={shareImageUrl} /> :
                                 <div className={"share-project-preview-placeholder"}/>}
@@ -263,7 +262,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                     {shareImageUrl && isMobile && downloadName && (
                                         <div className={appendClassName("share-touch-image-container", classes.touchImageContainer)}
                                             onTouchStart={()=>touched(true)}>
-                                            <img ref={touchImage}
+                                            <img ref={touchImage} crossOrigin=""
                                                  onContextMenu={()=>touched(false)}
                                                  className={appendClassName("share-touch-image", classes.touchImage)}
                                                  src={shareImageUrl} alt={"Save a copy"} />
@@ -390,7 +389,7 @@ function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:Produc
         ctx.drawImage(imageContext.canvas, 0,0);
         addProductText(ctx, product, imageContext.canvas.width, imageContext.canvas.height, bottomHeight);
 
-        const thumbnail = resolveThumbnailPath ? resolveThumbnailPath(product) : product.thumbnail
+        const thumbnail = resolveThumbnailPath ? resolveThumbnailPath(product) : product.thumbnail;
 
         if (thumbnail) {
             const img = new Image();
@@ -414,6 +413,7 @@ function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:Produc
             };
             img.onerror = () => {
                 //skip it.
+                resolve(ctx)
             }
         } else {
             resolve(ctx)
@@ -464,7 +464,7 @@ function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
                     }
                 };
                 img.onerror = () => {
-                    reject()
+                    //reject()
                 }
             } else {
                 reject()
@@ -475,21 +475,15 @@ function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
 
 function isFileReady(url: string) {
     return new Promise<boolean>((resolve, reject)=>{
-        const http = new XMLHttpRequest();
-        http.open('GET', url);
-        http.onreadystatechange = () => {
-            if (http.readyState === http.DONE) {
-                if (http.status === 200) {
-                    resolve(true)
-                } else {
-                    resolve(false)
-                }
-            }
+        const img = new Image();
+        img.crossOrigin = "";
+        img.src = url;
+        img.onload = () => {
+            resolve(true)
         };
-        http.onerror = () => {
+        img.onerror = () => {
             resolve(false)
-        };
-        http.send()
+        }
     })
 }
 function whenFileAvailable(url: string, timeoutMS:number = 30) {
@@ -501,13 +495,13 @@ function whenFileAvailable(url: string, timeoutMS:number = 30) {
                 if (exists) {
                     window.clearInterval(interval);
                     resolve(true);
-                    console.log(`File ${url} is now available`)
+                    //console.log(`File ${url} is now available`)
                 } else if (elapsed >= timeoutMS) {
                     window.clearInterval(interval);
                     resolve(false)
                 } else {
                     //console.clear();
-                    console.log("Waiting for uploaded file " + url)
+                    //console.log("Waiting for uploaded file " + url)
                 }
             }).catch((error)=>{
                 console.error("Got error: ", error);
