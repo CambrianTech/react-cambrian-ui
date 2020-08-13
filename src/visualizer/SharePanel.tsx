@@ -37,8 +37,8 @@ type SharePanelProps = {
     socialClicked?:(socialNetwork:string)=>void
 
     resolveThumbnailPath?: (swatch: SwatchItem) => string | undefined;
-    onProgress?:(visible:boolean, status:string, percentage:number)=>void,
-    onCompleted?:(success:boolean)=>void
+    onImageUploadProgress?:(visible:boolean, status:string, percentage:number)=>void,
+    onImageUploadCompleted?:(success:boolean)=>void
 
     onClose: () => void
 }
@@ -54,17 +54,19 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
             const shareLinkTextBox = createRef<HTMLInputElement>();
 
+            const touchImage = createRef<HTMLImageElement>();
+
             const onProgress = useCallback((visible:boolean, status:string, percentage:number) => {
-                if (props.onProgress) {
-                    props.onProgress(visible, status, percentage)
+                if (props.onImageUploadProgress) {
+                    props.onImageUploadProgress(visible, status, percentage)
                 }
-            }, [props.onProgress]);
+            }, [props.onImageUploadProgress]);
 
             const onCompleted = useCallback((success:boolean) => {
-                if (props.onCompleted) {
-                    props.onCompleted(success)
+                if (props.onImageUploadCompleted) {
+                    props.onImageUploadCompleted(success)
                 }
-            }, [props.onCompleted]);
+            }, [props.onImageUploadCompleted]);
 
             const socialClicked = useCallback((socialNetwork:string) => {
                 if (props.socialClicked) {
@@ -94,6 +96,17 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
             }, [shareLinkTextBox, onClose]);
 
+            const touched = useCallback((show:boolean, internal?:boolean) => {
+                if (!touchImage.current) return;
+                if (!internal && !show) {
+                    window.setTimeout(()=>{
+                        touched(false, true);
+                    }, 500);
+                } else {
+                    touchImage.current.style.display = show ? "inline" : "none";
+                }
+            }, [touchImage]);
+
             const [shareImageUrl, setShareImageUrl] = useState<string>();
             const [beforeAfterImageUrl, setBeforeAfterImageUrl] = useState<string>();
             const [performUpload, setPerformUpload] = useState(false);
@@ -108,7 +121,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                     if (shareImage) {
 
-                        console.log("upload mask");
+                        // console.log("upload mask");
 
                         const maskUrl = await CBContentManager.default.uploadFile(props.data.maskCanvas, CBServerFile.Mask);
                         if (!maskUrl) {
@@ -118,26 +131,23 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                         }
                         onProgress(true, "Uploading Pinterest image", 0.2);
 
-                        console.log("finish share image");
-                        onProgress(true, "Uploading Pinterest image", 0.3);
-
                         addSwatchBranding(shareImage, product, props.resolveThumbnailPath).then(ctx=>{
                             const image = ctx.canvas.toDataURL("image/png");
                             setShareImageUrl(image)
                         });
 
-                        console.log("upload share as preview");
+                        // console.log("upload share as preview");
                         onProgress(true, "Uploading Pinterest image", 0.5);
 
                         const previewUrl = await CBContentManager.default.uploadFile(shareImage.canvas, CBServerFile.Preview);
                         if (!previewUrl) {
-                            console.error("Could not upload preview image!");
+                            console.error("Could not upload Pinterest image!");
                             onCompleted(false);
                             return
                         }
 
                         if (hasUpload(CBServerFile.Pinterest)) {
-                            console.log("generate before/after");
+                            // console.log("generate before/after");
                             const pinterest = props.isUploadedImage ? await generateBeforeAfter(props.api, props.scene) : await getShareImage(props.api);
 
                             if (!pinterest) {
@@ -146,23 +156,21 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                             onProgress(true, "Uploading Pinterest image", 0.6);
 
-                            console.log("add branding");
+                            // console.log("add branding");
                             const pinterestImage = await addSwatchBranding(pinterest, product, props.resolveThumbnailPath);
-                            console.log("branding added");
+                            // console.log("branding added");
                             const pinterestUrl = await CBContentManager.default.uploadFile(pinterestImage.canvas, CBServerFile.Pinterest);
                             if (!pinterestUrl) {
-                                console.error("Could not upload pinterest image!");
+                                console.error("Could not upload Pinterest image!");
                                 onCompleted(false);
                                 return
                             }
 
-                            console.log("wait on pinterest");
+                            // console.log("wait on pinterest");
                             //takes a few seconds to get to aws
                             whenFileAvailable(pinterestUrl, PINTEREST_UPLOAD_TIMEOUT).then(()=>{
                                 setBeforeAfterImageUrl(pinterestUrl)
                             });
-
-                            onProgress(true, "Uploading Pinterest image", 0.7);
                         }
 
                         onProgress(false, "Upload Successful", 1.0);
@@ -253,7 +261,16 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                 <div className={"primary-buttons"}>
                                     {/*https://material.io/components/buttons#usage*/}
                                     {shareImageUrl && isMobile && downloadName && (
-                                        <Button variant="contained">Tap & Hold to Copy Image</Button>
+                                        <div className={appendClassName("share-touch-image-container", classes.touchImageContainer)}
+                                            onTouchStart={()=>touched(true)}>
+                                            <img ref={touchImage}
+                                                 onContextMenu={()=>touched(false)}
+                                                 className={appendClassName("share-touch-image", classes.touchImage)}
+                                                 src={shareImageUrl} alt={"Save a copy"} />
+                                            <Button variant="contained" className={appendClassName("share-touch-button", classes.touchButton)}>
+                                                Tap & Hold to Copy Image
+                                            </Button>
+                                        </div>
                                     )}
                                     {shareImageUrl && !isMobile && downloadName && (
                                         <Button variant="contained" onClick={()=>deliverRenderedImage(downloadName, shareImageUrl)}>Save Image</Button>
@@ -279,7 +296,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
         return null;
     },
     (prevProps, nextProps) => {
-        return prevProps.visible === nextProps.visible && prevProps.product === nextProps.product;
+        return prevProps.visible === nextProps.visible && prevProps.product === nextProps.product && prevProps.needsUpload === nextProps.needsUpload;
     }
 );
 
@@ -377,7 +394,7 @@ function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:Produc
 
         if (thumbnail) {
             const img = new Image();
-            img.crossOrigin = "";
+            img.crossOrigin = "Anonymous";
             img.src = thumbnail;
 
             img.onload = () => {
