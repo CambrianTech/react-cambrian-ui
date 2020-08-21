@@ -1,6 +1,6 @@
 import React, {ReactNode, useRef, useEffect, useCallback} from "react"
 import { useDropzone } from "react-dropzone"
-import {CBSceneParams, getRotatedFile, CBContentManager} from "react-home-ar";
+import {CBSceneParams, getRotatedFile, CBContentManager, getTags, getAccelerationVector} from "react-home-ar";
 
 const fileAccept = "image/*";
 
@@ -69,8 +69,28 @@ export function ImageUpload(props: ImageUploadProperties) {
         const startTime = new Date();
         setProgress({visible:true, progress:0, message:"Your photo is being uploaded"});
 
-        const uploadFile = await getRotatedFile(firstFile, props.maxImageSize ? Math.max(props.maxImageSize, 2048) : 2048);
+        const [uploadFile, newWidth, newHeight] = await getRotatedFile(firstFile, props.maxImageSize ? Math.max(props.maxImageSize, 2048) : 2048);
+        const exifData = await getTags(firstFile);
         const firstFilePreviewPath = URL.createObjectURL(uploadFile);
+
+        //Add small factor to deal with crop factor, could be calculated exactly
+        const focalLength = exifData.get("FocalLengthIn35mmFilm")+.25;
+
+        //which fov are we calculating
+        const portait_landscape = newWidth>newHeight ? 36 : 24;
+        const fov = 2*Math.atan2(portait_landscape,(2*focalLength)) * 180 / Math.PI;
+
+        let xrotation:number|undefined, zrotation:number|undefined;
+
+        if(exifData.get("Make")==="Apple"){
+
+            const accelerationVector = await getAccelerationVector(exifData.get("MakerNote"));
+            xrotation = Math.asin(accelerationVector[4]? accelerationVector[4]/accelerationVector[5]:0);
+
+            const rotation1 = Math.asin(accelerationVector[0]? accelerationVector[0]/accelerationVector[1]:0);
+            const rotation2 = Math.asin(accelerationVector[2]? accelerationVector[2]/accelerationVector[3]:0);
+            zrotation = newWidth > newHeight ? -rotation2 : -rotation1;//note sign here.
+        }
 
         CBContentManager.default.resetScene();
 
@@ -80,14 +100,20 @@ export function ImageUpload(props: ImageUploadProperties) {
 
         const roomId = CBContentManager.default.roomId;
 
-        //console.log("results:", results);
-
         if (results && roomId) {
 
             setProgress({visible:true, progress:1, message:"Complete"});
 
             if (results.dataUrl != null) {
                 fetch(results.dataUrl).then(res => res.json()).then(data => {
+
+                    if (fov) {
+                        data.fov = fov;
+                    }
+
+                    if (xrotation !== undefined && zrotation !== undefined) {
+                        data.cameraRotation =  [xrotation, 0, zrotation];
+                    }
 
                     if (data.hasOwnProperty("main")) {
                         //TODO: something maybe on the server for main,preview,thumbnail?
