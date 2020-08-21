@@ -80,21 +80,29 @@ export function ImageUpload(props: ImageUploadProperties) {
         const portait_landscape = newWidth>newHeight ? 36 : 24;
         const fov = 2*Math.atan2(portait_landscape,(2*focalLength)) * 180 / Math.PI;
 
-        let xrotation:number|undefined, zrotation:number|undefined;
+        let rotation:[number, number, number] | undefined;
+        let acceleration: [number, number, number] | undefined;
 
-        if(exifData.get("Make")==="Apple"){
+        if (exifData.get("Make") === "Apple") {
 
             const accelerationVector = await getAccelerationVector(exifData.get("MakerNote"));
-            xrotation = Math.asin(accelerationVector[4]? accelerationVector[4]/accelerationVector[5]:0);
 
-            const rotation1 = Math.asin(accelerationVector[0]? accelerationVector[0]/accelerationVector[1]:0);
-            const rotation2 = Math.asin(accelerationVector[2]? accelerationVector[2]/accelerationVector[3]:0);
-            zrotation = newWidth > newHeight ? -rotation2 : -rotation1;//note sign here.
+            if (accelerationVector) {
+                const x = accelerationVector[4]/accelerationVector[5];
+                const y = accelerationVector[0]/accelerationVector[1];
+                const z = accelerationVector[2]/accelerationVector[3];
+
+                //for new SDK:
+                acceleration = newWidth > newHeight ? [x, y, -z] : [x, z, -y];
+
+                //for legacy API:
+                rotation = [Math.asin(acceleration[0]), Math.asin(acceleration[1]), Math.asin(acceleration[2])];
+            }
         }
 
         CBContentManager.default.resetScene();
 
-        const results = await CBContentManager.default.uploadRoom(uploadFile, ((progress, status) => {
+        const results = await CBContentManager.default.uploadRoom(uploadFile, fov, acceleration, ((progress, status) => {
             setProgress({visible:true, progress:progress, message:status})
         })).catch((error)=>handleError(error));
 
@@ -107,19 +115,19 @@ export function ImageUpload(props: ImageUploadProperties) {
             if (results.dataUrl != null) {
                 fetch(results.dataUrl).then(res => res.json()).then(data => {
 
-                    if (fov) {
-                        data.fov = fov;
-                    }
-
-                    if (xrotation !== undefined && zrotation !== undefined) {
-                        data.cameraRotation =  [xrotation, 0, zrotation];
-                    }
-
                     if (data.hasOwnProperty("main")) {
-                        //TODO: something maybe on the server for main,preview,thumbnail?
+                        //NEW SDK 2.0:
                         data.images.main = firstFilePreviewPath;
                     } else {
                         //legacy
+                        if (fov) {
+                            data.fov = fov;
+                        }
+
+                        if (rotation !== undefined) {
+                            data.cameraRotation =  [rotation[0], -data.floorRotation, rotation[2]];
+                        }
+
                         data['images'] = {
                             main: results.semanticUrl.replace("mask.png", "background"),
                             lighting: results.lightingUrl,
