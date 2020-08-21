@@ -60,10 +60,11 @@ export function ImageUpload(props: ImageUploadProperties) {
             (input as any).value = null
         }
 
-        const firstFile = acceptedFiles[0];
-
-        if (!firstFile)
+        if (!acceptedFiles.length || !acceptedFiles[0]) {
             return;
+        }
+
+        const firstFile = acceptedFiles[0];
 
         const messageMinDurationMS = 4000;
         const startTime = new Date();
@@ -84,7 +85,6 @@ export function ImageUpload(props: ImageUploadProperties) {
         let acceleration: [number, number, number] | undefined;
 
         if (exifData.get("Make") === "Apple") {
-
             const accelerationVector = await getAccelerationVector(exifData.get("MakerNote"));
 
             if (accelerationVector) {
