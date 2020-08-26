@@ -21,8 +21,9 @@ type RotateToolProps = {
 }
 
 type RotateToolCachedProps = RotateToolProps & {
-    onMouseDown:()=>void
-    onMouseUp:()=>void
+    onMouseDown:(e:any)=>void
+    onMouseUp:(e:any)=>void
+    onMouseMove:(e:any)=>void
 }
 
 function toDegrees(radians: number) {
@@ -42,7 +43,11 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
             return (
                 <div className={className}>
                     <div className={appendClassName("rotate-tool-content", classes.rotateToolContent)}>
-                        <div className={appendClassName("rotate-tool-slider", classes.rotateToolSlider)}>
+                        <div className={appendClassName("rotate-tool-slider", classes.rotateToolSlider)}
+                             onMouseDown={(e)=>cProps.onMouseDown(e)} onTouchStart={(e)=>cProps.onMouseDown(e)}
+                             onMouseMove={(e)=>cProps.onMouseMove(e)} onTouchMove={(e)=>cProps.onMouseMove(e)}
+                             onMouseUp={(e)=>cProps.onMouseUp(e)} onTouchEnd={(e)=>cProps.onMouseUp(e)}>
+
                             <div className={appendClassName("rotate-tool-labels", classes.rotateToolSliderLabels)}>
                                 <div>-180°</div>
                                 <div>|&nbsp;</div>
@@ -54,11 +59,12 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
                                 <div>|&nbsp;</div>
                                 <div>180°</div>
                             </div>
+
                             <div className={appendClassName("rotate-tool-slider-bar", classes.rotateToolSliderBar)}>
+
                                 <input id={"rotate-input"} type="range" min={-180} max={180} step={0.5} defaultValue={toDegrees(cProps.rotation) + ""}
-                                       onMouseDown={()=>cProps.onMouseDown()} onTouchStart={()=>cProps.onMouseDown()}
-                                       onMouseUp={()=>cProps.onMouseUp()} onTouchEnd={()=>cProps.onMouseUp()}
                                        onChange={e => cProps.onRotationChanged(-1.0 * toRadians(Number(e.target.value)))} list="range-values" />
+
                                 <datalist id="range-values">
                                     <option value="-180" />
                                     <option value="-135" />
@@ -70,6 +76,7 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
                                     <option value="135" />
                                     <option value="180" />
                                 </datalist>
+
                             </div>
 
                             <div className={appendClassName("rotate-tool-instructions", classes.rotateToolInstructions)}>
@@ -108,23 +115,61 @@ export function RotateTool(props: RotateToolProps) {
         onRotationFinished(commit, rotationControlValue.current)
     }, [onRotationFinished, rotationControlValue]);
 
+    const setRotation = useCallback((value:number) => {
+        const rotateInput = document.getElementById("rotate-input") as HTMLInputElement;
+        if (rotateInput) {
+            rotateInput.value = `${toDegrees(-1.0 * value)}`
+        }
+    }, [isActive]);
+
+    const adjustSlider = useCallback((e:any, rotateInput:HTMLInputElement)=>{
+
+        if (rotateInput && e.hasOwnProperty("pageX") && e.hasOwnProperty("target")) {
+            const rect = rotateInput.getBoundingClientRect();
+            const sliderDiameter = rect.height;
+            const x = (e.clientX - rect.left - 0.5 * sliderDiameter) / (rect.width - sliderDiameter);
+            const range = parseFloat(rotateInput.max) - parseFloat(rotateInput.min);
+            const value = parseFloat(rotateInput.min) + range * x;
+
+            const currrentValue = parseFloat(rotateInput.value);
+            if (Math.abs(currrentValue - value) > 5.0) {
+                const radians = -1.0 * toRadians(value);
+                setRotation(radians);
+                onRotationChanged(radians);
+            }
+        }
+    }, [setRotation]);
+
+    const onMouseDown = useCallback((e:any) => {
+        isActive.current = true;
+        adjustSlider(e, document.getElementById("rotate-input") as HTMLInputElement);
+    }, [isActive, adjustSlider]);
+
+    const onMouseMove = useCallback((e:any) => {
+        if (isActive.current) {
+            adjustSlider(e, document.getElementById("rotate-input") as HTMLInputElement);
+        }
+    }, [adjustSlider]);
+
+    const onMouseUp = useCallback((e:any) => {
+        isActive.current = false;
+    }, [isActive, adjustSlider]);
+
     useEffect(()=>{
         if (visible) {
             rotationControlValue.current = rotation;
 
             if (!isActive.current) {
-                const rotateInput = document.getElementById("rotate-input") as HTMLInputElement;
-                if (rotateInput) {
-                    rotateInput.value = `${toDegrees(-1.0 * rotation)}`
-                }
+                setRotation(rotation)
             }
         }
     }, [visible, rotationControlValue, isActive, rotation]);
 
     return (
         <RotateToolCached {...props}
-                          onMouseDown={()=>isActive.current = true}
-                          onMouseUp={()=>isActive.current = false}
+                          onMouseDown={onMouseDown}
+                          onMouseUp={onMouseUp}
+                          onMouseMove={onMouseMove}
                           onRotationChanged={rotateChanged}
                           onRotationFinished={rotateFinished} />
     )
