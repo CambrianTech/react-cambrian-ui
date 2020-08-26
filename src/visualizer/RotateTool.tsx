@@ -36,14 +36,14 @@ function toRadians(degrees: number) {
 export const RotateToolCached = React.memo<RotateToolCachedProps>(
     (cProps) => {
         if (cProps.visible) {
-            let className = appendClassName("rotate-tool", classes.rotateTool)
-            className = appendClassName(className, cProps.className)
+            let className = appendClassName("rotate-tool", classes.rotateTool);
+            className = appendClassName(className, cProps.className);
 
             return (
                 <div className={className}>
-                    <div>
-                        <div className={classes.rotateToolSlider}>
-                            <div className={classes.rotateToolSliderLabels}>
+                    <div className={appendClassName("rotate-tool-content", classes.rotateToolContent)}>
+                        <div className={appendClassName("rotate-tool-slider", classes.rotateToolSlider)}>
+                            <div className={appendClassName("rotate-tool-labels", classes.rotateToolSliderLabels)}>
                                 <div>-180°</div>
                                 <div>|&nbsp;</div>
                                 <div>-90°</div>
@@ -54,7 +54,7 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
                                 <div>|&nbsp;</div>
                                 <div>180°</div>
                             </div>
-                            <div className={classes.rotateToolSliderBar}>
+                            <div className={appendClassName("rotate-tool-slider-bar", classes.rotateToolSliderBar)}>
                                 <input id={"rotate-input"} type="range" min={-180} max={180} step={0.5} defaultValue={toDegrees(cProps.rotation) + ""}
                                        onMouseDown={()=>cProps.onMouseDown()} onTouchStart={()=>cProps.onMouseDown()}
                                        onMouseUp={()=>cProps.onMouseUp()} onTouchEnd={()=>cProps.onMouseUp()}
@@ -72,11 +72,11 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
                                 </datalist>
                             </div>
 
-                            <div className={classes.rotateToolInstructions}>
+                            <div className={appendClassName("rotate-tool-instructions", classes.rotateToolInstructions)}>
                                 Click and drag objects or adjust the slider.
                             </div>
                         </div>
-                        <div className={classes.rotateToolSliderFooter}>
+                        <div className={appendClassName("rotate-tool-footer", classes.rotateToolFooter)}>
                             <Fab className={appendClassName("cancel", classes.rotateToolSliderCancel)} icon={cProps.cancelIcon ? cProps.cancelIcon : <MaterialIcon icon='close' />} onClick={() => cProps.onRotationFinished(false, 0)}  />
                             <Fab className={appendClassName("confirm", classes.rotateToolSliderConfirm)} icon={cProps.confirmIcon ? cProps.confirmIcon : <MaterialIcon icon='check' />} onClick={() => cProps.onRotationFinished(true, 0)} />
                         </div>
@@ -95,7 +95,7 @@ export function RotateTool(props: RotateToolProps) {
     const rotationControlValue = useRef(0);
     const isActive = useRef(false);
 
-    const [rotation, visible, onRotationChanged, onRotationFinished] = [props.rotation, props.visible, props.onRotationChanged, props.onRotationFinished]
+    const [rotation, visible, onRotationChanged, onRotationFinished] = [props.rotation, props.visible, props.onRotationChanged, props.onRotationFinished];
 
     const rotateChanged = useCallback((radians: number) => {
         rotationControlValue.current = radians;
