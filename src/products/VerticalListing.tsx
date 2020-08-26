@@ -31,7 +31,9 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             const swatchRect = swatchDiv.getBoundingClientRect();
             const listingRect = this.listing.current.getBoundingClientRect();
             const contentRect = this.listingContent.current.getBoundingClientRect();
-            const subSwatches = document.getElementById(`${swatchDiv.id}-swatches`) as HTMLDivElement
+            const subSwatches = document.getElementById(`${swatchDiv.id}-swatches`) as HTMLDivElement;
+
+            if (!subSwatches) return;
 
             const topOfSwatch = swatchRect.top - contentRect.top;
 
