@@ -1,14 +1,20 @@
 import React, {ReactNode, useRef, useEffect, useCallback} from "react"
 import { useDropzone } from "react-dropzone"
-import {CBSceneParams, getRotatedFile, CBContentManager, getTags, getAccelerationVector} from "react-home-ar";
+import {
+    CBARSceneProperties,
+    getRotatedFile,
+    CBContentManager,
+    getTags,
+    getAccelerationVector
+} from "react-home-ar";
 
 const fileAccept = "image/*";
 
-export type ImageProperties = CBSceneParams & {
+export type ImageProperties = CBARSceneProperties & {
     roomId: string | null,
 }
 
-export type UploadProgress = {
+export type ServerProgress = {
     visible:boolean
     progress?:number
     message?:string
@@ -22,7 +28,7 @@ interface ImageUploadProperties {
 
     maxImageSize?:number
     onImageChosen: (props: ImageProperties) => void
-    onProgress?:(status: UploadProgress) => void
+    onProgress?:(status: ServerProgress) => void
 }
 
 export function openImageDialog() {
@@ -46,7 +52,7 @@ export function ImageUpload(props: ImageUploadProperties) {
         }
     }, []);
 
-    const setProgress = useCallback((progress:UploadProgress) => {
+    const setProgress = useCallback((progress:ServerProgress) => {
         if (props.onProgress) {
             props.onProgress(progress)
         }

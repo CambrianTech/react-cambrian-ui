@@ -374,7 +374,7 @@ function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:Produc
 
         const ctx = document.createElement("canvas").getContext("2d");
         if (!ctx) {
-            reject();
+            reject(new Error("No image context"));
             return
         }
 
@@ -460,14 +460,14 @@ function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
 
                         resolve(ctx)
                     } else {
-                        reject()
+                        reject(new Error("Image generation error, no context"))
                     }
                 };
                 img.onerror = () => {
-                    //reject()
+                    reject(new Error("Image generation error"))
                 }
             } else {
-                reject()
+                reject(new Error("Could not get image context"))
             }
         })
     })
