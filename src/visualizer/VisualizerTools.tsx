@@ -26,6 +26,7 @@ type VisualizerToolsProperties = {
 
     visible:boolean
     className?:string
+    placeholder?:React.ReactElement<HTMLElement>|undefined
 
     mode:VisualizerToolMode
 
@@ -143,7 +144,7 @@ export const VisualizerToolsCached = React.memo<VisualizerToolsCachedProps>(
                 </div>
             );
         }
-        return null;
+        return props.placeholder ? props.placeholder : null;
     }
 );
 
