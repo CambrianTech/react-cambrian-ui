@@ -98,16 +98,15 @@ export const VisualizerToolsCached = React.memo<VisualizerToolsCachedProps>(
             return undefined
         } , [props]);
 
+        let className = appendClassName("visualizer-tools", classes.visualizerTools);
+        className = appendClassName(className, props.className);
+
         if (props.visible) {
-
-            let className = appendClassName("visualizer-tools", classes.visualizerTools)
-            className = appendClassName(className, props.className)
-
             const buttonsVisible = props.mode !== VisualizerToolMode.Rotate && props.mode !== VisualizerToolMode.Translate && props.mode !== VisualizerToolMode.Pattern;
 
             return (
-                <div>
-                    {buttonsVisible && <div className={appendClassName(className, classes.visualizerToolsButtons)}>
+                <div className={className}>
+                    {buttonsVisible && <div className={appendClassName("visualizer-tools-buttons", classes.visualizerToolsButtons)}>
                         {props.isModePermitted(VisualizerToolMode.ChoosePhoto) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChoosePhoto)} textLabel={getModeLabel(VisualizerToolMode.ChoosePhoto)} icon={<MaterialIcon icon='add_a_photo' />} />}
                         {props.isModePermitted(VisualizerToolMode.ChooseScene) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChooseScene)} textLabel={getModeLabel(VisualizerToolMode.ChooseScene)} icon={<MaterialIcon icon='insert_photo' />} />}
                         {props.isModePermitted(VisualizerToolMode.Share) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.Share)} textLabel={getModeLabel(VisualizerToolMode.Share)} icon={<MaterialIcon icon='share' />} />}
@@ -144,7 +143,7 @@ export const VisualizerToolsCached = React.memo<VisualizerToolsCachedProps>(
                 </div>
             );
         }
-        return props.placeholder ? props.placeholder : null;
+        return props.placeholder ? <div className={className}>{props.placeholder}</div> : null;
     }
 );
 
