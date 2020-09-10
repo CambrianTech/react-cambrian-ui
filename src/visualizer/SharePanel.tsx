@@ -6,7 +6,7 @@ import {
     ProductItem,
     CBServerFile,
     CBContentManager,
-    SwatchItem, getConfig
+    SwatchItem, getConfig, UploadNames
 } from "react-home-ar";
 import classes from "./SharePanel.scss";
 import {appendClassName, isMobile} from "../internal/Utils";
@@ -78,7 +78,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                 return props.getShareUrl(socialNetwork)
             }, [props.getShareUrl]);
 
-            const hasUpload = useCallback((name:CBServerFile) => {
+            const hasUpload = useCallback((name:string) => {
                 const uploads = getConfig().uploadNames;
                 return uploads.indexOf(name) >= 0
             }, []);
@@ -146,7 +146,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                             return
                         }
 
-                        if (hasUpload(CBServerFile.Pinterest)) {
+                        if (hasUpload(UploadNames.Pinterest)) {
                             // console.log("generate before/after");
                             const pinterest = props.isUploadedImage ? await generateBeforeAfter(props.api, props.scene) : await getShareImage(props.api);
 
@@ -159,7 +159,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                             // console.log("add branding");
                             const pinterestImage = await addSwatchBranding(pinterest, product, props.resolveThumbnailPath);
                             // console.log("branding added");
-                            const pinterestUrl = await CBContentManager.default.uploadFile(pinterestImage.canvas, CBServerFile.Pinterest);
+                            const pinterestUrl = await CBContentManager.default.uploadFile(pinterestImage.canvas, UploadNames.Pinterest);
                             if (!pinterestUrl) {
                                 console.error("Could not upload Pinterest image!");
                                 onCompleted(false);
@@ -231,7 +231,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                                     {/* seeing some missing attibutes, like tall pins, https://developers.pinterest.com/docs/widgets/save/?*/}
 
-                                    {hasUpload(CBServerFile.Pinterest) &&
+                                    {hasUpload(UploadNames.Pinterest) &&
                                     <div style={{opacity:!beforeAfterImageUrl ? 0.5 : 1.0}}
                                          onClick={()=>{ if (!beforeAfterImageUrl) alert("Busy uploading, just a moment")}}>
                                         <PinterestShareButton
