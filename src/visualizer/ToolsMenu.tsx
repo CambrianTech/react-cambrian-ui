@@ -5,14 +5,31 @@ import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 
 import {makeStyles} from "@material-ui/core/styles";
-import SaveIcon from '@material-ui/icons/Save';
-import PrintIcon from '@material-ui/icons/Print';
-import ShareIcon from '@material-ui/icons/Share';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import MaterialIcon from "@material/react-material-icon";
 
 type ToolsMenuProperties = {
     className?:string
+    hidden?:boolean
+    direction?:'up' | 'down' | 'left' | 'right'
+    actions?:ToolsMenuAction[]
+    icon?:React.ReactNode
 }
+
+export type ToolsMenuAction = {
+    name:string
+    longName?:string|undefined
+    icon:React.ReactNode
+}
+
+export const ToolsMenuDefaultActions:ToolsMenuAction[] = [
+    { icon: <MaterialIcon icon='add_a_photo' />, name: 'Photo', longName:'Take Photo' },
+    { icon: <MaterialIcon icon='insert_photo' />, name: 'Scene', longName:'Change Scene' },
+    { icon: <MaterialIcon icon='share' />, name: 'Share', longName:'Share Project' },
+    { icon: <MaterialIcon icon='rotate_right' />, name: 'Rotate' },
+    { icon: <MaterialIcon icon='open_with' />, name: 'Move' },
+    { icon: <MaterialIcon icon='view_compact' />, name: 'Pattern' },
+    { icon: <MaterialIcon icon='edit' />, name: 'Edit Surface' },
+];
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,16 +44,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const actions = [
-    { icon: <SaveIcon />, name: 'Save' },
-    { icon: <PrintIcon />, name: 'Print' },
-    { icon: <ShareIcon />, name: 'Share' },
-    { icon: <FavoriteIcon />, name: 'Like' },
-];
-
 export function ToolsMenu(props: ToolsMenuProperties) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const actions = props.actions ? props.actions : ToolsMenuDefaultActions;
+    const isMobile = window.outerWidth < 400;
 
     const handleOpen = () => {
         setOpen(true);
@@ -45,23 +57,22 @@ export function ToolsMenu(props: ToolsMenuProperties) {
     const handleClose = () => {
         setOpen(false);
     };
-
+    
     return (
         <SpeedDial
-            direction={"down"}
-            ariaLabel="SpeedDial tooltip example"
+            direction={props.direction ? props.direction : 'down'}
+            ariaLabel="Visualizer Tools"
             className={classes.speedDial}
-            hidden={hidden}
-            icon={<SpeedDialIcon />}
+            hidden={props.hidden}
+            icon={props.icon ? props.icon : <SpeedDialIcon />}
             onClose={handleClose}
             onOpen={handleOpen}
-            open={open}
-        >
+            open={open}>
             {actions.map((action) => (
                 <SpeedDialAction
                     key={action.name}
                     icon={action.icon}
-                    tooltipTitle={action.name}
+                    tooltipTitle={!isMobile && action.longName ? action.longName : action.name}
                     tooltipOpen
                     onClick={handleClose}
                 />
