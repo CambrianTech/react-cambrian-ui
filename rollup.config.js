@@ -37,7 +37,8 @@ export default {
       exclude: ["dist"],
       namedExports: {
         react: Object.keys(react),
-        'react-dom': Object.keys(reactDom)
+        'react-dom': Object.keys(reactDom),
+        'node_modules/react-is/index.js': ['isFragment', 'ForwardRef']
       }
     }),
     postcss({
