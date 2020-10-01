@@ -1,19 +1,18 @@
 import * as React from "react";
 
 import SpeedDial from '@material-ui/lab/SpeedDial';
-import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 
 import {makeStyles} from "@material-ui/core/styles";
 import MaterialIcon from "@material/react-material-icon";
-
+import {SpeedDialIcon} from "@material-ui/lab";
 
 type ToolsMenuProperties = {
     className?:string
     hidden?:boolean
     direction?:'up' | 'down' | 'left' | 'right'
     actions?:ToolsMenuAction[]
-    icon?:React.ReactNode
+    icon?:React.ReactNode,
     openIcon?:React.ReactNode
     onAction?:(action:ToolsMenuAction)=>void
 }
@@ -71,12 +70,11 @@ export function ToolsMenu(props: ToolsMenuProperties) {
 
     return (
         <SpeedDial
+            {...props}
+            icon={<SpeedDialIcon icon={props.icon} openIcon={props.openIcon} />}
             direction={props.direction ? props.direction : 'down'}
             ariaLabel="Visualizer Tools"
             className={classes.speedDial}
-            hidden={props.hidden}
-            icon={props.icon ? props.icon : <SpeedDialIcon />}
-            openIcon={props.openIcon}
             onClose={handleClose}
             onOpen={handleOpen}
             open={open}>

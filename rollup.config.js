@@ -38,7 +38,7 @@ export default {
       namedExports: {
         react: Object.keys(react),
         'react-dom': Object.keys(reactDom),
-        'node_modules/react-is/index.js': ['isFragment', 'ForwardRef']
+        'node_modules/react-is/index.js': ['isFragment', 'ForwardRef', "Memo"]
       }
     }),
     postcss({
