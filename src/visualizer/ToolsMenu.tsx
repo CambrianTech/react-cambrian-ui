@@ -7,18 +7,22 @@ import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import {makeStyles} from "@material-ui/core/styles";
 import MaterialIcon from "@material/react-material-icon";
 
+
 type ToolsMenuProperties = {
     className?:string
     hidden?:boolean
     direction?:'up' | 'down' | 'left' | 'right'
     actions?:ToolsMenuAction[]
     icon?:React.ReactNode
+    openIcon?:React.ReactNode
+    onAction?:(action:ToolsMenuAction)=>void
 }
 
 export type ToolsMenuAction = {
     name:string
     longName?:string|undefined
     icon:React.ReactNode
+    operation?:string
 }
 
 export const ToolsMenuDefaultActions:ToolsMenuAction[] = [
@@ -57,7 +61,14 @@ export function ToolsMenu(props: ToolsMenuProperties) {
     const handleClose = () => {
         setOpen(false);
     };
-    
+
+    const handleAction = (action:ToolsMenuAction) => {
+        handleClose();
+        if (props.onAction) {
+            props.onAction(action);
+        }
+    };
+
     return (
         <SpeedDial
             direction={props.direction ? props.direction : 'down'}
@@ -65,6 +76,7 @@ export function ToolsMenu(props: ToolsMenuProperties) {
             className={classes.speedDial}
             hidden={props.hidden}
             icon={props.icon ? props.icon : <SpeedDialIcon />}
+            openIcon={props.openIcon}
             onClose={handleClose}
             onOpen={handleOpen}
             open={open}>
@@ -74,7 +86,7 @@ export function ToolsMenu(props: ToolsMenuProperties) {
                     icon={action.icon}
                     tooltipTitle={!isMobile && action.longName ? action.longName : action.name}
                     tooltipOpen
-                    onClick={handleClose}
+                    onClick={()=>handleAction(action)}
                 />
             ))}
         </SpeedDial>
