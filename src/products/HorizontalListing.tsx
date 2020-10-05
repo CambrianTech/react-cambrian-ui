@@ -1,14 +1,12 @@
 import * as React from "react";
 import classes from "./HorizontalListing.scss";
 import {Thumbnail} from "../general";
-import {SwatchInfoParams, SwatchListing, SwatchListingProps, SwatchListingState} from "./SwatchListing";
+import {SwatchInfoParams, SwatchListing, SwatchListingProps} from "./SwatchListing";
 import {SwatchItem} from "react-home-ar";
 import {ReactNode} from "react";
 import {appendClassName} from "../internal/Utils";
 
-export type HorizontalListingProps = SwatchListingProps & {
-
-}
+export type HorizontalListingProps = SwatchListingProps;
 
 export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
     protected constructor(props:HorizontalListingProps) {

@@ -18,8 +18,8 @@ export type SwatchListingProps = {
     willRenderSwatches?:(swatches:SwatchItem[])=>void
     willRenderSwatch?:(params:SwatchInfoParams)=>void
 
-    noResultsNode?:ReactNode|undefined
-    swatchVisibilityChanged?:(swatch:SwatchItem, visible: boolean) => void;
+    swatchVisibilityChanged?:(swatch:SwatchItem, visible: boolean) => void
+    children?:ReactNode
 }
 
 export type SwatchListingState = {
@@ -214,6 +214,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         }
 
         let swatchCount = 0;
+        const filterCount = this.props.applyFilters && this.props.filters ? this.props.filters.length : -1;
 
         return (
             <div ref={this.listing} className={className}>
@@ -224,7 +225,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
                         return result
                     })}
                 </div>
-                {swatchCount === 0 && !!this.props.filters && this.props.filters.length > 0 && this.props.noResultsNode}
+                {swatchCount === 0 && filterCount === 0 && this.props.children}
             </div>
         );
     }
