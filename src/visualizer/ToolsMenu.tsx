@@ -95,9 +95,9 @@ export function SimpleToolsMenu(props: SimpleToolsMenuProperties) {
 
     return (
         <SpeedDial
-            {...props}
-            icon={<SpeedDialIcon icon={props.icon} openIcon={props.openIcon} />}
+            hidden={props.hidden}
             direction={props.direction ? props.direction : 'down'}
+            icon={<SpeedDialIcon icon={props.icon} openIcon={props.openIcon} />}
             ariaLabel="Visualizer Tools"
             className={classes.speedDial}
             onClose={handleClose}
