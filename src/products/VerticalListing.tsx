@@ -12,7 +12,6 @@ export type VerticalListingProps = SwatchListingProps & {
     getSubSwatchChildren?:(swatch:SwatchItem, isSelected:boolean)=>ReactNode|null
     getSubSwatchInfo?:(params:SwatchInfoParams)=>ReactNode|null
     willRenderSubSwatches?:(swatches:SwatchItem[])=>void
-    collapseSelection?:boolean
 }
 
 export class VerticalListing extends SwatchListing<VerticalListingProps> {
@@ -21,9 +20,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
     }
 
     protected didDataChange(nextProps: Readonly<VerticalListingProps>, nextState: Readonly<SwatchListingState>) {
-        return nextProps.selectedSubSwatch != this.props.selectedSubSwatch
-            || nextProps.collapseSelection != this.props.collapseSelection
-            ||  super.didDataChange(nextProps, nextState)
+        return nextProps.selectedSubSwatch != this.props.selectedSubSwatch ||  super.didDataChange(nextProps, nextState)
     }
 
     protected scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) {
@@ -37,17 +34,17 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
 
             const topOfSwatch = swatchRect.top - contentRect.top;
 
-            let newTop = topOfSwatch - 0.5 * listingRect.height + 0.5 * Math.min(swatchRect.height, listingRect.height)
-            let subSwatchesHeight = subSwatches.getBoundingClientRect().height
+            let newTop = topOfSwatch - 0.5 * listingRect.height + 0.5 * Math.min(swatchRect.height, listingRect.height);
+            let subSwatchesHeight = subSwatches.getBoundingClientRect().height;
             if (!subSwatchesHeight) {
                 //issue here is that the subSwatches is closed, so we need to know the height beforehand
                 subSwatchesHeight = swatchRect.height
             }
 
             if (prevSwatchDiv) {
-                const prevRect = prevSwatchDiv.getBoundingClientRect()
+                const prevRect = prevSwatchDiv.getBoundingClientRect();
                 if (prevRect.top > swatchRect.top) {
-                    const amount = prevRect.height - swatchRect.height
+                    const amount = prevRect.height - swatchRect.height;
                     newTop += amount
                 }
             } else {
@@ -56,7 +53,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
 
             const options:ScrollToOptions = {
                 top: newTop
-            }
+            };
 
             if (behavior) {
                 options.behavior = behavior
@@ -71,7 +68,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             return this.props.getSwatchInfo(params)
         }
         const numColors = params.childCount ? params.childCount : (params.swatch.numChildren ? params.swatch.numChildren : 0);
-        const isPlural = params.swatch.children.length !== 1
+        const isPlural = params.swatch.children.length !== 1;
         const childName = params.swatch.childName ? params.swatch.childName(isPlural) : (isPlural ? "Items" : "Item");
         const numColorsText = `${numColors} ${params.isFiltered ? "Matching" : ""} ${childName}`;
         return (
@@ -91,23 +88,35 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         }
     }
 
-    private clickedRow(swatch:SwatchItem) {
-        const row = document.getElementById(swatch.key) as HTMLDivElement
-        const rowChild = document.getElementById(`${swatch.key}-swatches`) as HTMLDivElement
-        if (row && rowChild) {
-            row.classList.toggle("selected")
-            rowChild.classList.toggle("selected")
-            rowChild.classList.toggle(classes.subSwatchListingContainerSelected)
+    private clearSelection() {
+        const selectedRow = document.querySelector(".vertical-swatch-listing-item.selected");
+        if (selectedRow) {
+            selectedRow.classList.remove("selected");
+            return selectedRow;
         }
-        window.setTimeout(()=>{
-            this.props.onClick(swatch)
-        }, 200);
+        return undefined;
+    }
+
+    private clickedRow(swatch:SwatchItem) {
+        const clearedRow = this.clearSelection();
+        const row = document.getElementById(swatch.key) as HTMLDivElement;
+        const rowChild = document.getElementById(`${swatch.key}-swatches`) as HTMLDivElement;
+        if (row && rowChild) {
+            if (clearedRow === row) {
+                row.classList.remove("selected");
+                rowChild.classList.remove("selected");
+                rowChild.classList.remove(classes.subSwatchListingContainerSelected)
+            } else {
+                row.classList.add("selected");
+                rowChild.classList.add("selected");
+                rowChild.classList.add(classes.subSwatchListingContainerSelected)
+            }
+        }
+        this.props.onClick(swatch)
     }
 
     protected renderSwatch(swatch:SwatchItem): ReactNode {
-
         const filters = this.filters;
-
         const subSwatches = DataFilter.applyFilters(filters, swatch.children as DataItem[]);
         const numSwatches:number|undefined = swatch.children ? subSwatches.length : undefined;
 
@@ -115,7 +124,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             return null
         }
 
-        const isChildSelected = swatch.hasColumns && this.props.selectedSwatch === swatch && !this.props.collapseSelection;
+        const isChildSelected = swatch.hasColumns && this.props.selectedSwatch === swatch;
 
         let className = appendClassName("vertical-swatch-listing-item", classes.swatchListingItem);
         let childClassName = appendClassName("vertical-swatch-listing-child", classes.subSwatchListingContainer);
