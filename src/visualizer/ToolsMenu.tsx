@@ -10,12 +10,16 @@ import {RotateTool} from "./RotateTool";
 import {TranslateTool} from "./TranslateTool";
 import {useCallback} from "react";
 
-export enum ToolMode {
+export enum ToolOperation {
     None='',
     Rotate='rotate',
     Translate='translate',
     DrawSurface='draw',
-    EraseSurface='erase'
+    EraseSurface='erase',
+    ChoosePhoto='choose-photo',
+    ChooseScene='choose-scene',
+    Share='share',
+    ChoosePattern='choose-pattern',
 }
 
 export type SimpleToolsMenuProperties = {
@@ -36,13 +40,13 @@ export type ToolsMenuAction = {
 }
 
 export const ToolsMenuDefaultActions:ToolsMenuAction[] = [
-    { icon: <MaterialIcon icon='add_a_photo' />, name: 'Photo', longName:'Take Photo' },
-    { icon: <MaterialIcon icon='insert_photo' />, name: 'Scene', longName:'Change Scene' },
-    { icon: <MaterialIcon icon='share' />, name: 'Share', longName:'Share Project' },
-    { icon: <MaterialIcon icon='rotate_right' />, name: 'Rotate', operation:ToolMode.Rotate },
-    { icon: <MaterialIcon icon='open_with' />, name: 'Move', operation:ToolMode.Translate },
-    { icon: <MaterialIcon icon='view_compact' />, name: 'Pattern' },
-    { icon: <MaterialIcon icon='edit' />, name: 'Edit Surface', operation:ToolMode.DrawSurface },
+    { icon: <MaterialIcon icon='add_a_photo' />, name: 'Photo', longName:'Take Photo', operation:ToolOperation.ChoosePhoto },
+    { icon: <MaterialIcon icon='insert_photo' />, name: 'Scene', longName:'Change Scene', operation:ToolOperation.ChooseScene },
+    { icon: <MaterialIcon icon='share' />, name: 'Share', longName:'Share Project', operation:ToolOperation.Share },
+    { icon: <MaterialIcon icon='rotate_right' />, name: 'Rotate', operation:ToolOperation.Rotate },
+    { icon: <MaterialIcon icon='open_with' />, name: 'Move', operation:ToolOperation.Translate },
+    { icon: <MaterialIcon icon='view_compact' />, name: 'Pattern', operation:ToolOperation.ChoosePattern },
+    { icon: <MaterialIcon icon='edit' />, name: 'Edit Surface', operation:ToolOperation.DrawSurface },
 ];
 
 export type ToolsMenuProperties = SimpleToolsMenuProperties & {
@@ -118,24 +122,21 @@ export function SimpleToolsMenu(props: SimpleToolsMenuProperties) {
 
 export function ToolsMenu(props: ToolsMenuProperties) {
 
-    const [mode, setMode] = React.useState(ToolMode.None);
+    const [mode, setMode] = React.useState(ToolOperation.None);
     const onShowHideButtons = props.onShowHideButtons;
     const onRotationFinished = props.onRotationFinished;
 
     const handleAction = (action:ToolsMenuAction) => {
 
         switch (action.operation) {
-            case ToolMode.Rotate:
-                setMode(ToolMode.Rotate);
-                break;
-            case ToolMode.Translate:
-                setMode(ToolMode.Translate);
-                break;
-            case ToolMode.DrawSurface:
-                setMode(ToolMode.DrawSurface);
+            case ToolOperation.Rotate:
+            case ToolOperation.Translate:
+            case ToolOperation.DrawSurface:
+            case ToolOperation.EraseSurface:
+                setMode(action.operation);
                 break;
             default:
-                setMode(ToolMode.None);
+                setMode(ToolOperation.None);
         }
 
         if (props.onAction) {
@@ -147,7 +148,7 @@ export function ToolsMenu(props: ToolsMenuProperties) {
         if (onRotationFinished) {
             onRotationFinished(finished, radians)
         }
-        setMode(ToolMode.None);
+        setMode(ToolOperation.None);
         onShowHideButtons(true);
     } , [onRotationFinished, onShowHideButtons]);
 
@@ -156,7 +157,7 @@ export function ToolsMenu(props: ToolsMenuProperties) {
         if (onTranslationFinished) {
             onTranslationFinished(finished, xPos, yPos)
         }
-        setMode(ToolMode.None);
+        setMode(ToolOperation.None);
         onShowHideButtons(true);
     } , [onTranslationFinished, onShowHideButtons]);
 
@@ -165,14 +166,14 @@ export function ToolsMenu(props: ToolsMenuProperties) {
             <SimpleToolsMenu {...props} onAction={handleAction} />
 
             {props.onRotationChanged && (
-                <RotateTool visible={mode === ToolMode.Rotate}
+                <RotateTool visible={mode === ToolOperation.Rotate}
                             onRotationFinished={rotateFinished}
                             onRotationChanged={props.onRotationChanged}
                             rotation={props.initialRotation ? props.initialRotation : 0} />
             )}
 
             {props.onTranslationChanged && (
-                <TranslateTool visible={mode === ToolMode.Translate}
+                <TranslateTool visible={mode === ToolOperation.Translate}
                                onTranslationFinished={translateFinished}
                                onTranslationChanged={props.onTranslationChanged}
                                xPos={props.initialXPos !== undefined ? props.initialXPos : 0}
