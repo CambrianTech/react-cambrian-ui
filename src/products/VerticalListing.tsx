@@ -112,7 +112,9 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                 rowChild.classList.add(classes.subSwatchListingContainerSelected)
             }
         }
-        this.props.onClick(swatch)
+        window.setTimeout(()=>{
+            this.props.onClick(swatch)
+        }, 500);
     }
 
     protected renderSwatch(swatch:SwatchItem): ReactNode {
