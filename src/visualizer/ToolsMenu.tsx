@@ -24,6 +24,7 @@ export enum ToolOperation {
 
 export type SimpleToolsMenuProperties = {
     className?:string
+    name?:string
     hidden?:boolean
     direction?:'up' | 'down' | 'left' | 'right'
     actions?:ToolsMenuAction[]
@@ -84,12 +85,8 @@ export function SimpleToolsMenu(props: SimpleToolsMenuProperties) {
     const actions = props.actions ? props.actions : ToolsMenuDefaultActions;
     const isMobile = window.outerWidth < 400;
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
+    const handleClick = () => {
+        setOpen(!open);
     };
 
     const handleAction = (action:ToolsMenuAction) => {
@@ -102,10 +99,9 @@ export function SimpleToolsMenu(props: SimpleToolsMenuProperties) {
             hidden={props.hidden}
             direction={props.direction ? props.direction : 'down'}
             icon={<SpeedDialIcon icon={props.icon} openIcon={props.openIcon} />}
-            ariaLabel="Visualizer Tools"
+            ariaLabel={props.name ? props.name : "Tools"}
             className={classes.speedDial}
-            onClose={handleClose}
-            onOpen={handleOpen}
+            onClick={handleClick}
             open={open}>
             {actions.map((action) => (
                 <SpeedDialAction
