@@ -6,8 +6,6 @@ import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import {makeStyles} from "@material-ui/core/styles";
 import MaterialIcon from "@material/react-material-icon";
 import {SpeedDialIcon} from "@material-ui/lab";
-import {RotateTool} from "./RotateTool";
-import {TranslateTool} from "./TranslateTool";
 import {useCallback, useMemo} from "react";
 import {CBARSurface, CBARSurfaceAsset} from "react-home-ar";
 
@@ -23,17 +21,19 @@ export enum ToolOperation {
     ChoosePattern='choose-pattern',
 }
 
-export type SimpleToolsMenuProperties = {
+export type ToolsMenuProperties = {
     className?:string
     name?:string
     hidden?:boolean
     direction?:'up' | 'down' | 'left' | 'right'
+
+    onAction:(action:ToolsMenuAction)=>void
+
     selectedAsset?:CBARSurfaceAsset|undefined
     selectedSurface?:CBARSurface|undefined
     actions?:ToolsMenuAction[]
     icon?:React.ReactNode,
     openIcon?:React.ReactNode
-    onAction:(action:ToolsMenuAction)=>void
 }
 
 export type ToolsMenuAction = {
@@ -55,22 +55,6 @@ export const DefaultToolsMenuActions:ToolsMenuAction[] = [
     { icon: <MaterialIcon icon='edit' />, name: 'Edit Surface', operation:ToolOperation.DrawSurface, requiresSurface:true },
 ];
 
-export type ToolsMenuProperties = SimpleToolsMenuProperties & {
-
-    initialRotation?:number
-    onRotationChanged?: (radians: number) => void
-    onRotationFinished?: (commit: boolean, radians:number) => void
-    onShowHideButtons: (show: boolean) => void
-
-    initialXPos?:number
-    initialYPos?:number
-    minTranslation?:[number, number]
-    maxTranslation?:[number, number]
-
-    onTranslationChanged?: (xPos: number, yPos: number) => void
-    onTranslationFinished?: (commit: boolean, xPos: number, yPos: number) => void
-}
-
 const useStyles = makeStyles((theme) => ({
     root: {
         height: 380,
@@ -84,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function SimpleToolsMenu(props: SimpleToolsMenuProperties) {
+export function ToolsMenu(props: ToolsMenuProperties) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const isMobile = window.outerWidth < 400;
@@ -128,70 +112,5 @@ export function SimpleToolsMenu(props: SimpleToolsMenuProperties) {
                 />
             ))}
         </SpeedDial>
-    )
-}
-
-export function ToolsMenu(props: ToolsMenuProperties) {
-
-    const [mode, setMode] = React.useState(ToolOperation.None);
-    const onShowHideButtons = props.onShowHideButtons;
-    const onRotationFinished = props.onRotationFinished;
-
-    const handleAction = (action:ToolsMenuAction) => {
-
-        switch (action.operation) {
-            case ToolOperation.Rotate:
-            case ToolOperation.Translate:
-            case ToolOperation.DrawSurface:
-            case ToolOperation.EraseSurface:
-                setMode(action.operation);
-                break;
-            default:
-                setMode(ToolOperation.None);
-        }
-
-        if (props.onAction) {
-            props.onAction(action);
-        }
-    };
-
-    const rotateFinished = useCallback((finished: boolean, radians:number) => {
-        if (onRotationFinished) {
-            onRotationFinished(finished, radians)
-        }
-        setMode(ToolOperation.None);
-        onShowHideButtons(true);
-    } , [onRotationFinished, onShowHideButtons]);
-
-    const onTranslationFinished = props.onTranslationFinished;
-    const translateFinished = useCallback((finished: boolean, xPos:number, yPos:number) => {
-        if (onTranslationFinished) {
-            onTranslationFinished(finished, xPos, yPos)
-        }
-        setMode(ToolOperation.None);
-        onShowHideButtons(true);
-    } , [onTranslationFinished, onShowHideButtons]);
-
-    return (
-        <div className={"tools-menu"}>
-            <SimpleToolsMenu {...props} onAction={handleAction} />
-
-            {props.onRotationChanged && (
-                <RotateTool visible={mode === ToolOperation.Rotate}
-                            onRotationFinished={rotateFinished}
-                            onRotationChanged={props.onRotationChanged}
-                            rotation={props.initialRotation ? props.initialRotation : 0} />
-            )}
-
-            {props.onTranslationChanged && (
-                <TranslateTool visible={mode === ToolOperation.Translate}
-                               onTranslationFinished={translateFinished}
-                               onTranslationChanged={props.onTranslationChanged}
-                               xPos={props.initialXPos !== undefined ? props.initialXPos : 0}
-                               yPos={props.initialYPos !== undefined ? props.initialYPos : 0}
-                               min={props.minTranslation} max={props.maxTranslation} />
-            )}
-
-        </div>
     )
 }
