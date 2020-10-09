@@ -84,7 +84,7 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
                             </div>
                         </div>
                         <div className={appendClassName("rotate-tool-footer", classes.rotateToolFooter)}>
-                            <Fab className={appendClassName("cancel", classes.rotateToolSliderCancel)} icon={cProps.cancelIcon ? cProps.cancelIcon : <MaterialIcon icon='close' />} onClick={() => cProps.onRotationFinished(false, 0)}  />
+                            <Fab className={appendClassName("cancel", classes.rotateToolSliderCancel)} icon={cProps.cancelIcon ? cProps.cancelIcon : <MaterialIcon icon='close'  />} onClick={() => cProps.onRotationFinished(false, 0)}  />
                             <Fab className={appendClassName("confirm", classes.rotateToolSliderConfirm)} icon={cProps.confirmIcon ? cProps.confirmIcon : <MaterialIcon icon='check' />} onClick={() => cProps.onRotationFinished(true, 0)} />
                         </div>
                     </div>

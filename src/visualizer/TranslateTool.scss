@@ -70,9 +70,12 @@
 
 .translateToolSliderCancel {
   @extend .translateToolSliderButton;
-  background-color:#555
+  color: var(--mdc-theme-secondary, #fff);
+  background-color: var(--mdc-theme-primary, #000);
 }
 
 .translateToolSliderConfirm {
   @extend .translateToolSliderButton;
+  color: var(--mdc-theme-primary, #000);
+  background-color: var(--mdc-theme-secondary, #fff);
 }

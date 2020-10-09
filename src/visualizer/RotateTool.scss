@@ -66,9 +66,12 @@
 
 .rotateToolSliderCancel {
   @extend .rotateToolSliderButton;
-  background-color:#555
+  color: var(--mdc-theme-secondary, #fff);
+  background-color: var(--mdc-theme-primary, #000);
 }
 
 .rotateToolSliderConfirm {
   @extend .rotateToolSliderButton;
+  color: var(--mdc-theme-primary, #000);
+  background-color: var(--mdc-theme-secondary, #fff);
 }
