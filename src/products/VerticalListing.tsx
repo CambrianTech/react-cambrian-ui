@@ -51,6 +51,8 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                 newTop += subSwatchesHeight / 2.0
             }
 
+            //console.log(listingRect, contentRect, newTop);
+
             const options:ScrollToOptions = {
                 top: newTop
             };
