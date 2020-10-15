@@ -17,6 +17,7 @@ export type SwatchListingProps = {
 
     willRenderSwatches?:(swatches:SwatchItem[])=>void
     willRenderSwatch?:(params:SwatchInfoParams)=>void
+    didScroll?:(scroller:HTMLDivElement, content:HTMLDivElement, e:any)=>void
 
     swatchVisibilityChanged?:(swatch:SwatchItem, visible: boolean) => void
     children?:ReactNode
@@ -115,6 +116,10 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             this.lastAutoScrollTime = performance.now()
         } else if (this.scrollInterval) {
             window.clearInterval(this.scrollInterval)
+        }
+
+        if (this.props.didScroll && this.listing.current && this.listingContent.current) {
+            this.props.didScroll(this.listing.current, this.listingContent.current, e);
         }
     };
 

@@ -25,36 +25,22 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
 
     protected scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) {
         if (swatchDiv && this.listingContent.current && this.listing.current) {
-            const swatchRect = swatchDiv.getBoundingClientRect();
             const listingRect = this.listing.current.getBoundingClientRect();
-            const contentRect = this.listingContent.current.getBoundingClientRect();
             const subSwatches = document.getElementById(`${swatchDiv.id}-swatches`) as HTMLDivElement;
 
             if (!subSwatches) return;
 
-            const topOfSwatch = swatchRect.top - contentRect.top;
+            //const scrollHeight = this.listing.current.scrollHeight;
+            let scrollTo = swatchDiv.offsetTop - listingRect.height / 2.0;
 
-            let newTop = topOfSwatch - 0.5 * listingRect.height + 0.5 * Math.min(swatchRect.height, listingRect.height);
-            let subSwatchesHeight = subSwatches.getBoundingClientRect().height;
-            if (!subSwatchesHeight) {
-                //issue here is that the subSwatches is closed, so we need to know the height beforehand
-                subSwatchesHeight = swatchRect.height
+            if (prevSwatchDiv && prevSwatchDiv.offsetTop > subSwatches.offsetTop) {
+                const prevSwatchRect = prevSwatchDiv.getBoundingClientRect();
+                scrollTo += prevSwatchRect.height / 2.0; //plus goes up
             }
-
-            if (prevSwatchDiv) {
-                const prevRect = prevSwatchDiv.getBoundingClientRect();
-                if (prevRect.top > swatchRect.top) {
-                    const amount = prevRect.height - swatchRect.height;
-                    newTop += amount
-                }
-            } else {
-                newTop += subSwatchesHeight / 2.0
-            }
-
-            //console.log(listingRect, contentRect, newTop);
+            //console.log(listingRect.height, contentRect.height, newTop);
 
             const options:ScrollToOptions = {
-                top: newTop
+                top: scrollTo
             };
 
             if (behavior) {
