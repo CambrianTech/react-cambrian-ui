@@ -109,6 +109,8 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     private _prevSwatchDiv:HTMLDivElement|undefined = undefined;
 
     private onScroll = (e:any) => {
+        if (!this._isMounted) return;
+
         if (!this._realScroll) {
             this.lastAutoScrollTime = performance.now()
         } else if (this.scrollInterval) {
@@ -119,6 +121,8 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     private _realScroll = false;
     private _realScrollPossible = false;
     private onWheel = () => {
+        if (!this._isMounted) return;
+
         if (this._realScrollPossible) {
             this._realScroll = true;
         }
@@ -197,7 +201,6 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     componentDidMount() {
         this._isMounted = true;
-        console.log("mounted");
     }
 
     componentWillUnmount() {
