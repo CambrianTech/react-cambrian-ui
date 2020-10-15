@@ -98,15 +98,15 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     private _swatchLengthChanged = false;
 
-    private get isBound() : boolean {
-        return !!this.listingContent.current && !!this.listing.current
+    protected get isBound() : boolean {
+        return this._isMounted;
     }
 
     private scrollInterval = 0;
     private lastAutoScrollTime = 0;
     protected autoScrollTimeout = 2000;
+    private _boundEvents = false;
 
-    private _addedOnScroll = false;
     private onScroll = (e:any) => {
         if (!this._realScroll) {
             this.lastAutoScrollTime = performance.now()
@@ -123,6 +123,73 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         }
         window.clearInterval(this.scrollInterval)
     };
+
+    protected onMouseover() {
+        if (!this._isMounted) return;
+        this._realScrollPossible = true
+    }
+
+    protected onMouseout() {
+        if (!this._isMounted) return;
+        this._realScrollPossible = false
+    }
+
+    protected onClick() {
+        if (!this._isMounted) return;
+        if (this.scrollInterval) window.clearInterval(this.scrollInterval)
+    }
+
+    protected onTouchstart() {
+        if (!this._isMounted) return;
+        if (this.scrollInterval) window.clearInterval(this.scrollInterval)
+    }
+
+    protected onTouchmove() {
+        if (!this._isMounted) return;
+        if (this.scrollInterval) window.clearInterval(this.scrollInterval)
+    }
+
+    private bindEvents() {
+        if (!this.listing.current) return;
+
+        this._boundEvents = true;
+
+        this.listing.current.addEventListener('scroll', this.onScroll);
+        this.listing.current.addEventListener('wheel', this.onWheel);
+        this.listing.current.addEventListener('mouseover', this.onMouseover);
+        this.listing.current.addEventListener('mouseout', this.onMouseout);
+        this.listing.current.addEventListener('click', this.onClick);
+        this.listing.current.addEventListener('touchstart', this.onTouchstart);
+        this.listing.current.addEventListener('touchmove', this.onTouchmove);
+    }
+
+    private unbindEvents() {
+        if (!this.listing.current) return;
+
+        this._boundEvents = false;
+
+        this.listing.current.removeEventListener('scroll', this.onScroll);
+        this.listing.current.removeEventListener('wheel', this.onWheel);
+        this.listing.current.removeEventListener('mouseover', this.onMouseover);
+        this.listing.current.removeEventListener('mouseout', this.onMouseout);
+        this.listing.current.removeEventListener('click', this.onClick);
+        this.listing.current.removeEventListener('touchstart', this.onTouchstart);
+        this.listing.current.removeEventListener('touchmove', this.onTouchmove);
+    }
+
+    private _isMounted = false;
+
+    componentDidMount() {
+        this._isMounted = true;
+        console.log("mounted");
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+        if (this._boundEvents) {
+            this.unbindEvents();
+        }
+    }
 
     componentDidUpdate(prevProps: Readonly<T>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
         const filterString = this.filtersToString(this.filters);
@@ -146,28 +213,9 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
         const prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined;
 
-        if (!this._addedOnScroll) {
-            this._addedOnScroll = true;
-            this.listing.current.addEventListener('scroll', this.onScroll);
-            this.listing.current.addEventListener('wheel', this.onWheel);
-            this.listing.current.addEventListener('mouseover', ()=>{
-                this._realScrollPossible = true
-            });
-            this.listing.current.addEventListener('mouseout', ()=>{
-                this._realScrollPossible = false
-            });
+        if (!this._boundEvents) {
 
-            this.listing.current.addEventListener('click', ()=>{
-                if (this.scrollInterval) window.clearInterval(this.scrollInterval)
-            });
-
-            this.listing.current.addEventListener('touchstart', ()=>{
-                if (this.scrollInterval) window.clearInterval(this.scrollInterval)
-            });
-
-            this.listing.current.addEventListener('touchmove', ()=>{
-                if (this.scrollInterval) window.clearInterval(this.scrollInterval)
-            });
+            this.bindEvents();
 
             if (!this.scrollInterval && !this._realScroll) {
                 this.scrollInterval = window.setInterval(()=>{
