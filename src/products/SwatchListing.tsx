@@ -98,7 +98,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     private _swatchLengthChanged = false;
 
-    protected get isBound() : boolean {
+    protected get isMounted() : boolean {
         return this._isMounted;
     }
 
@@ -106,6 +106,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     private lastAutoScrollTime = 0;
     protected autoScrollTimeout = 2000;
     private _boundEvents = false;
+    private _prevSwatchDiv:HTMLDivElement|undefined = undefined;
 
     private onScroll = (e:any) => {
         if (!this._realScroll) {
@@ -161,6 +162,17 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         this.listing.current.addEventListener('click', this.onClick);
         this.listing.current.addEventListener('touchstart', this.onTouchstart);
         this.listing.current.addEventListener('touchmove', this.onTouchmove);
+
+        this.scrollInterval = window.setInterval(()=>{
+            if (!this.isMounted || !this.props.selectedSwatch || this._realScroll) return;
+            const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
+            if (!this.lastAutoScrollTime || (performance.now() - this.lastAutoScrollTime) > 500) {
+                this.scrollSwatchIntoView(swatchDiv, this._prevSwatchDiv, "auto")
+            }
+        },500);
+        window.setTimeout(()=>{
+            window.clearInterval(this.scrollInterval); this.scrollInterval = 0
+        }, this.autoScrollTimeout)
     }
 
     private unbindEvents() {
@@ -175,6 +187,10 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         this.listing.current.removeEventListener('click', this.onClick);
         this.listing.current.removeEventListener('touchstart', this.onTouchstart);
         this.listing.current.removeEventListener('touchmove', this.onTouchmove);
+
+        if (this.scrollInterval) {
+            window.clearInterval(this.scrollInterval); this.scrollInterval = 0;
+        }
     }
 
     private _isMounted = false;
@@ -205,34 +221,18 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             this._swatchLengthChanged = true
         }
 
-        if (!this.isBound || !this.props.selectedSwatch || !this.listing.current || !this.listingContent.current) return;
+        if (!this.isMounted || !this.props.selectedSwatch || !this.listing.current || !this.listingContent.current) return;
 
         const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
-
-        if (!swatchDiv) return;
-
-        const prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined;
+        this._prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined;
 
         if (!this._boundEvents) {
-
             this.bindEvents();
-
-            if (!this.scrollInterval && !this._realScroll) {
-                this.scrollInterval = window.setInterval(()=>{
-                    if (!this.lastAutoScrollTime || (performance.now() - this.lastAutoScrollTime) > 500) {
-                        this.scrollSwatchIntoView(swatchDiv, prevSwatchDiv, "auto")
-                    }
-                },500);
-                window.setTimeout(()=>{
-                    window.clearInterval(this.scrollInterval)
-                }, this.autoScrollTimeout)
-            }
         }
 
-        if (prevProps.selectedSwatch !== this.props.selectedSwatch) {
-
+        if (prevProps.selectedSwatch !== this.props.selectedSwatch && swatchDiv) {
             //console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
-            this.scrollSwatchIntoView(swatchDiv, prevSwatchDiv, "smooth")
+            this.scrollSwatchIntoView(swatchDiv, this._prevSwatchDiv, "smooth")
         }
     }
 
