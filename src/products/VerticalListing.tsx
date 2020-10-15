@@ -115,7 +115,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
             }
         }
         window.setTimeout(()=>{
-            this.props.onClick(swatch)
+            if (this.isMounted) this.props.onClick(swatch)
         }, 500);
     }
 

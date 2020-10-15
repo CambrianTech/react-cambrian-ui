@@ -240,7 +240,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     }
 
     render() {
-        if (!this.props.swatches || this.props.visible===false) {
+        if (!this.props.swatches || this.props.visible === false) {
             return null
         }
 
@@ -257,9 +257,8 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             const parent = swatches[0].parent;
             if (parent instanceof DataItem) {
                 const parentItem = parent as DataItem;
-                //todo:handle existing declared onUpdate?
                 parentItem.onUpdate = ()=>{
-                    this.forceUpdate();
+                    if (this.isMounted) this.forceUpdate();
                 }
             }
         }
