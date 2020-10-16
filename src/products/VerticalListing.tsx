@@ -23,18 +23,36 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
         return nextProps.selectedSubSwatch != this.props.selectedSubSwatch ||  super.didDataChange(nextProps, nextState)
     }
 
+    private _lastSwatchDiv:HTMLDivElement|undefined = undefined;
+    private _lastPrevSwatchDiv:HTMLDivElement|undefined = undefined;
+
     protected scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) {
-        if (swatchDiv && this.content && this.listing) {
+        this._lastSwatchDiv = swatchDiv;
+        this._lastPrevSwatchDiv = prevSwatchDiv;
+
+        this._scrollSwatchIntoView(swatchDiv, prevSwatchDiv, behavior);
+    }
+
+    public refreshLayout(behavior?:ScrollBehavior) {
+        if (this._lastSwatchDiv) {
+            this._scrollSwatchIntoView(this._lastSwatchDiv, this._lastPrevSwatchDiv, behavior);
+        }
+    }
+
+    private _scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) {
+        if (this.content && this.listing) {
             const listingRect = this.listing.getBoundingClientRect();
             const subSwatches = document.getElementById(`${swatchDiv.id}-swatches`) as HTMLDivElement;
 
             if (!subSwatches) return;
 
-            let scrollTo = swatchDiv.offsetTop - listingRect.height / 2.0 - subSwatches.getBoundingClientRect().height / 2.0;
+            let scrollTo = swatchDiv.offsetTop - listingRect.height / 2.0;
 
-            if (prevSwatchDiv && prevSwatchDiv.offsetTop < subSwatches.offsetTop) {
+            scrollTo -= this.listing.offsetTop;
+
+            if (prevSwatchDiv && prevSwatchDiv.offsetTop > subSwatches.offsetTop) {
                 const prevSwatchRect = prevSwatchDiv.getBoundingClientRect();
-                scrollTo -= prevSwatchRect.height / 2.0;
+                scrollTo += prevSwatchRect.height / 2.0;
             }
 
             const options:ScrollToOptions = {
