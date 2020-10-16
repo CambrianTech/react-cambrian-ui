@@ -49,8 +49,16 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     protected abstract scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) : void;
 
-    protected listing = createRef<HTMLDivElement>();
-    protected listingContent = createRef<HTMLDivElement>();
+    private _listing = createRef<HTMLDivElement>();
+    private _content = createRef<HTMLDivElement>();
+
+    public get listing() : HTMLDivElement | null {
+        return this._listing.current;
+    }
+
+    public get content() : HTMLDivElement | null {
+        return this._content.current;
+    }
 
     protected get swatches() : SwatchItem[] {
         const swatches = this.props.swatches as DataItem[];
@@ -118,8 +126,8 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             window.clearInterval(this.scrollInterval)
         }
 
-        if (this.props.didScroll && this.listing.current && this.listingContent.current) {
-            this.props.didScroll(this.listing.current, this.listingContent.current, e);
+        if (this.props.didScroll && this.listing && this.content) {
+            this.props.didScroll(this.listing, this.content, e);
         }
     };
 
@@ -159,18 +167,19 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         if (this.scrollInterval) window.clearInterval(this.scrollInterval)
     }
 
-    private bindEvents() {
-        if (!this.listing.current) return;
+
+    protected bindEvents() {
+        if (!this.listing) return;
 
         this._boundEvents = true;
 
-        this.listing.current.addEventListener('scroll', this.onScroll);
-        this.listing.current.addEventListener('wheel', this.onWheel);
-        this.listing.current.addEventListener('mouseover', this.onMouseover);
-        this.listing.current.addEventListener('mouseout', this.onMouseout);
-        this.listing.current.addEventListener('click', this.onClick);
-        this.listing.current.addEventListener('touchstart', this.onTouchstart);
-        this.listing.current.addEventListener('touchmove', this.onTouchmove);
+        this.listing.addEventListener('scroll', this.onScroll);
+        this.listing.addEventListener('wheel', this.onWheel);
+        this.listing.addEventListener('mouseover', this.onMouseover);
+        this.listing.addEventListener('mouseout', this.onMouseout);
+        this.listing.addEventListener('click', this.onClick);
+        this.listing.addEventListener('touchstart', this.onTouchstart);
+        this.listing.addEventListener('touchmove', this.onTouchmove);
 
         this.scrollInterval = window.setInterval(()=>{
             if (!this.isMounted || !this.props.selectedSwatch || this._realScroll) return;
@@ -185,17 +194,17 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
     }
 
     private unbindEvents() {
-        if (!this.listing.current) return;
+        if (!this.listing) return;
 
         this._boundEvents = false;
 
-        this.listing.current.removeEventListener('scroll', this.onScroll);
-        this.listing.current.removeEventListener('wheel', this.onWheel);
-        this.listing.current.removeEventListener('mouseover', this.onMouseover);
-        this.listing.current.removeEventListener('mouseout', this.onMouseout);
-        this.listing.current.removeEventListener('click', this.onClick);
-        this.listing.current.removeEventListener('touchstart', this.onTouchstart);
-        this.listing.current.removeEventListener('touchmove', this.onTouchmove);
+        this.listing.removeEventListener('scroll', this.onScroll);
+        this.listing.removeEventListener('wheel', this.onWheel);
+        this.listing.removeEventListener('mouseover', this.onMouseover);
+        this.listing.removeEventListener('mouseout', this.onMouseout);
+        this.listing.removeEventListener('click', this.onClick);
+        this.listing.removeEventListener('touchstart', this.onTouchstart);
+        this.listing.removeEventListener('touchmove', this.onTouchmove);
 
         if (this.scrollInterval) {
             window.clearInterval(this.scrollInterval); this.scrollInterval = 0;
@@ -229,7 +238,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             this._swatchLengthChanged = true
         }
 
-        if (!this.isMounted || !this.props.selectedSwatch || !this.listing.current || !this.listingContent.current) return;
+        if (!this.isMounted || !this.props.selectedSwatch || !this.listing || !this.content) return;
 
         const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
         this._prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined;
@@ -272,8 +281,8 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         const filterCount = this.props.applyFilters && this.props.filters ? this.props.filters.length : -1;
 
         return (
-            <div ref={this.listing} className={className}>
-                <div ref={this.listingContent} className={appendClassName(`${this.listingName}-content`, this.scss.swatchListingContent)}>
+            <div ref={this._listing} className={className}>
+                <div ref={this._content} className={appendClassName(`${this.listingName}-content`, this.scss.swatchListingContent)}>
                     {swatches.map((swatch) => {
                         const result = this.renderSwatch(swatch);
                         if (result) swatchCount ++;

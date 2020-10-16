@@ -28,10 +28,10 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
 
     protected scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) {
 
-        if (swatchDiv && this.listingContent.current && this.listing.current) {
+        if (swatchDiv && this.content && this.listing) {
             const swatchRect = swatchDiv.getBoundingClientRect();
-            const listingRect = this.listing.current.getBoundingClientRect();
-            const contentRect = this.listingContent.current.getBoundingClientRect();
+            const listingRect = this.listing.getBoundingClientRect();
+            const contentRect = this.content.getBoundingClientRect();
 
             const leftOfSwatch = swatchRect.left - contentRect.left;
             let newLeft = leftOfSwatch - 0.5 * listingRect.width + 0.5 * swatchRect.width
@@ -42,7 +42,7 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
             if (behavior) {
                 options.behavior = behavior
             }
-            this.listing.current.scroll(options);
+            this.listing.scroll(options);
         }
     }
 
