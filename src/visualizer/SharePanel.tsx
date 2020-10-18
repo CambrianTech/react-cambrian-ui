@@ -368,7 +368,7 @@ function addProductText(ctx:CanvasRenderingContext2D, product:ProductItem, image
 
 }
 
-function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:ProductItem, resolveThumbnailPath:undefined|((swatch: SwatchItem) => string | undefined)) {
+export function addSwatchBranding(imageContext:CanvasRenderingContext2D, product:ProductItem, resolveThumbnailPath:undefined|((swatch: SwatchItem) => string | undefined)) {
 
     return new Promise<CanvasRenderingContext2D>((resolve, reject)=>{
 
@@ -471,6 +471,40 @@ function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
             }
         })
     })
+}
+
+export function drawBeforeAfter(beforeContext:CanvasImageSource, afterContext:CanvasImageSource) {
+    const ctx = document.createElement("canvas").getContext("2d")!;
+
+    const beforeWidth = beforeContext.width as number;
+    const beforeHeight = beforeContext.height as number;
+    const beforeAspectRatio = beforeWidth / beforeHeight;
+
+    const afterWidth = beforeContext.width as number;
+    const afterHeight = beforeContext.height as number;
+    const afterAspectRatio = afterWidth / afterHeight;
+
+    //make image same width and twice the height of the render (afterContext)
+    ctx.canvas.width = afterWidth;
+    ctx.canvas.height = afterHeight * 2.0;
+
+    //draw after onto the image below before.
+    ctx.drawImage(afterContext, 0, afterHeight);
+
+    //draw before at top, above after
+    if (beforeAspectRatio < afterAspectRatio) {
+        const srcWidth = beforeWidth;
+        const srcHeight = beforeWidth / afterAspectRatio;
+        const offsetY = (beforeHeight - srcHeight) / 2.0;
+        ctx.drawImage(beforeContext, 0, offsetY, srcWidth, srcHeight,
+            0, 0, beforeWidth, beforeHeight)
+    } else {
+        const srcWidth = beforeHeight * afterAspectRatio;
+        const srcHeight = beforeHeight;
+        const offsetX = (beforeWidth - srcWidth) / 2.0;
+        ctx.drawImage(beforeContext, offsetX, 0, srcWidth, srcHeight,
+            0, 0, beforeWidth, beforeHeight)
+    }
 }
 
 function isFileReady(url: string) {
