@@ -319,7 +319,7 @@ export async function getShareImage(api:CBMethods) {
     return null
 }
 
-function addProductText(ctx:CanvasRenderingContext2D, product:ProductItem, imageWidth:number, imageHeight:number, bottomHeight:number) {
+export function addProductText(ctx:CanvasRenderingContext2D, product:ProductItem, imageWidth:number, imageHeight:number, bottomHeight:number) {
 
     const fontFamily = "Lato,Avenir Next,Roboto,Verdana,serif";
 
@@ -421,6 +421,7 @@ export function addSwatchBranding(imageContext:CanvasRenderingContext2D, product
     })
 
 }
+
 function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
 
     return new Promise<CanvasRenderingContext2D>((resolve, reject)=>{
@@ -473,8 +474,10 @@ function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
     })
 }
 
-export function drawBeforeAfter(beforeContext:CanvasImageSource, afterContext:CanvasImageSource) {
-    const ctx = document.createElement("canvas").getContext("2d")!;
+export function drawBeforeAfter(beforeContext:CanvasImageSource, afterContext:CanvasImageSource) : CanvasRenderingContext2D | null {
+    const ctx = document.createElement("canvas").getContext("2d");
+
+    if (!ctx) return null;
 
     const beforeWidth = beforeContext.width as number;
     const beforeHeight = beforeContext.height as number;
@@ -505,6 +508,8 @@ export function drawBeforeAfter(beforeContext:CanvasImageSource, afterContext:Ca
         ctx.drawImage(beforeContext, offsetX, 0, srcWidth, srcHeight,
             0, 0, beforeWidth, beforeHeight)
     }
+
+    return ctx;
 }
 
 function isFileReady(url: string) {
@@ -520,7 +525,8 @@ function isFileReady(url: string) {
         }
     })
 }
-function whenFileAvailable(url: string, timeoutMS:number = 30) {
+
+export function whenFileAvailable(url: string, timeoutMS:number = 30) {
     return new Promise<boolean>((resolve, reject)=>{
         const startTime = performance.now();
         let interval = window.setInterval(()=> {
@@ -546,7 +552,7 @@ function whenFileAvailable(url: string, timeoutMS:number = 30) {
     })
 }
 
-function deliverRenderedImage(filename:string, dataUrl:string) {
+export function deliverRenderedImage(filename:string, dataUrl:string) {
 
     if (isMobile) {
         //showDownloadOverlay(true, dataUrl)
