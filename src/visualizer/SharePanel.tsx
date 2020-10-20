@@ -6,7 +6,8 @@ import {
     ProductItem,
     CBServerFile,
     CBContentManager,
-    SwatchItem, getConfig, UploadNames
+    SwatchItem,
+    UploadNames
 } from "react-home-ar";
 import classes from "./SharePanel.scss";
 import {appendClassName, isMobile} from "../internal/Utils";
@@ -79,7 +80,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
             }, [props.getShareUrl]);
 
             const hasUpload = useCallback((name:string) => {
-                const uploads = getConfig().uploadNames;
+                const uploads = CBContentManager.default.uploadNames;
                 return uploads.indexOf(name) >= 0
             }, []);
 
@@ -123,7 +124,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                         // console.log("upload mask");
 
-                        const maskUrl = await CBContentManager.default.uploadFile(props.data.maskCanvas, CBServerFile.Mask);
+                        const maskUrl = await CBContentManager.default.uploadFile(props.data.maskCanvas, UploadNames.Mask);
                         if (!maskUrl) {
                             console.error("Could not upload mask image!");
                             onCompleted(false);
@@ -139,7 +140,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                         // console.log("upload share as preview");
                         onProgress(true, "Uploading Pinterest image", 0.5);
 
-                        const previewUrl = await CBContentManager.default.uploadFile(shareImage.canvas, CBServerFile.Preview);
+                        const previewUrl = await CBContentManager.default.uploadFile(shareImage.canvas, UploadNames.Preview);
                         if (!previewUrl) {
                             console.error("Could not upload Pinterest image!");
                             onCompleted(false);
@@ -159,8 +160,8 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                             // console.log("add branding");
                             const pinterestImage = await addSwatchBranding(pinterest, product, props.resolveThumbnailPath);
                             // console.log("branding added");
-                            const pinterestUrl = await CBContentManager.default.uploadFile(pinterestImage.canvas, UploadNames.Pinterest);
-                            if (!pinterestUrl) {
+                            const pinterestResult = await CBContentManager.default.uploadFile(pinterestImage.canvas, UploadNames.Pinterest);
+                            if (!pinterestResult) {
                                 console.error("Could not upload Pinterest image!");
                                 onCompleted(false);
                                 return
@@ -168,8 +169,8 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                             // console.log("wait on pinterest");
                             //takes a few seconds to get to aws
-                            whenFileAvailable(pinterestUrl, PINTEREST_UPLOAD_TIMEOUT).then(()=>{
-                                setBeforeAfterImageUrl(pinterestUrl)
+                            whenFileAvailable(pinterestResult.url, PINTEREST_UPLOAD_TIMEOUT).then(()=>{
+                                setBeforeAfterImageUrl(pinterestResult.url)
                             });
                         }
 

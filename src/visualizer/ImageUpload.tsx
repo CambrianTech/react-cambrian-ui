@@ -1,11 +1,11 @@
-import React, {ReactNode, useRef, useEffect, useCallback} from "react"
-import { useDropzone } from "react-dropzone"
+import React, {ReactNode, useCallback, useEffect, useRef} from "react"
+import {useDropzone} from "react-dropzone"
 import {
     CBARSceneProperties,
-    getRotatedFile,
     CBContentManager,
-    getTags,
-    getAccelerationVector
+    getAccelerationVector,
+    getRotatedFile,
+    getTags
 } from "react-home-ar";
 
 const fileAccept = "image/*";
