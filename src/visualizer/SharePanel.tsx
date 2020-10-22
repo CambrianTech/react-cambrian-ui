@@ -475,7 +475,7 @@ function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
     })
 }
 
-export function drawBeforeAfter(beforeContext:CanvasImageSource, afterContext:CanvasImageSource) : CanvasRenderingContext2D | null {
+export function drawBeforeAfter(beforeContext:CanvasImageSource, afterContext:CanvasImageSource, isHorizontal?:boolean) : CanvasRenderingContext2D | null {
     const ctx = document.createElement("canvas").getContext("2d");
 
     if (!ctx) return null;
@@ -484,30 +484,42 @@ export function drawBeforeAfter(beforeContext:CanvasImageSource, afterContext:Ca
     const beforeHeight = beforeContext.height as number;
     const beforeAspectRatio = beforeWidth / beforeHeight;
 
-    const afterWidth = beforeContext.width as number;
-    const afterHeight = beforeContext.height as number;
+    const afterWidth = afterContext.width as number;
+    const afterHeight = afterContext.height as number;
     const afterAspectRatio = afterWidth / afterHeight;
 
-    //make image same width and twice the height of the render (afterContext)
-    ctx.canvas.width = afterWidth;
-    ctx.canvas.height = afterHeight * 2.0;
+    const isWider = beforeAspectRatio < afterAspectRatio;
 
-    //draw after onto the image below before.
-    ctx.drawImage(afterContext, 0, afterHeight);
+    if (isHorizontal) {
+        //make image same width and twice the height of the render (afterContext)
+        ctx.canvas.width = afterWidth * 2.0;
+        ctx.canvas.height = afterHeight;
 
-    //draw before at top, above after
-    if (beforeAspectRatio < afterAspectRatio) {
-        const srcWidth = beforeWidth;
-        const srcHeight = beforeWidth / afterAspectRatio;
-        const offsetY = (beforeHeight - srcHeight) / 2.0;
-        ctx.drawImage(beforeContext, 0, offsetY, srcWidth, srcHeight,
-            0, 0, beforeWidth, beforeHeight)
+        const srcWidth = isWider ? beforeWidth : beforeHeight * afterAspectRatio;
+        const srcHeight = isWider ? beforeWidth / afterAspectRatio : beforeHeight;
+        const offsetX = isWider ? 0 : 0.5 * (beforeWidth - srcWidth);
+        const offsetY = isWider ? 0.5 * (beforeHeight - srcHeight) : 0;
+
+        //draw before image at the left
+        ctx.drawImage(beforeContext, offsetX, offsetY, srcWidth, srcHeight, 0, 0, 0.5 * ctx.canvas.width, ctx.canvas.height);
+
+        //draw after image onto the context at the bottom, starting at the middle
+        ctx.drawImage(afterContext, 0.5 * ctx.canvas.width, 0);
     } else {
-        const srcWidth = beforeHeight * afterAspectRatio;
-        const srcHeight = beforeHeight;
-        const offsetX = (beforeWidth - srcWidth) / 2.0;
-        ctx.drawImage(beforeContext, offsetX, 0, srcWidth, srcHeight,
-            0, 0, beforeWidth, beforeHeight)
+        //make image same width and twice the height of the render (afterContext)
+        ctx.canvas.width = afterWidth;
+        ctx.canvas.height = afterHeight * 2.0;
+
+        const srcWidth = isWider ? beforeWidth : beforeHeight * afterAspectRatio;
+        const srcHeight = isWider ? beforeWidth / afterAspectRatio : beforeHeight;
+        const offsetX = isWider ? 0 : 0.5 * (beforeWidth - srcWidth);
+        const offsetY = isWider ? 0.5 * (beforeHeight - srcHeight) : 0;
+
+        //draw before image at the top
+        ctx.drawImage(beforeContext, offsetX, offsetY, srcWidth, srcHeight, 0, 0, ctx.canvas.width, 0.5 * ctx.canvas.height);
+
+        //draw after image onto the context at the bottom, starting at the middle
+        ctx.drawImage(afterContext, 0, 0.5 * ctx.canvas.height);
     }
 
     return ctx;
