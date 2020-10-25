@@ -1,13 +1,8 @@
 import {createRef, default as React, useCallback, useEffect, useState} from "react";
 import {
-    CBMethods,
-    CBSceneData,
-    CBSceneProperties,
     ProductItem,
-    CBServerFile,
     CBContentManager,
-    SwatchItem,
-    UploadNames
+    SwatchItem, CBARUploadNames
 } from "react-home-ar";
 import classes from "./SharePanel.scss";
 import {appendClassName, isMobile} from "../internal/Utils";
@@ -25,9 +20,6 @@ type SharePanelProps = {
     visible:boolean
     className?:string
     product?:ProductItem
-    api:CBMethods,
-    scene:CBSceneProperties,
-    data:CBSceneData,
     isUploadedImage:boolean,
     shareSubject:string
     needsUpload:boolean
@@ -112,89 +104,11 @@ export const SharePanelCached = React.memo<SharePanelProps>(
             const [beforeAfterImageUrl, setBeforeAfterImageUrl] = useState<string>();
             const [performUpload, setPerformUpload] = useState(false);
 
-            const doShareUpload = useCallback((product:ProductItem) => {
-                (async () => {
-
-                    setPerformUpload(false);
-
-                    onProgress(true, "Contacting server", 0.3);
-                    const shareImage = await getShareImage(props.api);
-
-                    if (shareImage) {
-
-                        // console.log("upload mask");
-
-                        const maskUrl = await CBContentManager.default.uploadFile(props.data.maskCanvas, UploadNames.Mask);
-                        if (!maskUrl) {
-                            console.error("Could not upload mask image!");
-                            onCompleted(false);
-                            return
-                        }
-                        onProgress(true, "Uploading Pinterest image", 0.2);
-
-                        addSwatchBranding(shareImage, product, props.resolveThumbnailPath).then(ctx=>{
-                            const image = ctx.canvas.toDataURL("image/png");
-                            setShareImageUrl(image)
-                        });
-
-                        // console.log("upload share as preview");
-                        onProgress(true, "Uploading Pinterest image", 0.5);
-
-                        const previewUrl = await CBContentManager.default.uploadFile(shareImage.canvas, UploadNames.Preview);
-                        if (!previewUrl) {
-                            console.error("Could not upload Pinterest image!");
-                            onCompleted(false);
-                            return
-                        }
-
-                        if (hasUpload(UploadNames.Pinterest)) {
-                            // console.log("generate before/after");
-                            const pinterest = props.isUploadedImage ? await generateBeforeAfter(props.api, props.scene) : await getShareImage(props.api);
-
-                            if (!pinterest) {
-                                return
-                            }
-
-                            onProgress(true, "Uploading Pinterest image", 0.6);
-
-                            // console.log("add branding");
-                            const pinterestImage = await addSwatchBranding(pinterest, product, props.resolveThumbnailPath);
-                            // console.log("branding added");
-                            const pinterestResult = await CBContentManager.default.uploadFile(pinterestImage.canvas, UploadNames.Pinterest);
-                            if (!pinterestResult) {
-                                console.error("Could not upload Pinterest image!");
-                                onCompleted(false);
-                                return
-                            }
-
-                            // console.log("wait on pinterest");
-                            //takes a few seconds to get to aws
-                            whenFileAvailable(pinterestResult.url, PINTEREST_UPLOAD_TIMEOUT).then(()=>{
-                                setBeforeAfterImageUrl(pinterestResult.url)
-                            });
-                        }
-
-                        onProgress(false, "Upload Successful", 1.0);
-
-                        //setShareUrl(updateUrl());
-                    } else {
-                        console.error("Could not generate share image!");
-                        onCompleted(false);
-                    }
-                })()
-            }, [hasUpload, onProgress, onCompleted, whenFileAvailable, getShareImage, generateBeforeAfter, addSwatchBranding, props.resolveThumbnailPath]);
-
             useEffect(() => {
                 if (props.needsUpload) {
                     setPerformUpload(true);
                 }
             }, [props.needsUpload]);
-
-            useEffect(() => {
-                if (performUpload && props.scene && props.product && props.visible) {
-                    doShareUpload(props.product)
-                }
-            }, [performUpload, props.scene, props.product, props.visible]);
 
             let className = appendClassName("share-project", classes.share);
             if (props.className) {
@@ -232,7 +146,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                                     {/* seeing some missing attibutes, like tall pins, https://developers.pinterest.com/docs/widgets/save/?*/}
 
-                                    {hasUpload(UploadNames.Pinterest) &&
+                                    {hasUpload(CBARUploadNames.Pinterest) &&
                                     <div style={{opacity:!beforeAfterImageUrl ? 0.5 : 1.0}}
                                          onClick={()=>{ if (!beforeAfterImageUrl) alert("Busy uploading, just a moment")}}>
                                         <PinterestShareButton
@@ -299,26 +213,6 @@ export const SharePanelCached = React.memo<SharePanelProps>(
         return prevProps.visible === nextProps.visible && prevProps.product === nextProps.product && prevProps.needsUpload === nextProps.needsUpload;
     }
 );
-
-export async function getShareImage(api:CBMethods) {
-    const screenshot = await api.captureScreenshot();
-
-    if (screenshot) {
-        const img = new Image();
-        img.src = screenshot;
-        await new Promise(resolve => img.onload = resolve);
-
-        const context = document.createElement("canvas").getContext('2d');
-        if (context) {
-            context.canvas.width = img.width;
-            context.canvas.height = img.height;
-            context.drawImage(img, 0, 0);
-
-            return context
-        }
-    }
-    return null
-}
 
 export function addProductText(ctx:CanvasRenderingContext2D, product:ProductItem, imageWidth:number, imageHeight:number, bottomHeight:number) {
 
@@ -421,58 +315,6 @@ export function addSwatchBranding(imageContext:CanvasRenderingContext2D, product
         }
     })
 
-}
-
-function generateBeforeAfter(api:CBMethods, sceneData:CBSceneProperties) {
-
-    return new Promise<CanvasRenderingContext2D>((resolve, reject)=>{
-
-        getShareImage(api).then((imageContext)=>{
-
-            if (imageContext) {
-                const ctx = document.createElement("canvas").getContext("2d")!;
-
-                ctx.canvas.width = imageContext.canvas.width;
-                ctx.canvas.height = imageContext.canvas.height * 2.0;
-
-                //draw render onto the image
-                ctx.drawImage(imageContext.canvas, 0, imageContext.canvas.height);
-                const img = new Image();
-                img.crossOrigin = "";
-                img.src = sceneData.backgroundUrl;
-
-                img.onload = () => {
-                    if (ctx) {
-                        const srcAspectRatio = img.width / img.height;
-                        const renderAspectRatio = imageContext.canvas.width / imageContext.canvas.height;
-
-                        if (srcAspectRatio < renderAspectRatio) {
-                            const srcWidth = img.width;
-                            const srcHeight = img.width / renderAspectRatio;
-                            const offsetY = (img.height - srcHeight) / 2.0;
-                            ctx.drawImage(img, 0, offsetY, srcWidth, srcHeight,
-                                0, 0, imageContext.canvas.width, imageContext.canvas.height)
-                        } else {
-                            const srcWidth = img.height * renderAspectRatio;
-                            const srcHeight = img.height;
-                            const offsetX = (img.width - srcWidth) / 2.0;
-                            ctx.drawImage(img, offsetX, 0, srcWidth, srcHeight,
-                                0, 0, imageContext.canvas.width, imageContext.canvas.height)
-                        }
-
-                        resolve(ctx)
-                    } else {
-                        reject(new Error("Image generation error, no context"))
-                    }
-                };
-                img.onerror = () => {
-                    reject(new Error("Image generation error"))
-                }
-            } else {
-                reject(new Error("Could not get image context"))
-            }
-        })
-    })
 }
 
 export function drawBeforeAfter(beforeContext:CanvasImageSource, afterContext:CanvasImageSource, isHorizontal?:boolean) : CanvasRenderingContext2D | null {
