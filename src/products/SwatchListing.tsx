@@ -184,7 +184,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         this.scrollInterval = window.setInterval(()=>{
             if (!this.isMounted || !this.props.selectedSwatch || this._realScroll) return;
             const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
-            if (!this.lastAutoScrollTime || (performance.now() - this.lastAutoScrollTime) > 500) {
+            if (swatchDiv && !this.lastAutoScrollTime || (performance.now() - this.lastAutoScrollTime) > 500) {
                 this.scrollSwatchIntoView(swatchDiv, this._prevSwatchDiv, "auto")
             }
         },500);
@@ -247,7 +247,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             this.bindEvents();
         }
 
-        if (prevProps.selectedSwatch !== this.props.selectedSwatch && swatchDiv) {
+        if (swatchDiv && prevProps.selectedSwatch !== this.props.selectedSwatch) {
             //console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
             this.scrollSwatchIntoView(swatchDiv, this._prevSwatchDiv, "smooth")
         }

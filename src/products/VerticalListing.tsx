@@ -40,7 +40,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
     }
 
     private _scrollSwatchIntoView(swatchDiv:HTMLDivElement, prevSwatchDiv?:HTMLDivElement, behavior?:ScrollBehavior) {
-        if (this.content && this.listing) {
+        if (this.content && this.listing && swatchDiv) {
             const listingRect = this.listing.getBoundingClientRect();
             const subSwatches = document.getElementById(`${swatchDiv.id}-swatches`) as HTMLDivElement;
 
