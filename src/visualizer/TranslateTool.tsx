@@ -130,9 +130,11 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
 
 export function TranslateTool(props: TranslateToolProps) {
 
+    const [onTranslationChanged, onTranslationFinished] = [props.onTranslationChanged, props.onTranslationFinished];
+
     const translationControl_xPos = useRef(0);
     const translationControl_yPos = useRef(0);
-    const onTranslationChanged = props.onTranslationChanged;
+
     const isActive = useRef(false);
 
     const sendTranslationChanged = useCallback(() => {
@@ -151,8 +153,8 @@ export function TranslateTool(props: TranslateToolProps) {
     }, [translationControl_yPos, sendTranslationChanged]);
 
     const translationFinished = useCallback((commit: boolean) => {
-        props.onTranslationFinished(commit, translationControl_xPos.current, translationControl_yPos.current)
-    }, []);
+        onTranslationFinished(commit, translationControl_xPos.current, translationControl_yPos.current)
+    }, [onTranslationFinished]);
 
     const adjustSlider = useCallback((e:any, isX:boolean)=>{
 
