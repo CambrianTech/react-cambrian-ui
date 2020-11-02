@@ -91,9 +91,9 @@ export function ImageUpload(props: ImageUploadProperties) {
         let acceleration: [number, number, number] | undefined;
 
         if (exifData.get("Make") === "Apple") {
-            const accelerationVector = await getAccelerationVector(exifData.get("MakerNote"));
+            const accelerationVector = await getAccelerationVector(exifData.get("MakerNote")) as number[]|undefined;
 
-            if (accelerationVector) {
+            if (accelerationVector && accelerationVector.length) {
                 const x = accelerationVector[4]/accelerationVector[5];
                 const y = accelerationVector[0]/accelerationVector[1];
                 const z = accelerationVector[2]/accelerationVector[3];

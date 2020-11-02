@@ -2,7 +2,7 @@ import {createRef, default as React, useCallback, useEffect, useState} from "rea
 import {
     ProductItem,
     CBContentManager,
-    SwatchItem, CBARUploadNames
+    SwatchItem
 } from "react-home-ar";
 import classes from "./SharePanel.scss";
 import {appendClassName, isMobile} from "../internal/Utils";
@@ -146,7 +146,6 @@ export const SharePanelCached = React.memo<SharePanelProps>(
 
                                     {/* seeing some missing attibutes, like tall pins, https://developers.pinterest.com/docs/widgets/save/?*/}
 
-                                    {hasUpload(CBARUploadNames.Pinterest) &&
                                     <div style={{opacity:!beforeAfterImageUrl ? 0.5 : 1.0}}
                                          onClick={()=>{ if (!beforeAfterImageUrl) alert("Busy uploading, just a moment")}}>
                                         <PinterestShareButton
@@ -158,7 +157,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                             url={getShareUrl("pinterest")}>
                                             <PinterestIcon size={32} round={true} path={""} crossOrigin={""} />
                                         </PinterestShareButton>
-                                    </div>}
+                                    </div>
 
                                     <LinkedinShareButton onClick={()=>socialClicked("linkedin")}
                                                          title={props.shareSubject}
