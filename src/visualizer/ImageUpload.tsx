@@ -90,10 +90,10 @@ export function ImageUpload(props: ImageUploadProperties) {
         let rotation:[number, number, number] | undefined;
         let acceleration: [number, number, number] | undefined;
 
-        if (exifData.get("Make") === "Apple") {
+        if (exifData.get("Make") === "Apple" && exifData.get("MakerNote")) {
             const accelerationVector = await getAccelerationVector(exifData.get("MakerNote")) as number[]|undefined;
 
-            if (accelerationVector && accelerationVector.length) {
+            if (accelerationVector && accelerationVector.length && accelerationVector.length === 6) {
                 const x = accelerationVector[4]/accelerationVector[5];
                 const y = accelerationVector[0]/accelerationVector[1];
                 const z = accelerationVector[2]/accelerationVector[3];
