@@ -1,0 +1,54 @@
+.editSurfaceTool {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right:0;
+  background: rgba(0, 0, 0, 0.5);
+  padding-top: 20px;
+  user-select: none;
+}
+
+.editSurfaceToolContent {
+
+}
+
+.editSurfaceToolButtons {
+  pointer-events: all;
+  cursor: pointer;
+  width: 80%;
+  margin: 0 auto;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.71;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.editSurfaceToolFooter {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  position: relative;
+  text-align: center;
+}
+
+.editSurfaceToolSliderButton {
+  margin-right:50px;
+  margin-left:50px;
+}
+
+.editSurfaceToolSliderCancel {
+  @extend .editSurfaceToolSliderButton;
+  color: var(--mdc-theme-secondary, #fff);
+  background-color: var(--mdc-theme-primary, #000);
+}
+
+.editSurfaceToolSliderConfirm {
+  @extend .editSurfaceToolSliderButton;
+  color: var(--mdc-theme-primary, #000);
+  background-color: var(--mdc-theme-secondary, #fff);
+}
