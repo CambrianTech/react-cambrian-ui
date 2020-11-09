@@ -7,14 +7,9 @@ import {makeStyles} from "@material-ui/core/styles";
 import MaterialIcon from "@material/react-material-icon";
 import {SpeedDialIcon} from "@material-ui/lab";
 import {useCallback, useMemo} from "react";
-import {CBARSurface, CBARSurfaceAsset} from "react-home-ar";
+import {CBARSurface, CBARSurfaceAsset, CBARToolMode} from "react-home-ar";
 
 export enum ToolOperation {
-    None='',
-    Rotate='rotate',
-    Translate='translate',
-    DrawSurface='draw',
-    EraseSurface='erase',
     ChoosePhoto='choose-photo',
     ChooseScene='choose-scene',
     Share='share',
@@ -49,10 +44,10 @@ export const DefaultToolsMenuActions:ToolsMenuAction[] = [
     { icon: <MaterialIcon icon='add_a_photo' />, name: 'Photo', longName:'Take Photo', operation:ToolOperation.ChoosePhoto },
     { icon: <MaterialIcon icon='insert_photo' />, name: 'Scene', longName:'Change Scene', operation:ToolOperation.ChooseScene },
     { icon: <MaterialIcon icon='share' />, name: 'Share', longName:'Share Project', operation:ToolOperation.Share },
-    { icon: <MaterialIcon icon='rotate_right' />, name: 'Rotate', operation:ToolOperation.Rotate, requiresAsset:true },
-    { icon: <MaterialIcon icon='open_with' />, name: 'Move', operation:ToolOperation.Translate, requiresAsset:true },
+    { icon: <MaterialIcon icon='rotate_right' />, name: 'Rotate', operation:CBARToolMode.Rotate, requiresAsset:true },
+    { icon: <MaterialIcon icon='open_with' />, name: 'Move', operation:CBARToolMode.Translate, requiresAsset:true },
     { icon: <MaterialIcon icon='view_compact' />, name: 'Pattern', operation:ToolOperation.ChoosePattern, requiresAsset:true },
-    { icon: <MaterialIcon icon='edit' />, name: 'Edit Surface', operation:ToolOperation.DrawSurface, requiresSurface:true },
+    { icon: <MaterialIcon icon='edit' />, name: 'Edit Surface', operation:CBARToolMode.DrawSurface, requiresSurface:true },
 ];
 
 const useStyles = makeStyles((theme) => ({
