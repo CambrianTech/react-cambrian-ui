@@ -5,50 +5,94 @@
   left: 0;
   right:0;
   background: rgba(0, 0, 0, 0.5);
-  padding-top: 20px;
+  padding-top: 40px;
+  padding-bottom: 40px;
   user-select: none;
 }
 
 .editSurfaceToolContent {
+  display:flex;
+  justify-content: space-around;
+  align-items: center;
 
-}
-
-.editSurfaceToolButtons {
   pointer-events: all;
   cursor: pointer;
-  width: 80%;
-  margin: 0 auto;
+
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
   font-style: normal;
   font-stretch: normal;
-  line-height: 1.71;
   letter-spacing: normal;
   text-align: center;
   color: #ffffff;
 }
 
-.editSurfaceToolFooter {
-  margin-top: 20px;
-  margin-bottom: 40px;
-  position: relative;
-  text-align: center;
+.editSurfaceToolActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.editSurfaceToolSliderButton {
-  margin-right:50px;
-  margin-left:50px;
+.editSurfaceToolPrimaryButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.editSurfaceToolSliderCancel {
-  @extend .editSurfaceToolSliderButton;
+.editSurfaceToolPrimaryButtons > * {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.editSurfaceToolButton {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.editSurfaceToolAction {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.editSurfaceToolActionLabel {
+  padding-left: 15px;
+}
+
+.editSurfaceToolActionIcon {
+  transition: all .1s;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.editSurfaceToolActionIconSelected {
+  border-color: #fff;
+}
+
+.editSurfaceToolDraw {
+
+}
+
+.editSurfaceToolErase {
+
+}
+
+.editSurfaceToolUndo {
   color: var(--mdc-theme-secondary, #fff);
   background-color: var(--mdc-theme-primary, #000);
 }
 
-.editSurfaceToolSliderConfirm {
-  @extend .editSurfaceToolSliderButton;
+.editSurfaceToolCancel {
+  @extend .editSurfaceToolButton;
+  color: var(--mdc-theme-secondary, #fff);
+  background-color: var(--mdc-theme-primary, #000);
+}
+
+.editSurfaceToolConfirm {
+  @extend .editSurfaceToolButton;
   color: var(--mdc-theme-primary, #000);
   background-color: var(--mdc-theme-secondary, #fff);
 }
