@@ -37,6 +37,8 @@ export function openImageDialog() {
 
     if (input) {
         input.click()
+    } else {
+        console.error("No ImageUpload component found!")
     }
 }
 

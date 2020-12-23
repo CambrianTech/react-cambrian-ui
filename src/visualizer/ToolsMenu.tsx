@@ -7,7 +7,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import MaterialIcon from "@material/react-material-icon";
 import {SpeedDialIcon} from "@material-ui/lab";
 import {useCallback, useMemo} from "react";
-import {CBARSurface, CBARSurfaceAsset, CBARToolMode} from "react-home-ar";
+import {CBARSurface, CBARSurfaceAsset, CBARTiledAsset, CBARToolMode} from "react-home-ar";
 
 export enum ToolOperation {
     Remove='remove',
@@ -42,7 +42,7 @@ export type ToolsMenuAction = {
 }
 
 export const DefaultToolsMenuActions:ToolsMenuAction[] = [
-    { icon: <MaterialIcon icon='clear' />, name: 'Remove', longName:'Remove', operation:ToolOperation.Remove },
+    { icon: <MaterialIcon icon='clear' />, name: 'Remove', longName:'Remove', operation:ToolOperation.Remove, requiresAsset:true },
     { icon: <MaterialIcon icon='add_a_photo' />, name: 'Photo', longName:'Take Photo', operation:ToolOperation.ChoosePhoto },
     { icon: <MaterialIcon icon='insert_photo' />, name: 'Scene', longName:'Change Scene', operation:ToolOperation.ChooseScene },
     { icon: <MaterialIcon icon='share' />, name: 'Share', longName:'Share Project', operation:ToolOperation.Share },
@@ -79,7 +79,14 @@ export function ToolsMenu(props: ToolsMenuProperties) {
 
     const actions = useMemo(()=>{
         let actions:ToolsMenuAction[] = props.actions ? props.actions : DefaultToolsMenuActions;
-        if (!props.selectedAsset) {
+        if (props.selectedAsset) {
+            if (!props.selectedAsset.canMove) {
+                actions = actions.filter(action=>action.operation !== CBARToolMode.Rotate && action.operation !== CBARToolMode.Translate);
+            }
+            if (!(props.selectedAsset instanceof CBARTiledAsset)) {
+                actions = actions.filter(action=>action.operation !== ToolOperation.ChoosePattern);
+            }
+        } else {
             actions = actions.filter(action=>!action.requiresAsset);
         }
         if (!props.selectedSurface) {

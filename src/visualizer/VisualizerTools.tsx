@@ -149,11 +149,11 @@ export const VisualizerToolsCached = React.memo<VisualizerToolsCachedProps>(
 
 export function VisualizerTools(props: VisualizerToolsProperties) {
 
-    const onShowHideButtons = props.onShowHideButtons
+    const onShowHideButtons = props.onShowHideButtons;
 
-    const onRotationFinished = props.onRotationFinished
+    const onRotationFinished = props.onRotationFinished;
     const rotateFinished = useCallback((finished: boolean, radians:number) => {
-        onShowHideButtons(true)
+        onShowHideButtons(true);
         if (onRotationFinished) {
             onRotationFinished(finished, radians)
         }
@@ -164,9 +164,9 @@ export function VisualizerTools(props: VisualizerToolsProperties) {
         props.changeMode(VisualizerToolMode.Rotate)
     } , [props]);
 
-    const onTranslationFinished = props.onTranslationFinished
+    const onTranslationFinished = props.onTranslationFinished;
     const translateFinished = useCallback((finished: boolean, xPos:number, yPos:number) => {
-        onShowHideButtons(true)
+        onShowHideButtons(true);
         if (onTranslationFinished) {
             onTranslationFinished(finished, xPos, yPos)
         }
@@ -181,10 +181,10 @@ export function VisualizerTools(props: VisualizerToolsProperties) {
         props.changeMode(props.mode === VisualizerToolMode.Pattern ? VisualizerToolMode.None : VisualizerToolMode.Pattern)
     } , [props]);
 
-    const tiledAsset = props.selectedAsset && props.selectedAsset instanceof CBARTiledAsset ? props.selectedAsset as CBARTiledAsset : undefined
+    const tiledAsset = props.selectedAsset && props.selectedAsset instanceof CBARTiledAsset ? props.selectedAsset as CBARTiledAsset : undefined;
 
     const hasPatterns = useMemo(()=>{
-        if (!tiledAsset || !props.isModePermitted(VisualizerToolMode.Pattern)) return false
+        if (!tiledAsset || !props.isModePermitted(VisualizerToolMode.Pattern)) return false;
 
         if (props.patternSelectorRestrictToProducts) {
             return tiledAsset.product ? tiledAsset.product.patterns.length > 1 : false
