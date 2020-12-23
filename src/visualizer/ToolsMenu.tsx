@@ -10,6 +10,7 @@ import {useCallback, useMemo} from "react";
 import {CBARSurface, CBARSurfaceAsset, CBARToolMode} from "react-home-ar";
 
 export enum ToolOperation {
+    Remove='remove',
     ChoosePhoto='choose-photo',
     ChooseScene='choose-scene',
     Share='share',
@@ -41,6 +42,7 @@ export type ToolsMenuAction = {
 }
 
 export const DefaultToolsMenuActions:ToolsMenuAction[] = [
+    { icon: <MaterialIcon icon='clear' />, name: 'Remove', longName:'Remove', operation:ToolOperation.Remove },
     { icon: <MaterialIcon icon='add_a_photo' />, name: 'Photo', longName:'Take Photo', operation:ToolOperation.ChoosePhoto },
     { icon: <MaterialIcon icon='insert_photo' />, name: 'Scene', longName:'Change Scene', operation:ToolOperation.ChooseScene },
     { icon: <MaterialIcon icon='share' />, name: 'Share', longName:'Share Project', operation:ToolOperation.Share },
@@ -51,16 +53,14 @@ export const DefaultToolsMenuActions:ToolsMenuAction[] = [
 ];
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        height: 380,
-        transform: 'translateZ(0px)',
-        flexGrow: 1,
-    },
     speedDial: {
         position: 'absolute',
         top: theme.spacing(2),
         right: theme.spacing(2),
     },
+    staticTooltip: {
+        whiteSpace:"nowrap"
+    }
 }));
 
 export function ToolsMenu(props: ToolsMenuProperties) {
@@ -99,6 +99,7 @@ export function ToolsMenu(props: ToolsMenuProperties) {
             open={open}>
             {actions.map((action) => (
                 <SpeedDialAction
+                    classes={{ staticTooltip: classes.staticTooltip }}
                     key={action.name}
                     icon={action.icon}
                     tooltipTitle={!isMobile && action.longName ? action.longName : action.name}
