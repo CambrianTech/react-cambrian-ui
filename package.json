@@ -38,6 +38,7 @@
   },
   "homepage": "https://github.com/CambrianTech/react-home-ar#readme",
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@types/node": "^14.14.16",
     "react-dropzone": "^11.2.4",
@@ -46,7 +47,6 @@
     "rollup-plugin-postcss": "^3.1.1"
   },
   "devDependencies": {
-    "@material-ui/core": "^4.11.0",
     "@material/react-fab": "^0.15.0",
     "@material/react-material-icon": "^0.15.0",
     "@types/react": "^17.0.0",
