@@ -43,7 +43,7 @@ export type ToolsMenuAction = {
 
 export const DefaultToolsMenuActions:ToolsMenuAction[] = [
     { icon: <MaterialIcon icon='clear' />, name: 'Remove', longName:'Remove', operation:ToolOperation.Remove, requiresAsset:true },
-    { icon: <MaterialIcon icon='add_a_photo' />, name: 'Photo', longName:'Take Photo', operation:ToolOperation.ChoosePhoto },
+    { icon: <MaterialIcon icon='add_a_photo' />, name: 'Photo', operation:ToolOperation.ChoosePhoto },
     { icon: <MaterialIcon icon='insert_photo' />, name: 'Scene', longName:'Change Scene', operation:ToolOperation.ChooseScene },
     { icon: <MaterialIcon icon='share' />, name: 'Share', longName:'Share Project', operation:ToolOperation.Share },
     { icon: <MaterialIcon icon='rotate_right' />, name: 'Rotate', operation:CBARToolMode.Rotate, requiresAsset:true },
