@@ -8,6 +8,7 @@ type ProductInfoProps = {
     className?:string
     title?:string|undefined
     subTitle?:string|undefined
+    code?:string|undefined
     details?:ProductDetails
     resolveUrl:(name:string, url:string|undefined)=>string
 }
@@ -36,6 +37,9 @@ export const ProductInfoCached = React.memo<ProductInfoProps>(
                         </div>}
                         {props.subTitle && <div className={appendClassName("product-info-sub-title", classes.productSubTitle)}>
                             {props.subTitle}
+                        </div>}
+                        {props.code && <div className={appendClassName("product-info-sub-code", classes.productCode)}>
+                            {props.code}
                         </div>}
                     </div>
 

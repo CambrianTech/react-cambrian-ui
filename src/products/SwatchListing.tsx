@@ -271,6 +271,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             const parent = swatches[0].parent;
             if (parent instanceof DataItem) {
                 const parentItem = parent as DataItem;
+                parentItem.fetch();
                 parentItem.onUpdate = ()=>{
                     if (this.isMounted) this.forceUpdate();
                 }
