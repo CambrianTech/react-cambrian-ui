@@ -101,7 +101,7 @@ export function ToolsMenu(props: ToolsMenuProperties) {
             direction={props.direction ? props.direction : 'down'}
             icon={<SpeedDialIcon icon={props.icon} openIcon={props.openIcon} />}
             ariaLabel={props.name ? props.name : "Tools"}
-            className={classes.speedDial}
+            className={`${props.className} ${classes.speedDial}`}
             onClick={handleClick}
             open={open}>
             {actions.map((action) => (
