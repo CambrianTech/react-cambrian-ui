@@ -2,6 +2,8 @@
   "name": "react-cambrian-ui",
   "version": "0.0.1075",
   "description": "React Cambrian UI",
+  "homepage": "cambrian.io",
+  "author": "cambrian",
   "main": "dist/index.tsx",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -12,13 +14,15 @@
     "bump": "npm version patch --no-git-tag-version",
     "add-name": "cross-var sed -i -- 's/@SDK_NAME@/$npm_package_name/g' dist/index.*",
     "add-version": "cross-var sed -i -- 's/@SDK_VERSION@/$npm_package_version/g' dist/index.*",
+    "add-author": "cross-var sed -i -- 's/@SDK_AUTHOR@/cambrian/g' dist/index.*",
+    "add-homepage": "cross-var sed -i -- 's/@SDK_HOMEPAGE@/cambrian.io/g' dist/index.*",
     "delete-garbage": "cross-var rm -f dist/index.*-*",
     "prepack": "npm-run-all delete-garbage",
     "build": "npm-run-all clean build:js prepack",
     "build:js": "rollup -c",
     "clean": "rimraf dist",
     "format": "prettier --write 'src/**/*' 'demo/src/**/*'",
-    "prepare": "npm-run-all clean build add-name add-version",
+    "prepare": "npm-run-all clean build add-name add-version add-author add-homepage",
     "postpublish": "npm-run-all bump",
     "start": "npm-run-all --parallel start:js",
     "start:js": "rollup -c -w"
@@ -31,12 +35,10 @@
     "Cambrian",
     "UI"
   ],
-  "author": "Cambrian",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/CambrianTech/react-home-ar/issues"
   },
-  "homepage": "https://github.com/CambrianTech/react-home-ar#readme",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/lab": "^4.0.0-alpha.56",
