@@ -79,3 +79,10 @@
   color: var(--mdc-theme-primary, #fff);
   background-color: var(--mdc-theme-secondary, #fff);
 }
+
+@media only screen and (max-device-width: 480px) {
+  .translateToolFooter {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
