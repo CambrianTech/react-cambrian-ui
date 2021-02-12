@@ -1,7 +1,7 @@
 import {default as React} from "react";
 import classes from "./ProductInfo.scss";
 import {appendClassName} from "../internal/Utils";
-import {ProductDetails} from "react-home-ar";
+import {DetailsConfig} from "cambrian-base";
 
 type ProductInfoProps = {
     visible:boolean
@@ -9,7 +9,7 @@ type ProductInfoProps = {
     title?:string|undefined
     subTitle?:string|undefined
     code?:string|undefined
-    details?:ProductDetails
+    details?:DetailsConfig
     resolveUrl:(name:string, url:string|undefined)=>string
 }
 
@@ -50,10 +50,12 @@ export const ProductInfoCached = React.memo<ProductInfoProps>(
                     </pre>}
 
                     {specs && <ul className={appendClassName("specs", classes.specs)}>
-                        {Object.keys(specs).map((field) => {
-                            return <li key={field} className={appendClassName("field", classes.field)}>
-                                <div className={appendClassName("fieldName", classes.fieldName)}>{field}</div>
-                                <div className={appendClassName("fieldValue", classes.fieldValue)}>{specs[field]}</div>
+                        {specs.map(entry => {
+                            const key = Object.keys(entry)[0];
+                            const value = entry[key];
+                            return <li key={key} className={appendClassName("field", classes.field)}>
+                                <div className={appendClassName("fieldName", classes.fieldName)}>{`${key}`}</div>
+                                <div className={appendClassName("fieldValue", classes.fieldValue)}>{`${value}`}</div>
                             </li>
                         })}
                     </ul>}
