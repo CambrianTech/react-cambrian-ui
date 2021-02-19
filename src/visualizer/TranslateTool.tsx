@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useCallback, useEffect, useRef} from "react";
-import classes from "./TranslateTool.scss";
+import classes from "./VisualizerTools.scss";
 import {appendClassName} from "../internal/Utils"
 import {Fab, Icon} from "@material-ui/core";
 
@@ -33,7 +33,7 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
 
         if (cProps.visible) {
 
-            let className = appendClassName("translate-tool", classes.translateTool);
+            let className = appendClassName("translate-tool", classes.overlayTool);
             className = appendClassName(className, cProps.className);
 
             const min = cProps.min !== undefined ? cProps.min : [-5, -5];
@@ -45,13 +45,13 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
 
             return (
                 <div className={className}>
-                    <div className={appendClassName("translate-tool-content", classes.translateToolContent)}>
-                        <div className={appendClassName("translate-tool-slider", classes.translateToolSlider)}>
+                    <div className={"translate-tool-content"}>
+                        <div className={appendClassName("translate-tool-slider", classes.toolSlider)}>
 
                             <div onMouseDown={(e)=>cProps.onMouseDown(e,true)} onTouchStart={(e)=>cProps.onMouseDown(e,true)}
                                  onMouseMove={(e)=>cProps.onMouseMove(e,true)} onTouchMove={(e)=>cProps.onMouseMove(e,true)}
                                  onMouseUp={(e)=>cProps.onMouseUp(e,true)} onTouchEnd={(e)=>cProps.onMouseUp(e,true)}>
-                                <div className={appendClassName("translate-tool-slider-labels", classes.translateToolSliderLabels)}>
+                                <div className={appendClassName("translate-tool-slider-labels", classes.toolSliderLabels)}>
                                     <div>{min[0]}</div>
                                     <div>|&nbsp;</div>
                                     <div>{minMiddle[0]}</div>
@@ -70,7 +70,7 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
                                     <option value={max[0]} />
                                 </datalist>
 
-                                <div className={appendClassName("translate-tool-slider-bar", classes.translateToolSliderBar)}>
+                                <div className={appendClassName("translate-tool-slider-bar", classes.toolSliderBar)}>
                                     <input id={"translate-x"} type="range" min={min[0]} max={max[0]} step={0.01} defaultValue={cProps.xPos + ""}
                                            onChange={e => cProps.onTranslationXChanged(Number(e.target.value))} list="range-values-0" />
                                 </div>
@@ -79,7 +79,7 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
                             <div onMouseDown={(e)=>cProps.onMouseDown(e,false)} onTouchStart={(e)=>cProps.onMouseDown(e,false)}
                                  onMouseMove={(e)=>cProps.onMouseMove(e,false)} onTouchMove={(e)=>cProps.onMouseMove(e,false)}
                                  onMouseUp={(e)=>cProps.onMouseUp(e,false)} onTouchEnd={(e)=>cProps.onMouseUp(e,false)}>
-                                <div className={appendClassName("translate-tool-slider-labels", classes.translateToolSliderLabels)}>
+                                <div className={appendClassName("translate-tool-slider-labels", classes.toolSliderLabels)}>
                                     <div>{min[1]}</div>
                                     <div>|&nbsp;</div>
                                     <div>{minMiddle[1]}</div>
@@ -99,21 +99,21 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
                                     <option value={max[1]} />
                                 </datalist>
 
-                                <div className={appendClassName("translate-tool-slider-bar", classes.translateToolSliderBar)}>
+                                <div className={appendClassName("translate-tool-slider-bar", classes.toolSliderBar)}>
                                     <input id={"translate-y"} type="range" min={min[1]} max={max[1]} step={0.01} defaultValue={cProps.yPos + ""}
                                            onChange={e => cProps.onTranslationYChanged(Number(e.target.value))} list="range-values-1" />
                                 </div>
                             </div>
 
-                            <div className={appendClassName("translate-tool-instructions", classes.translateToolInstructions)}>
+                            <div className={appendClassName("translate-tool-instructions", classes.overlayInstructions)}>
                                 Click and drag objects or adjust sliders.
                             </div>
                         </div>
-                        <div className={appendClassName("translate-tool-footer", classes.translateToolFooter)}>
-                            <Fab className={appendClassName("cancel", classes.translateToolSliderCancel)}  onClick={() => cProps.onTranslationFinishedInternal(false)}>
+                        <div className={appendClassName("translate-tool-footer", classes.overlayFooter)}>
+                            <Fab className={appendClassName("cancel", classes.cancelButton)}  onClick={() => cProps.onTranslationFinishedInternal(false)}>
                                 {cProps.cancelIcon ? cProps.cancelIcon : <Icon>close</Icon>}
                             </Fab>
-                            <Fab className={appendClassName("confirm", classes.translateToolSliderConfirm)} onClick={() => cProps.onTranslationFinishedInternal(true)}>
+                            <Fab className={appendClassName("confirm", classes.confirmButton)} onClick={() => cProps.onTranslationFinishedInternal(true)}>
                                 {cProps.confirmIcon ? cProps.confirmIcon : <Icon>check</Icon>}
                             </Fab>
                         </div>

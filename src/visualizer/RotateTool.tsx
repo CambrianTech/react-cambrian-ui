@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useRef} from "react";
-import classes from "./RotateTool.scss";
+import classes from "./VisualizerTools.scss";
 import {appendClassName} from "../internal/Utils"
 import {useEffect} from "react";
 import {useCallback} from "react";

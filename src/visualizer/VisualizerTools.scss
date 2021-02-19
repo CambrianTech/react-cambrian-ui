@@ -79,3 +79,10 @@
   margin-right:50px;
   margin-left:50px;
 }
+
+@media only screen and (max-device-width: 480px) {
+  .overlayFooter {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
