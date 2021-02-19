@@ -33,18 +33,18 @@ function toRadians(degrees: number) {
 export const RotateToolCached = React.memo<RotateToolCachedProps>(
     (cProps) => {
         if (cProps.visible) {
-            let className = appendClassName("rotate-tool", classes.rotateTool);
+            let className = appendClassName("rotate-tool", classes.overlayTool);
             className = appendClassName(className, cProps.className);
 
             return (
                 <div className={className}>
-                    <div className={appendClassName("rotate-tool-content", classes.rotateToolContent)}>
-                        <div className={appendClassName("rotate-tool-slider", classes.rotateToolSlider)}
+                    <div className={"rotate-tool-content"}>
+                        <div className={appendClassName("rotate-tool-slider", classes.toolSlider)}
                              onMouseDown={(e)=>cProps.onMouseDown(e)} onTouchStart={(e)=>cProps.onMouseDown(e)}
                              onMouseMove={(e)=>cProps.onMouseMove(e)} onTouchMove={(e)=>cProps.onMouseMove(e)}
                              onMouseUp={(e)=>cProps.onMouseUp(e)} onTouchEnd={(e)=>cProps.onMouseUp(e)}>
 
-                            <div className={appendClassName("rotate-tool-labels", classes.rotateToolSliderLabels)}>
+                            <div className={appendClassName("rotate-tool-labels", classes.toolSliderLabels)}>
                                 <div>-180°</div>
                                 <div>|&nbsp;</div>
                                 <div>-90°</div>
@@ -56,7 +56,7 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
                                 <div>180°</div>
                             </div>
 
-                            <div className={appendClassName("rotate-tool-slider-bar", classes.rotateToolSliderBar)}>
+                            <div className={appendClassName("rotate-tool-slider-bar", classes.toolSliderBar)}>
 
                                 <input id={"rotate-input"} type="range" min={-180} max={180} step={0.5} defaultValue={toDegrees(cProps.rotation) + ""}
                                        onChange={e => cProps.onRotationChanged(-1.0 * toRadians(Number(e.target.value)))} list="range-values" />
@@ -75,16 +75,16 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
 
                             </div>
 
-                            <div className={appendClassName("rotate-tool-instructions", classes.rotateToolInstructions)}>
+                            <div className={appendClassName("rotate-tool-instructions", classes.overlayInstructions)}>
                                 Click and drag objects or adjust the slider.
                             </div>
                         </div>
-                        <div className={appendClassName("rotate-tool-footer", classes.rotateToolFooter)}>
-                            <Fab className={appendClassName("cancel", classes.rotateToolSliderCancel)} onClick={() => cProps.onRotationFinished(false, 0)} >
+                        <div className={appendClassName("rotate-tool-footer", classes.overlayFooter)}>
+                            <Fab className={appendClassName("cancel", classes.cancelButton)} onClick={() => cProps.onRotationFinished(false, 0)} >
                                 {cProps.cancelIcon ? cProps.cancelIcon : <Icon>close</Icon>}
                             </Fab>
-                            <Fab className={appendClassName("confirm", classes.rotateToolSliderConfirm)}>
-                                {cProps.confirmIcon ? cProps.confirmIcon : <Icon>check</Icon>} onClick={() => cProps.onRotationFinished(true, 0)}
+                            <Fab className={appendClassName("confirm", classes.confirmButton)} onClick={() => cProps.onRotationFinished(true, 0)}>
+                                {cProps.confirmIcon ? cProps.confirmIcon : <Icon>check</Icon>}
                             </Fab>
                         </div>
                     </div>

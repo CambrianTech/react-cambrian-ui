@@ -1,0 +1,81 @@
+.primaryButton {
+  color: var(--mdc-theme-secondary, #fff) !important;
+  background-color: var(--mdc-theme-primary, #000);
+}
+
+.secondaryButton {
+  color: var(--mdc-theme-primary, #000) !important;
+  background-color: var(--mdc-theme-secondary, #fff) !important;
+}
+
+.confirmButton {
+  @extend .primaryButton;
+  margin: 10px !important;
+}
+
+.cancelButton {
+  @extend .secondaryButton;
+  margin: 10px !important;
+}
+
+.overlayTool {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right:0;
+  background: rgba(0, 0, 0, 0.5);
+  padding-top: 20px;
+  user-select: none;
+}
+
+.toolSlider {
+  pointer-events: all;
+  cursor: pointer;
+  width: 80%;
+  margin: 0 auto;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.71;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.toolSliderLabels {
+  width:100%;
+  margin: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  column-count: 5;
+}
+
+.toolSliderBar {
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.15);
+  margin-right: 20px;
+}
+
+.overlayFooter {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  position: relative;
+  text-align: center;
+}
+
+.overlayInstructions {
+  width: 100%;
+  color: #ffffff;
+  margin-top: 10px;
+}
+
+.rotateToolSliderButton {
+  margin-right:50px;
+  margin-left:50px;
+}
