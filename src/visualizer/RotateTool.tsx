@@ -1,15 +1,10 @@
 import * as React from "react";
-import {Fab} from "@material/react-fab";
-import '@material/react-fab/dist/fab.css';
 import {useRef} from "react";
-
-
 import classes from "./RotateTool.scss";
-import MaterialIcon from "@material/react-material-icon";
-
 import {appendClassName} from "../internal/Utils"
 import {useEffect} from "react";
 import {useCallback} from "react";
+import {Fab, Icon} from "@material-ui/core";
 
 type RotateToolProps = {
     visible: boolean
@@ -85,8 +80,12 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
                             </div>
                         </div>
                         <div className={appendClassName("rotate-tool-footer", classes.rotateToolFooter)}>
-                            <Fab className={appendClassName("cancel", classes.rotateToolSliderCancel)} icon={cProps.cancelIcon ? cProps.cancelIcon : <MaterialIcon icon='close'  />} onClick={() => cProps.onRotationFinished(false, 0)}  />
-                            <Fab className={appendClassName("confirm", classes.rotateToolSliderConfirm)} icon={cProps.confirmIcon ? cProps.confirmIcon : <MaterialIcon icon='check' />} onClick={() => cProps.onRotationFinished(true, 0)} />
+                            <Fab className={appendClassName("cancel", classes.rotateToolSliderCancel)} onClick={() => cProps.onRotationFinished(false, 0)} >
+                                {cProps.cancelIcon ? cProps.cancelIcon : <Icon>close</Icon>}
+                            </Fab>
+                            <Fab className={appendClassName("confirm", classes.rotateToolSliderConfirm)}>
+                                {cProps.confirmIcon ? cProps.confirmIcon : <Icon>check</Icon>} onClick={() => cProps.onRotationFinished(true, 0)}
+                            </Fab>
                         </div>
                     </div>
                 </div>

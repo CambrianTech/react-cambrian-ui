@@ -1,14 +1,12 @@
 import * as React from "react";
-import {Fab} from "@material/react-fab";
-import '@material/react-fab/dist/fab.css';
 import {useCallback, useMemo} from "react";
 import {CBARTangibleAsset, CBARTiledAsset, TiledGridType} from "react-home-ar";
-import MaterialIcon from "@material/react-material-icon";
 import {RotateTool} from "./RotateTool";
 import classes from "./VisualizerTools.scss";
 import {appendClassName} from "../internal/Utils"
 import {TranslateTool} from "./TranslateTool";
 import {TiledGridSelector} from "./TiledGridSelector";
+import {Fab, Icon} from "@material-ui/core";
 
 export enum VisualizerToolMode {
     None,
@@ -107,13 +105,13 @@ export const VisualizerToolsCached = React.memo<VisualizerToolsCachedProps>(
             return (
                 <div className={className}>
                     {buttonsVisible && <div className={appendClassName("visualizer-tools-buttons", classes.visualizerToolsButtons)}>
-                        {props.isModePermitted(VisualizerToolMode.ChoosePhoto) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChoosePhoto)} textLabel={getModeLabel(VisualizerToolMode.ChoosePhoto)} icon={<MaterialIcon icon='add_a_photo' />} />}
-                        {props.isModePermitted(VisualizerToolMode.ChooseScene) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChooseScene)} textLabel={getModeLabel(VisualizerToolMode.ChooseScene)} icon={<MaterialIcon icon='insert_photo' />} />}
-                        {props.isModePermitted(VisualizerToolMode.Share) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.Share)} textLabel={getModeLabel(VisualizerToolMode.Share)} icon={<MaterialIcon icon='share' />} />}
-                        {props.isModePermitted(VisualizerToolMode.Rotate) && <Fab className={classes.toolButton} onClick={props.rotateButtonClicked} textLabel={getModeLabel(VisualizerToolMode.Rotate)} icon={<MaterialIcon icon='rotate_right' className={classes.rotateToolIcon} />} />}
-                        {props.isModePermitted(VisualizerToolMode.Translate) && <Fab className={classes.toolButton} onClick={props.translateButtonClicked} textLabel={getModeLabel(VisualizerToolMode.Translate)} icon={<MaterialIcon icon='open_with'  className={classes.moveToolIcon} />} />}
-                        {props.hasPatterns && <Fab className={classes.toolButton} onClick={props.patternButtonClicked} textLabel={getModeLabel(VisualizerToolMode.Pattern)} icon={<MaterialIcon icon='view_compact'  className={classes.patternToolIcon} />} />}
-                        {props.isModePermitted(VisualizerToolMode.DrawSurface) && props.isModePermitted(VisualizerToolMode.EraseSurface) && <Fab className={classes.toolButton} textLabel={getModeLabel(VisualizerToolMode.DrawSurface)} icon={<MaterialIcon icon='edit' />} />}
+                        {props.isModePermitted(VisualizerToolMode.ChoosePhoto) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChoosePhoto)} aria-label={getModeLabel(VisualizerToolMode.ChoosePhoto)}><Icon>add_a_photo</Icon></Fab>}
+                        {props.isModePermitted(VisualizerToolMode.ChooseScene) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.ChooseScene)} aria-label={getModeLabel(VisualizerToolMode.ChooseScene)}><Icon>insert_photo</Icon></Fab>}
+                        {props.isModePermitted(VisualizerToolMode.Share) && <Fab className={classes.toolButton} onClick={()=>props.changeMode(VisualizerToolMode.Share)} aria-label={getModeLabel(VisualizerToolMode.Share)}><Icon>share</Icon></Fab>}
+                        {props.isModePermitted(VisualizerToolMode.Rotate) && <Fab className={classes.toolButton} onClick={props.rotateButtonClicked} aria-label={getModeLabel(VisualizerToolMode.Rotate)}><Icon className={classes.rotateToolIcon}>rotate_right</Icon></Fab>}
+                        {props.isModePermitted(VisualizerToolMode.Translate) && <Fab className={classes.toolButton} onClick={props.translateButtonClicked} aria-label={getModeLabel(VisualizerToolMode.Translate)}><Icon className={classes.moveToolIcon}>open_with</Icon></Fab>}
+                        {props.hasPatterns && <Fab className={classes.toolButton} onClick={props.patternButtonClicked} aria-label={getModeLabel(VisualizerToolMode.Pattern)}><Icon className={classes.patternToolIcon}>view_compact</Icon></Fab>}
+                        {props.isModePermitted(VisualizerToolMode.DrawSurface) && props.isModePermitted(VisualizerToolMode.EraseSurface) && <Fab className={classes.toolButton} aria-label={getModeLabel(VisualizerToolMode.DrawSurface)}><Icon>edit</Icon></Fab>}
                     </div>}
 
                     {props.onRotationChanged && (

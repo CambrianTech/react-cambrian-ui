@@ -3,8 +3,7 @@ import {default as React, useCallback, useEffect, useRef, useState} from "react"
 import {appendClassName} from "../internal/Utils";
 import classes from "./TiledGridSelector.scss";
 import {CBARTiledAsset, TiledGridType, getEnumKeys} from "react-home-ar";
-import {Fab} from "@material/react-fab";
-import MaterialIcon from "@material/react-material-icon";
+import {Fab, Icon} from "@material-ui/core";
 
 type TiledGridSelectorProps = {
     visible: boolean
@@ -43,7 +42,9 @@ export const TiledGridSelectorCached = React.memo<TiledGridSelectorPropsInternal
 
             return (
                 <div className={className} onMouseOver={props.internalOnMouseOver} onMouseOut={props.internalOnMouseOut}>
-                    <Fab onClick={props.onClose} className={classes.tiledGridSelectorClose} icon={<MaterialIcon icon='close' />} />
+                    <Fab onClick={props.onClose} className={classes.tiledGridSelectorClose}>
+                        <Icon>close</Icon>
+                    </Fab>
                     {types.map((name) => {
                         const type = TiledGridType[name]
                         const isSelected = type === props.internalSelectedGridType

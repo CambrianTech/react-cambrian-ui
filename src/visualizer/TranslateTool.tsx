@@ -1,12 +1,8 @@
 import * as React from "react";
-import {Fab} from "@material/react-fab";
-import '@material/react-fab/dist/fab.css';
 import {useCallback, useEffect, useRef} from "react";
-
 import classes from "./TranslateTool.scss";
-import MaterialIcon from "@material/react-material-icon";
-
 import {appendClassName} from "../internal/Utils"
+import {Fab, Icon} from "@material-ui/core";
 
 type TranslateToolProps = {
     visible: boolean
@@ -114,8 +110,12 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
                             </div>
                         </div>
                         <div className={appendClassName("translate-tool-footer", classes.translateToolFooter)}>
-                            <Fab className={appendClassName("cancel", classes.translateToolSliderCancel)} icon={cProps.cancelIcon ? cProps.cancelIcon : <MaterialIcon icon='close' />} onClick={() => cProps.onTranslationFinishedInternal(false)}  />
-                            <Fab className={appendClassName("confirm", classes.translateToolSliderConfirm)} icon={cProps.confirmIcon ? cProps.confirmIcon : <MaterialIcon icon='check' />} onClick={() => cProps.onTranslationFinishedInternal(true)} />
+                            <Fab className={appendClassName("cancel", classes.translateToolSliderCancel)}  onClick={() => cProps.onTranslationFinishedInternal(false)}>
+                                {cProps.cancelIcon ? cProps.cancelIcon : <Icon>close</Icon>}
+                            </Fab>
+                            <Fab className={appendClassName("confirm", classes.translateToolSliderConfirm)} onClick={() => cProps.onTranslationFinishedInternal(true)}>
+                                {cProps.confirmIcon ? cProps.confirmIcon : <Icon>check</Icon>}
+                            </Fab>
                         </div>
                     </div>
                 </div>

@@ -1,13 +1,9 @@
 import * as React from "react";
-import {Fab} from "@material/react-fab";
-import '@material/react-fab/dist/fab.css';
-
 import classes from "./EditSurfaceTool.scss";
-import MaterialIcon from "@material/react-material-icon";
-
 import {appendClassName} from "../internal/Utils"
 import {CBARSurface, CBARToolMode} from "react-home-ar";
 import {useCallback} from "react";
+import {Fab, Icon} from "@material-ui/core";
 
 type EditSurfaceToolProps = {
     className?:string
@@ -82,21 +78,31 @@ export function EditSurfaceTool(props: EditSurfaceToolProps) {
             <div className={appendClassName("edit-surface-tool-content", classes.editSurfaceToolContent)}>
                 <div className={appendClassName("edit-surface-tool-actions", classes.editSurfaceToolActions)}>
                     <ActionButton selected={toolMode===CBARToolMode.DrawSurface} label={"Fill In"}>
-                        <Fab className={appendClassName("edit-surface-tool-draw", classes.editSurfaceToolDraw)} icon={<MaterialIcon icon='brush'  />} onClick={() => onToolChanged(CBARToolMode.DrawSurface)}  />
+                        <Fab className={appendClassName("edit-surface-tool-draw", classes.editSurfaceToolDraw)} onClick={() => onToolChanged(CBARToolMode.DrawSurface)}>
+                            <Icon>brush</Icon>
+                        </Fab>
                     </ActionButton>
                     <ActionButton selected={toolMode===CBARToolMode.EraseSurface} label={"Erase"}>
-                        <Fab className={appendClassName("edit-surface-tool-erase", classes.editSurfaceToolErase)} icon={eraserIcon} onClick={() => onToolChanged(CBARToolMode.EraseSurface)} />
+                        <Fab className={appendClassName("edit-surface-tool-erase", classes.editSurfaceToolErase)} onClick={() => onToolChanged(CBARToolMode.EraseSurface)}>
+                            {eraserIcon}
+                        </Fab>
                     </ActionButton>
                 </div>
                 <div className={appendClassName("edit-surface-tool-primary-buttons", classes.editSurfaceToolPrimaryButtons)}>
                     <div className={appendClassName("edit-surface-tool-button", classes.editSurfaceToolButton)}>
-                        <Fab className={appendClassName("edit-surface-tool-undo", classes.editSurfaceToolUndo)} icon={<MaterialIcon icon='undo'  />} onClick={()=>undoLast()}  />
+                        <Fab className={appendClassName("edit-surface-tool-undo", classes.editSurfaceToolUndo)} onClick={()=>undoLast()}>
+                            <Icon>undo</Icon>
+                        </Fab>
                     </div>
                     <div className={appendClassName("edit-surface-tool-button", classes.editSurfaceToolButton)}>
-                        <Fab className={appendClassName("edit-surface-tool-cancel", classes.editSurfaceToolCancel)} icon={<MaterialIcon icon='close'  />} onClick={()=>revertChanges()}  />
+                        <Fab className={appendClassName("edit-surface-tool-cancel", classes.editSurfaceToolCancel)} onClick={()=>revertChanges()}>
+                            <Icon>close</Icon>
+                        </Fab>
                     </div>
                     <div className={appendClassName("edit-surface-tool-button", classes.editSurfaceToolButton)}>
-                        <Fab className={appendClassName("edit-surface-tool-confirm", classes.editSurfaceToolConfirm)} icon={<MaterialIcon icon='check' />} onClick={()=>commitChanges()} />
+                        <Fab className={appendClassName("edit-surface-tool-confirm", classes.editSurfaceToolConfirm)} onClick={()=>commitChanges()}>
+                            <Icon>check</Icon>
+                        </Fab>
                     </div>
                 </div>
             </div>
