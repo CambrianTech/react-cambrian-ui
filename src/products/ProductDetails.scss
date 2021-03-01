@@ -1,9 +1,10 @@
 
 .productInfo {
-  background-color: white;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  overflow-y: scroll;
 }
 
 .productName {
@@ -25,8 +26,8 @@
 
 .productContent {
   font-family: Avenir, sans-serif;
-  white-space: pre-wrap;
   font-size: 14px;
+  white-space: pre-wrap;
 }
 
 .preview {

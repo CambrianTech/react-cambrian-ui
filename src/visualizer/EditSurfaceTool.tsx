@@ -23,7 +23,7 @@ type ActionButtonProps = {
     selected:boolean
 }
 
-export const ActionButton = React.memo<ActionButtonProps>(
+const ActionButton = React.memo<ActionButtonProps>(
     (props) => {
         let buttonClassName = appendClassName("edit-surface-tool-action-icon", classes.editSurfaceToolActionIcon);
         if (props.selected) {

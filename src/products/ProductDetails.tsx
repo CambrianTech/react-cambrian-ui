@@ -1,9 +1,9 @@
 import {default as React} from "react";
-import classes from "./ProductInfo.scss";
+import classes from "./ProductDetails.scss";
 import {appendClassName} from "../internal/Utils";
 import {DetailsConfig} from "cambrian-base";
 
-type ProductInfoProps = {
+type ProductDetailsProps = {
     visible:boolean
     className?:string
     title?:string|undefined
@@ -11,9 +11,10 @@ type ProductInfoProps = {
     code?:string|undefined
     details?:DetailsConfig
     resolveUrl:(name:string, url:string|undefined)=>string
+    children?:React.ReactNode
 }
 
-export const ProductInfoCached = React.memo<ProductInfoProps>(
+const ProductDetailsCached = React.memo<ProductDetailsProps>(
 
     (props) => {
         if (props.visible) {
@@ -43,24 +44,31 @@ export const ProductInfoCached = React.memo<ProductInfoProps>(
                         </div>}
                     </div>
 
-                    {preview && <img className={appendClassName("preview", classes.preview)} src={props.resolveUrl("preview", preview)} />}
+                    {preview && <img alt="preview" className={appendClassName("preview", classes.preview)} src={props.resolveUrl("preview", preview)} />}
 
                     {content && <pre className={appendClassName("product-info-content", classes.productContent)}>
                         {content}
                     </pre>}
 
                     {specs && <ul className={appendClassName("specs", classes.specs)}>
-                        {specs.map(entry => {
-                            const key = Object.keys(entry)[0];
-                            const value = entry[key];
-                            return <li key={key} className={appendClassName("field", classes.field)}>
-                                <div className={appendClassName("fieldName", classes.fieldName)}>{`${key}`}</div>
-                                <div className={appendClassName("fieldValue", classes.fieldValue)}>{`${value}`}</div>
+                        {specs.map(spec => {
+                            if (!(spec as any).hasOwnProperty("code")) {
+                                //backwards compatibility v 1141:
+                                spec = {
+                                    code:Object.keys(spec as any)[0],
+                                    displayName:Object.keys(spec as any)[0],
+                                    displayValue:Object.values(spec as any)[0] as string
+                                }
+                            }
+                            return <li key={spec.code} className={appendClassName("field", classes.field)}>
+                                <div className={appendClassName("fieldName", classes.fieldName)}>{`${spec.displayName}`}</div>
+                                <div className={appendClassName("fieldValue", classes.fieldValue)}>{`${spec.displayValue}`}</div>
                             </li>
                         })}
                     </ul>}
 
                     {url && <div><a href={url} target={"_blank"}>More details...</a></div>}
+                    {props.children}
                 </div>
             );
         }
@@ -71,6 +79,6 @@ export const ProductInfoCached = React.memo<ProductInfoProps>(
     }
 );
 
-export function ProductInfo(props: ProductInfoProps) {
-    return <ProductInfoCached {...props} />
+export function ProductDetails(props: ProductDetailsProps) {
+    return <ProductDetailsCached {...props} />
 }
