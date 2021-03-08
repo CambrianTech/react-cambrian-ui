@@ -19,7 +19,7 @@ const ProductDetailsCached = React.memo<ProductDetailsProps>(
     (props) => {
         if (props.visible) {
 
-            let className = appendClassName("product-info", classes.productInfo);
+            let className = appendClassName("product-details", classes.productInfo);
             if (props.className) {
                 className = appendClassName(className, props.className);
             }
@@ -32,28 +32,28 @@ const ProductDetailsCached = React.memo<ProductDetailsProps>(
             return (
                 <div className={className}>
 
-                    <div className={appendClassName("product-info-name", classes.productName)}>
-                        {props.title && <div className={appendClassName("product-info-title", classes.productTitle)}>
+                    <div className={appendClassName("product-details-name", classes.productName)}>
+                        {props.title && <div className={appendClassName("product-details-title", classes.productTitle)}>
                             {props.title}
                         </div>}
-                        {props.subTitle && <div className={appendClassName("product-info-sub-title", classes.productSubTitle)}>
+                        {props.subTitle && <div className={appendClassName("product-details-sub-title", classes.productSubTitle)}>
                             {props.subTitle}
                         </div>}
-                        {props.code && <div className={appendClassName("product-info-sub-code", classes.productCode)}>
+                        {props.code && <div className={appendClassName("product-details-sub-code", classes.productCode)}>
                             {props.code}
                         </div>}
                     </div>
 
                     {preview && <img alt="preview" className={appendClassName("preview", classes.preview)} src={props.resolveUrl("preview", preview)} />}
 
-                    {content && <pre className={appendClassName("product-info-content", classes.productContent)}>
+                    {content && <pre className={appendClassName("product-details-content", classes.productContent)}>
                         {content}
                     </pre>}
 
                     {specs && <ul className={appendClassName("specs", classes.specs)}>
                         {specs.map(spec => {
                             if (!(spec as any).hasOwnProperty("code")) {
-                                //backwards compatibility v 1141:
+                                //backwards compatibility:
                                 spec = {
                                     code:Object.keys(spec as any)[0],
                                     displayName:Object.keys(spec as any)[0],
