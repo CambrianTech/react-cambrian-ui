@@ -67,7 +67,7 @@ const ProductDetailsCached = React.memo<ProductDetailsProps>(
                         })}
                     </ul>}
 
-                    {url && <div><a href={url} target={"_blank"}>More details...</a></div>}
+                    {url && <div className={classes.callToAction}><a href={url} target={"_blank"}>More details...</a></div>}
                     {props.children}
                 </div>
             );

@@ -142,9 +142,9 @@ export function ImageUpload(props: ImageUploadProperties) {
                             superpixels: results.superpixelsUrl,
                             masks: {
                                 "floor": results.semanticUrl
-                            },
-                            roomId: roomId
+                            }
                         };
+                        data.roomId = roomId
                     }
 
                     props.onImageChosen(data);

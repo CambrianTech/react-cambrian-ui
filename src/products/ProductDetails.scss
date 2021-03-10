@@ -47,3 +47,13 @@
 .fieldName {
   font-weight: 600;
 }
+
+.callToAction {
+  margin-top: 20px;
+}
+
+@media (orientation: portrait) {
+  .callToAction {
+    margin-top: 10px;
+  }
+}
