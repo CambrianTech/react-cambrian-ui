@@ -1,6 +1,6 @@
 {
   "name": "react-cambrian-ui",
-  "version": "0.0.1158",
+  "version": "0.0.1166",
   "description": "React Cambrian UI",
   "homepage": "cambrian.io",
   "author": "cambrian",
@@ -40,8 +40,6 @@
     "url": "https://github.com/CambrianTech/react-home-ar/issues"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
     "@types/node": "^14.14.31",
     "cambrian-base": "^1.0.71",
     "react-dropzone": "^11.3.1",
@@ -49,6 +47,8 @@
     "react-share": "^4.3.1"
   },
   "devDependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "cross-var": "^1.1.0",
@@ -70,6 +70,8 @@
   "peerDependencies": {
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-home-ar": ">=0.0.1801"

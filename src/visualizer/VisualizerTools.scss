@@ -1,11 +1,11 @@
 .primaryButton {
-  color: var(--mdc-theme-secondary, #fff) !important;
-  background-color: var(--mdc-theme-primary, #000);
+  background-color: var(--mdc-theme-primary, #000)  !important;
+  color: var(--mdc-theme-on-primary, #ffffff) !important;
 }
 
 .secondaryButton {
-  color: var(--mdc-theme-primary, #000) !important;
   background-color: var(--mdc-theme-secondary, #fff) !important;
+  color: var(--mdc-theme-on-secondary, #000000) !important;
 }
 
 .confirmButton {
