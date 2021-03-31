@@ -1,6 +1,6 @@
 {
   "name": "react-cambrian-ui",
-  "version": "0.0.1171",
+  "version": "0.0.1173",
   "description": "React Cambrian UI",
   "homepage": "cambrian.io",
   "author": "cambrian",
@@ -55,7 +55,7 @@
     "npm-run-all": "^4.1.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-home-ar": "^0.0.1957",
+    "react-home-ar": "^0.0.1966",
     "react-test-renderer": "^17.0.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.41.1",

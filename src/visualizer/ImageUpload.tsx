@@ -1,4 +1,4 @@
-import React, {ReactNode, useCallback, useEffect, useRef} from "react"
+import React, {ReactNode, useCallback, useEffect, useRef, useState} from "react"
 import {useDropzone} from "react-dropzone"
 import {
     CBARSceneProperties,
@@ -7,6 +7,7 @@ import {
     getRotatedFile,
     getTags
 } from "react-home-ar";
+import {ImageRotation} from "./ImageRotation";
 
 const fileAccept = "image/*";
 
@@ -44,7 +45,11 @@ export function openImageDialog() {
 
 export function ImageUpload(props: ImageUploadProperties) {
 
-    let _isMounted = useRef(false);
+    const _isMounted = useRef(false);
+    const [rawImage, setRawImage] = useState<string>();
+    const [fov, setFov] = useState<number>();
+    const [acceleration, setAcceleration] = useState<[number,number,number]>();
+    const [rotation, setRotation] = useState<[number,number,number]>();
 
     useEffect(() => {
         _isMounted.current = true;
@@ -60,6 +65,15 @@ export function ImageUpload(props: ImageUploadProperties) {
         }
     }, [props]);
 
+    const onImageChosen = useCallback((result:string, useChanges:boolean) => {
+        setRawImage(undefined);
+        if (useChanges) {
+            uploadImage(result, fov, acceleration, rotation).then();
+        }
+    }, [fov, acceleration, rotation, uploadImage]);
+
+    const messageMinDurationMS = 4000;
+
     async function upload(acceptedFiles: File[]) {
 
         const inputs = Array.from(document.getElementsByTagName("input"));
@@ -73,14 +87,8 @@ export function ImageUpload(props: ImageUploadProperties) {
         }
 
         const firstFile = acceptedFiles[0];
-
-        const messageMinDurationMS = 4000;
-        const startTime = new Date();
-        setProgress({visible:true, progress:0, message:"Your photo is being uploaded"});
-
         const [uploadFile, newWidth, newHeight] = await getRotatedFile(firstFile, props.maxImageSize ? Math.max(props.maxImageSize, 2048) : 2048);
         const exifData = await getTags(firstFile);
-        const firstFilePreviewPath = URL.createObjectURL(uploadFile);
 
         //Add small factor to deal with crop factor, could be calculated exactly
         const focalLength = exifData.get("FocalLengthIn35mmFilm")+.25;
@@ -108,7 +116,24 @@ export function ImageUpload(props: ImageUploadProperties) {
             }
         }
 
+        const image = await CBContentManager.blobToDataUri(uploadFile);
+
+        setRawImage(image);
+        setFov(fov);
+        setAcceleration(acceleration);
+        setRotation(rotation);
+
+        //await uploadImage(image, fov, acceleration, rotation)
+    }
+
+    async function uploadImage(image:string, fov:number|undefined, acceleration:[number,number,number]|undefined, rotation:[number,number,number]|undefined) {
+
+        setProgress({visible:true, progress:0, message:"Photo is being uploaded"});
+
+        const startTime = new Date();
         CBContentManager.default.resetScene();
+
+        const uploadFile = CBContentManager.default.dataURItoBlob(image);
 
         const results = await CBContentManager.default.uploadRoom(uploadFile, fov, acceleration, ((progress, status) => {
             setProgress({visible:true, progress:progress, message:status})
@@ -125,7 +150,7 @@ export function ImageUpload(props: ImageUploadProperties) {
 
                     if (data.hasOwnProperty("main")) {
                         //NEW SDK 2.0:
-                        data.images.main = firstFilePreviewPath;
+                        data.images.main = URL.createObjectURL(uploadFile);
                     } else {
                         //legacy
                         if (fov) {
@@ -180,6 +205,7 @@ export function ImageUpload(props: ImageUploadProperties) {
 
     return (
         <div ref={props.ref}>
+            <ImageRotation imageUrl={rawImage} onFinished={onImageChosen} />
             <div className={props.className} {...getRootProps()}>
                 <input {...getInputProps()} />
                 {props.children}
