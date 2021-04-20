@@ -96,3 +96,13 @@
   color: var(--mdc-theme-primary, #000);
   background-color: var(--mdc-theme-secondary, #fff);
 }
+
+@media only screen and (max-device-width: 480px) {
+  .editSurfaceToolContent {
+    display: block;
+  }
+  .editSurfaceToolActions {
+    font-size: 0.8em;
+    padding-bottom: 10px;
+  }
+};
