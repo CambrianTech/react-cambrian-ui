@@ -2,7 +2,7 @@ import * as React from "react";
 import classes from "./EditSurfaceTool.scss";
 import {appendClassName} from "../internal/Utils"
 import {CBARSurface, CBARToolMode} from "react-home-ar";
-import {useCallback} from "react";
+import {createRef, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {Fab, Icon} from "@material-ui/core";
 
 type EditSurfaceToolProps = {
@@ -73,6 +73,31 @@ export function EditSurfaceTool(props: EditSurfaceToolProps) {
         });
     }, [surface, onEditFinished]);
 
+    const [historyLength, setHistoryLength] = useState(0);
+
+    const checkTimer = useRef(0);
+    const initialize = useCallback(() => {
+        checkTimer.current = window.setInterval(()=>{
+            if (props.surface) {
+                setHistoryLength(props.surface.historyLength);
+            }
+        }, 200)
+    }, [props, historyLength, checkTimer]);
+
+    const initializeRef = useRef(initialize);
+    useEffect(() => { initializeRef.current = initialize; }, [initialize]);
+
+    useEffect(() => {
+        if (initializeRef.current) {
+            initializeRef.current()
+        }
+        return ()=>{
+            if (checkTimer.current) {
+                window.clearInterval(checkTimer.current);
+            }
+        }
+    }, []);
+
     return (
         <div className={className}>
             <div className={appendClassName("edit-surface-tool-content", classes.editSurfaceToolContent)}>
@@ -90,7 +115,7 @@ export function EditSurfaceTool(props: EditSurfaceToolProps) {
                 </div>
                 <div className={appendClassName("edit-surface-tool-primary-buttons", classes.editSurfaceToolPrimaryButtons)}>
                     <div className={appendClassName("edit-surface-tool-button", classes.editSurfaceToolButton)}>
-                        <Fab className={appendClassName("edit-surface-tool-undo", classes.editSurfaceToolUndo)} onClick={()=>undoLast()}>
+                        <Fab disabled={historyLength === 0} className={appendClassName("edit-surface-tool-undo", classes.editSurfaceToolUndo)} onClick={()=>undoLast()}>
                             <Icon>undo</Icon>
                         </Fab>
                     </div>
