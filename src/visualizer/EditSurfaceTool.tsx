@@ -2,7 +2,7 @@ import * as React from "react";
 import classes from "./EditSurfaceTool.scss";
 import {appendClassName} from "../internal/Utils"
 import {CBARSurface, CBARToolMode} from "react-home-ar";
-import {createRef, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {Fab, Icon} from "@material-ui/core";
 
 type EditSurfaceToolProps = {

@@ -15,13 +15,13 @@ import {
     TwitterShareButton
 } from "react-share";
 import {Button} from "@material-ui/core";
+import {ShareConfig} from "cambrian-base";
 
-type SharePanelProps = {
+type SharePanelProps = ShareConfig & {
     visible:boolean
     className?:string
     product?:ProductItem
     isUploadedImage:boolean,
-    shareSubject:string
     needsUpload:boolean
 
     downloadName?:string
@@ -134,12 +134,12 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                 <div className={appendClassName("social-share-buttons", classes.socialButtons)}>
                                     <FacebookShareButton onClick={()=>socialClicked("facebook")}
                                                          url={getShareUrl("facebook")}
-                                                         quote={props.shareSubject}>
+                                                         quote={props.subject}>
                                         <FacebookIcon size={32} round={true} path={""} crossOrigin={""} />
                                     </FacebookShareButton>
 
                                     <TwitterShareButton onClick={()=>socialClicked("twitter")}
-                                                        title={props.shareSubject}
+                                                        title={props.subject}
                                                         url={getShareUrl("twitter")}>
                                         <TwitterIcon size={32} round={true} path={""} crossOrigin={""} />
                                     </TwitterShareButton>
@@ -152,7 +152,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                             onClick={()=>socialClicked("pinterest")}
                                             style={{cursor:!beforeAfterImageUrl ? "default" : "pointer"}}
                                             disabled={!beforeAfterImageUrl}
-                                            description={props.shareSubject}
+                                            description={props.subject}
                                             media={`${beforeAfterImageUrl}`}
                                             url={getShareUrl("pinterest")}>
                                             <PinterestIcon size={32} round={true} path={""} crossOrigin={""} />
@@ -160,7 +160,7 @@ export const SharePanelCached = React.memo<SharePanelProps>(
                                     </div>
 
                                     <LinkedinShareButton onClick={()=>socialClicked("linkedin")}
-                                                         title={props.shareSubject}
+                                                         title={props.subject}
                                                          url={getShareUrl("linkedin")}>
                                         <LinkedinIcon size={32} round={true} path={""} crossOrigin={""} />
                                     </LinkedinShareButton>
