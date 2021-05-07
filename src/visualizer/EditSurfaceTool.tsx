@@ -59,17 +59,22 @@ export function EditSurfaceTool(props: EditSurfaceToolProps) {
 
     const undoLast = useCallback(()=>{
         surface.undoLast();
+        setHistoryLength(surface.historyLength);
     }, [surface]);
 
     const revertChanges = useCallback(()=>{
         surface.revertChanges((success)=>{
             onEditFinished(success);
+            if (surface) {
+                setHistoryLength(surface.historyLength);
+            }
         });
     }, [surface, onEditFinished]);
 
     const commitChanges = useCallback(()=>{
         surface.commitChanges((success)=>{
             onEditFinished(success);
+            setHistoryLength(surface.historyLength);
         });
     }, [surface, onEditFinished]);
 
@@ -78,11 +83,9 @@ export function EditSurfaceTool(props: EditSurfaceToolProps) {
     const checkTimer = useRef(0);
     const initialize = useCallback(() => {
         checkTimer.current = window.setInterval(()=>{
-            if (props.surface) {
-                setHistoryLength(props.surface.historyLength);
-            }
-        }, 200)
-    }, [props, historyLength, checkTimer]);
+            setHistoryLength(surface.historyLength);
+        }, 1000);
+    }, [surface, checkTimer]);
 
     const initializeRef = useRef(initialize);
     useEffect(() => { initializeRef.current = initialize; }, [initialize]);

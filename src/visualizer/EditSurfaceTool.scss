@@ -81,8 +81,8 @@
 }
 
 .editSurfaceToolUndo {
-  color: var(--mdc-theme-secondary, #fff);
-  background-color: var(--mdc-theme-primary, #000);
+  color: var(--mdc-theme-primary, #fff) !important;
+  background-color: var(--mdc-theme-secondary, #000);
 }
 
 .editSurfaceToolCancel {
