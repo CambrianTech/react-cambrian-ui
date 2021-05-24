@@ -26,7 +26,7 @@ const ProductDetailsCached = React.memo<ProductDetailsProps>(
 
             const preview = props.details ? props.details.preview : undefined;
             const content = props.details ? props.details.content : undefined;
-            const specs = props.details ? props.details.specifications : undefined;
+            const specs = props.details ? props.details.specifications?.filter(s=>!s.hidden) : undefined;
             const url = props.details ? props.details.url : undefined;
 
             return (

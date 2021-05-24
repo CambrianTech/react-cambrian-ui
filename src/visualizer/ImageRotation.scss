@@ -1,7 +1,10 @@
 @import 'VisualizerTools';
 
 .imageRotation {
-
+    align-content: center;
+    display: flex;
+    justify-content: center;
+    max-width: 80%;
     &.content {
         display: inline-block;
     }
@@ -10,7 +13,7 @@
 .image {
     object-fit: contain;
     border: 2px solid #f2f2f2;
-    width: 100%;
+    max-width: 80vw;
     max-height: 80vh;
 }
 

@@ -105,7 +105,7 @@ export function ImageRotation(props: ImageRotationProperties) {
         }
     }, [image, props.imageUrl, showPopup]);
 
-    let className = classes.imageRotation + ' md-modal md-effect-12';
+    let className = classes.imageRotation + ' image-rotation-popup md-modal md-effect-12';
     if (props.className) {
         className += ` ${props.className}`
     }
