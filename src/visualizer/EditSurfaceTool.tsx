@@ -11,7 +11,8 @@ type EditSurfaceToolProps = {
     surface:CBARSurface|undefined
     onToolChanged: (mode: CBARToolMode) => void
     onEditFinished: (success: boolean) => void
-    directions?:string
+    drawLabel?:string
+    eraseLabel?:string
 }
 
 export const eraserIcon = (<svg style={{width:"24px", height:"24px"}} viewBox="0 0 24 24">
@@ -106,12 +107,12 @@ export function EditSurfaceTool(props: EditSurfaceToolProps) {
         <div className={className}>
             <div className={appendClassName("edit-surface-tool-content", classes.editSurfaceToolContent)}>
                 <div className={appendClassName("edit-surface-tool-actions", classes.editSurfaceToolActions)}>
-                    <ActionButton selected={toolMode===CBARToolMode.DrawSurface} label={"Fill In"}>
+                    <ActionButton selected={toolMode===CBARToolMode.DrawSurface} label={props.drawLabel ? props.drawLabel : "Fill In"}>
                         <Fab className={appendClassName("edit-surface-tool-draw", classes.editSurfaceToolDraw)} onClick={() => onToolChanged(CBARToolMode.DrawSurface)}>
                             <Icon>brush</Icon>
                         </Fab>
                     </ActionButton>
-                    <ActionButton selected={toolMode===CBARToolMode.EraseSurface} label={"Erase"}>
+                    <ActionButton selected={toolMode===CBARToolMode.EraseSurface} label={props.eraseLabel ? props.eraseLabel : "Erase"}>
                         <Fab className={appendClassName("edit-surface-tool-erase", classes.editSurfaceToolErase)} onClick={() => onToolChanged(CBARToolMode.EraseSurface)}>
                             {eraserIcon}
                         </Fab>

@@ -5,7 +5,8 @@ import {
     CBContentManager,
     getAccelerationVector,
     getRotatedFile,
-    getTags
+    getTags,
+    UploadStatus
 } from "react-home-ar";
 import {ImageRotation} from "./ImageRotation";
 
@@ -18,7 +19,7 @@ export type ImageProperties = CBARSceneProperties & {
 export type ServerProgress = {
     visible:boolean
     progress?:number
-    message?:string
+    message?:UploadStatus
     error?:any
 }
 
@@ -128,7 +129,7 @@ export function ImageUpload(props: ImageUploadProperties) {
 
     async function uploadImage(image:string, fov:number|undefined, acceleration:[number,number,number]|undefined, rotation:[number,number,number]|undefined) {
 
-        setProgress({visible:true, progress:0, message:"Photo is being uploaded"});
+        setProgress({visible:true, progress:0, message:UploadStatus.ImageUploading});
 
         const startTime = new Date();
         CBContentManager.default.resetScene();
@@ -143,7 +144,7 @@ export function ImageUpload(props: ImageUploadProperties) {
 
         if (results && roomId) {
 
-            setProgress({visible:true, progress:1, message:"Complete"});
+            setProgress({visible:true, progress:1, message:UploadStatus.Completed});
 
             if (results.dataUrl != null) {
                 fetch(results.dataUrl).then(res => res.json()).then(data => {
@@ -177,11 +178,11 @@ export function ImageUpload(props: ImageUploadProperties) {
             }
             else {
                 console.warn("Upload failed, no dataUrl");
-                setProgress({visible:true, progress:0, message:"Upload failed", error:new Error("Upload failed")})
+                setProgress({visible:true, progress:0, message:UploadStatus.Failed, error:new Error(UploadStatus.Failed)})
             }
         } else {
             console.warn("Upload failed, no room ID");
-            setProgress({visible:true, progress:0, message:"Upload failed", error:new Error("Upload failed")})
+            setProgress({visible:true, progress:0, message:UploadStatus.Failed, error:new Error(UploadStatus.Failed)})
         }
 
         const elapsed = new Date().getTime() - startTime.getTime();
