@@ -14,6 +14,7 @@ type RotateToolProps = {
     onRotationChanged: (rotation: number) => void
     cancelIcon?:React.ReactElement<HTMLElement>
     confirmIcon?:React.ReactElement<HTMLElement>
+    directions?:string
 }
 
 type RotateToolCachedProps = RotateToolProps & {
@@ -76,7 +77,7 @@ export const RotateToolCached = React.memo<RotateToolCachedProps>(
                             </div>
 
                             <div className={appendClassName("rotate-tool-instructions", classes.overlayInstructions)}>
-                                Click and drag objects or adjust the slider.
+                                {cProps.directions ? cProps.directions : "Click and drag objects or adjust the slider."}
                             </div>
                         </div>
                         <div className={appendClassName("rotate-tool-footer", classes.overlayFooter)}>

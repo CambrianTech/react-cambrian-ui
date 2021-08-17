@@ -9,6 +9,8 @@ type PickImageSourceProps = {
     hasScenes: boolean
     hasUpload: boolean
     sourceChosen:(source:ApiCapabilityName)=>void
+    chooseText?:string
+    uploadText?:string
 }
 
 const PickImageSourceCached = React.memo<PickImageSourceProps>(
@@ -19,13 +21,13 @@ const PickImageSourceCached = React.memo<PickImageSourceProps>(
                     {props.hasScenes && <Button variant="contained" color="primary" onClick={()=>props.sourceChosen('scenes')}>
                         <div className={classes.buttonContent}>
                             <Icon className={classes.buttonIcon}>insert_photo</Icon>
-                            <div className={classes.buttonText}>Choose Scene</div>
+                            <div className={classes.buttonText}>{props.chooseText ? props.chooseText : "Choose Scene"}</div>
                         </div>
                     </Button>}
                     {props.hasUpload && <Button variant="contained" color="secondary" onClick={()=>props.sourceChosen('upload')}>
                         <div className={classes.buttonContent}>
                             <Icon className={classes.buttonIcon}>add_a_photo</Icon>
-                            <div className={classes.buttonText}>Upload Photo</div>
+                            <div className={classes.buttonText}>{props.uploadText ? props.uploadText : "Upload Photo"}</div>
                         </div>
                     </Button>}
                 </div>

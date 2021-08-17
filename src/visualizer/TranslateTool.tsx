@@ -16,6 +16,7 @@ type TranslateToolProps = {
 
     cancelIcon?:React.ReactElement<HTMLElement>
     confirmIcon?:React.ReactElement<HTMLElement>
+    directions?:string
 }
 
 type TranslateToolCachedProps = TranslateToolProps & {
@@ -106,7 +107,7 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
                             </div>
 
                             <div className={appendClassName("translate-tool-instructions", classes.overlayInstructions)}>
-                                Click and drag objects or adjust sliders.
+                                {cProps.directions ? cProps.directions : "Click and drag objects or adjust sliders."}
                             </div>
                         </div>
                         <div className={appendClassName("translate-tool-footer", classes.overlayFooter)}>
