@@ -129,7 +129,7 @@ export function ImageUpload(props: ImageUploadProperties) {
 
     async function uploadImage(image:string, fov:number|undefined, acceleration:[number,number,number]|undefined, rotation:[number,number,number]|undefined) {
 
-        setProgress({visible:true, progress:0, message:UploadStatus.ImageUploading});
+        setProgress({visible:true, progress:0, message:UploadStatus.Uploading});
 
         const startTime = new Date();
         CBContentManager.default.resetScene();
