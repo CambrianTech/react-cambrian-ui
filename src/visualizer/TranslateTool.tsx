@@ -11,6 +11,7 @@ type TranslateToolProps = {
     yPos: number
     min?: [number, number]
     max?: [number, number]
+    onTranslationStarted: () => void
     onTranslationFinished: (commit: boolean, xPos: number, yPos: number) => void
     onTranslationChanged: (xPos: number, yPos: number) => void
 
@@ -131,7 +132,7 @@ export const TranslateToolCached = React.memo<TranslateToolCachedProps>(
 
 export function TranslateTool(props: TranslateToolProps) {
 
-    const [onTranslationChanged, onTranslationFinished] = [props.onTranslationChanged, props.onTranslationFinished];
+    const [onTranslationStarted, onTranslationChanged, onTranslationFinished] = [props.onTranslationStarted, props.onTranslationChanged, props.onTranslationFinished];
 
     const translationControl_xPos = useRef(0);
     const translationControl_yPos = useRef(0);
@@ -212,6 +213,7 @@ export function TranslateTool(props: TranslateToolProps) {
                     translateY.value = `${yPos}`
                 }
             }
+            onTranslationStarted();
         }
     }, [visible, xPos, yPos, translationControl_xPos, translationControl_yPos]);
 

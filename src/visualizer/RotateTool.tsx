@@ -10,6 +10,7 @@ type RotateToolProps = {
     visible: boolean
     className?:string
     rotation: number
+    onRotationStarted: () => void
     onRotationFinished: (commit: boolean, rotation: number) => void
     onRotationChanged: (rotation: number) => void
     cancelIcon?:React.ReactElement<HTMLElement>
@@ -103,7 +104,7 @@ export function RotateTool(props: RotateToolProps) {
     const rotationControlValue = useRef(0);
     const isActive = useRef(false);
 
-    const [rotation, visible, onRotationChanged, onRotationFinished] = [props.rotation, props.visible, props.onRotationChanged, props.onRotationFinished];
+    const [rotation, visible, onRotationStarted, onRotationChanged, onRotationFinished] = [props.rotation, props.visible, props.onRotationStarted, props.onRotationChanged, props.onRotationFinished];
 
     const rotateChanged = useCallback((radians: number) => {
         rotationControlValue.current = radians;
@@ -163,8 +164,9 @@ export function RotateTool(props: RotateToolProps) {
             if (!isActive.current) {
                 setRotation(rotation)
             }
+            onRotationStarted();
         }
-    }, [visible, rotationControlValue, isActive, rotation]);
+    }, [visible, rotationControlValue, isActive, rotation, onRotationStarted]);
 
     return (
         <RotateToolCached {...props}
