@@ -80,6 +80,17 @@
   margin-left:50px;
 }
 
+.zoomControls {
+  display: flex;
+  flex-direction: row;
+  height: fit-content;
+  & > {
+    margin-right: 10px !important;
+  }
+}
+
+
+
 @media only screen and (max-device-width: 480px) {
   .overlayFooter {
     margin-top: 10px;
