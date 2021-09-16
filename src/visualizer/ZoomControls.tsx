@@ -72,7 +72,7 @@ export function ZoomControls(props: ZoomControlsProps) {
     } else {
         return (
             <div className={className}>
-                <Fab onClick={()=>setZoomState(currentState === ZoomState.FitScreen ? ZoomState.ZoomedOut : ZoomState.FitScreen)}>
+                <Fab className={"MuiFab-primary"} onClick={()=>setZoomState(currentState === ZoomState.FitScreen ? ZoomState.ZoomedOut : ZoomState.FitScreen)}>
                     <Icon>{currentState === ZoomState.FitScreen ? "zoom_out" : "fit_screen"}</Icon>
                 </Fab>
             </div>
