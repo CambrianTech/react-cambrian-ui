@@ -1,7 +1,7 @@
 import {Fab, Icon} from "@material-ui/core";
 import * as React from "react";
 import {useCallback, useEffect, useRef, useState} from "react";
-import {CBARContext, ZoomState} from "react-home-ar";
+import {CBARContext, getConfig, ZoomState} from "react-home-ar";
 import classes from "./VisualizerTools.scss";
 
 type ZoomControlsProps = {
@@ -16,7 +16,7 @@ const scaleBy = 1.5
 export function ZoomControls(props: ZoomControlsProps) {
 
     const context = props.context
-    const [currentState, setCurrentState] = useState(ZoomState.FitScreen);
+    const [currentState, setCurrentState] = useState<ZoomState>();
 
     const zoom = useCallback((out:boolean)=>{
         if (context) {
@@ -44,11 +44,11 @@ export function ZoomControls(props: ZoomControlsProps) {
 
     useEffect(() => {
         //todo, wire up events in react-home-ar to enable watching their state rather than polling it:
-        interval.current = window.setInterval(refreshState, 200);
+        interval.current = window.setInterval(refreshState, 250);
         return () => {
             window.clearInterval(interval.current)
         }
-    }, [refreshState]);
+    }, [refreshState, interval]);
 
     let className = classes.zoomControls + ' zoom-controls';
     if (props.className) {
