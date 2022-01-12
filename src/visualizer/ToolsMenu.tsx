@@ -8,6 +8,7 @@ export enum ToolOperation {
     ChooseScene='choose-scene',
     Share='share',
     ChoosePattern='choose-pattern',
+    ChooseColor='choose-color',
 }
 
 export type ToolsMenuAction = {
@@ -20,6 +21,7 @@ export type ToolsMenuAction = {
 }
 
 export const DefaultAssetMenuActions:ToolsMenuAction[] = [
+    { icon: <Icon>palette</Icon>, name: 'Change Color', operation:ToolOperation.ChooseColor, requiresSurface:true },
     { icon: <Icon>clear</Icon>, name: 'Remove', longName:'Remove', operation:ToolOperation.Remove, requiresAsset:true },
     { icon: <Icon>rotate_right</Icon>, name: 'Rotate', operation:CBARToolMode.Rotate, requiresAsset:true },
     { icon: <Icon>open_with</Icon>, name: 'Move', operation:CBARToolMode.Translate, requiresAsset:true },
