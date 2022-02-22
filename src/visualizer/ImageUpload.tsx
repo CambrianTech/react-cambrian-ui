@@ -131,55 +131,35 @@ export function ImageUpload(props: ImageUploadProperties) {
 
         setProgress({visible:true, progress:0, message:UploadStatus.Uploading});
 
+        if (!CBContentManager.default) {
+            return
+        }
+
         const startTime = new Date();
         CBContentManager.default.resetScene();
 
         const uploadFile = CBContentManager.default.dataURItoBlob(image);
 
-        const results = await CBContentManager.default.uploadRoom(uploadFile, fov, acceleration, ((progress, status) => {
+        const dataUrl = await CBContentManager.default.uploadRoom(uploadFile, fov, acceleration, ((progress, status) => {
             setProgress({visible:true, progress:progress, message:status})
         })).catch((error)=>handleError(error));
 
         const roomId = CBContentManager.default.roomId;
 
-        if (results && roomId) {
+        if (dataUrl && roomId) {
 
             setProgress({visible:true, progress:1, message:UploadStatus.Completed});
 
-            if (results.dataUrl != null) {
-                fetch(results.dataUrl).then(res => res.json()).then(data => {
+            fetch(dataUrl).then(res => res.json()).then(data => {
 
-                    if (data.hasOwnProperty("main")) {
-                        //NEW SDK 2.0:
-                        data.images.main = URL.createObjectURL(uploadFile);
-                    } else {
-                        //legacy
-                        if (fov) {
-                            data.fov = fov;
-                        }
+                // if (data.hasOwnProperty("main")) {
+                //     //NEW SDK 2.0:
+                //     data.images.main = URL.createObjectURL(uploadFile);
+                // }
 
-                        if (rotation !== undefined) {
-                            data.cameraRotation =  [rotation[0], -data.floorRotation, rotation[2]];
-                        }
+                props.onImageChosen(data);
+            })
 
-                        data['images'] = {
-                            main: results.semanticUrl.replace("mask.png", "background"),
-                            lighting: results.lightingUrl,
-                            superpixels: results.superpixelsUrl,
-                            masks: {
-                                "floor": results.semanticUrl
-                            }
-                        };
-                        data.roomId = roomId
-                    }
-
-                    props.onImageChosen(data);
-                })
-            }
-            else {
-                console.warn("Upload failed, no dataUrl");
-                setProgress({visible:true, progress:0, message:UploadStatus.Failed, error:new Error(UploadStatus.Failed)})
-            }
         } else {
             console.warn("Upload failed, no room ID");
             setProgress({visible:true, progress:0, message:UploadStatus.Failed, error:new Error(UploadStatus.Failed)})
