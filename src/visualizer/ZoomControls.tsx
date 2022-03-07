@@ -1,8 +1,8 @@
-import {Fab, Icon} from "@material-ui/core";
 import * as React from "react";
 import {useCallback, useEffect, useRef, useState} from "react";
-import {CBARContext, getConfig, ZoomState} from "react-home-ar";
+import {CBARContext, ZoomState} from "react-home-ar";
 import classes from "./VisualizerTools.scss";
+import {Fab, Icon} from "@mui/material";
 
 type ZoomControlsProps = {
     hidden?: boolean

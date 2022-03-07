@@ -1,7 +1,7 @@
 import * as React from "react";
-import {Button, Icon} from "@material-ui/core";
 import {ApiCapabilityName} from "cambrian-base";
 import classes from "./PickImageSource.scss";
+import {Button, Icon} from "@mui/material";
 
 type PickImageSourceProps = {
     visible: boolean

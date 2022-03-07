@@ -1,6 +1,6 @@
 import * as React from "react";
 import {CBARToolMode} from "react-home-ar";
-import {Icon} from "@material-ui/core";
+import {Icon} from "@mui/material";
 
 export enum ToolOperation {
     Remove='remove',

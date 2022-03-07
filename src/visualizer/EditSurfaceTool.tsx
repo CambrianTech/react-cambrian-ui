@@ -3,7 +3,7 @@ import classes from "./EditSurfaceTool.scss";
 import {appendClassName} from "../internal/Utils"
 import {CBARSurface, CBARToolMode} from "react-home-ar";
 import {useCallback, useEffect, useRef, useState} from "react";
-import {Fab, Icon} from "@material-ui/core";
+import {Fab, Icon} from "@mui/material";
 
 type EditSurfaceToolProps = {
     className?:string

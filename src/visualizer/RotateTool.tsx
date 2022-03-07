@@ -4,7 +4,7 @@ import classes from "./VisualizerTools.scss";
 import {appendClassName} from "../internal/Utils"
 import {useEffect} from "react";
 import {useCallback} from "react";
-import {Fab, Icon} from "@material-ui/core";
+import {Fab, Icon} from "@mui/material";
 
 type RotateToolProps = {
     visible: boolean

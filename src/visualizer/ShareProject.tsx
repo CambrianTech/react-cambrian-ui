@@ -10,7 +10,7 @@ import {
     PinterestShareButton, LinkedinShareButton, LinkedinIcon
 } from "react-share"
 import {ProductColor} from "react-home-ar";
-import {Button} from "@material-ui/core";
+import {Button} from "@mui/material";
 
 type ShareProjectProps = {
     open: boolean

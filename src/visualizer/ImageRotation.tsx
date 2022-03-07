@@ -2,7 +2,7 @@ import React, {createRef, useCallback, useEffect, useState} from "react"
 import './ImageRotation.scss'
 import {appendClassName} from "../internal/Utils";
 import classes from "./ImageRotation.scss";
-import {Fab, Icon} from "@material-ui/core";
+import {Fab, Icon} from "@mui/material";
 
 interface ImageRotationProperties {
     className?: string,

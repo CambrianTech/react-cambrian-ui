@@ -3,7 +3,7 @@ import {default as React, useCallback, useEffect, useRef, useState} from "react"
 import {appendClassName} from "../internal/Utils";
 import classes from "./TiledGridSelector.scss";
 import {CBARTiledAsset, TiledGridType, getEnumKeys} from "react-home-ar";
-import {Fab, Icon} from "@material-ui/core";
+import {Fab, Icon} from "@mui/material";
 
 type TiledGridSelectorProps = {
     visible: boolean
