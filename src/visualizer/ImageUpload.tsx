@@ -157,6 +157,10 @@ export function ImageUpload(props: ImageUploadProperties) {
                 //     data.images.main = URL.createObjectURL(uploadFile);
                 // }
 
+                if (!data.hasOwnProperty("roomId")) {
+                    data.roomId = roomId
+                }
+
                 props.onImageChosen(data);
             })
 

@@ -58,13 +58,13 @@ export function ZoomControls(props: ZoomControlsProps) {
     if (props.mode == 'complex') {
         return (
             <div className={className}>
-                <Fab onClick={()=>zoom(false)}>
+                <Fab className={"MuiFab-primary"} onClick={()=>zoom(false)}>
                     <Icon>zoom_in</Icon>
                 </Fab>
-                <Fab onClick={()=>zoom(true)}>
+                <Fab className={"MuiFab-primary"} onClick={()=>zoom(true)}>
                     <Icon>zoom_out</Icon>
                 </Fab>
-                <Fab onClick={()=>setZoomState(ZoomState.FitScreen)}>
+                <Fab className={"MuiFab-primary"} onClick={()=>setZoomState(ZoomState.FitScreen)}>
                     <Icon>fit_screen</Icon>
                 </Fab>
             </div>
