@@ -58,13 +58,13 @@ export function ZoomControls(props: ZoomControlsProps) {
     if (props.mode == 'complex') {
         return (
             <div className={className}>
-                <Fab className={"MuiFab-primary"} onClick={()=>zoom(false)}>
+                <Fab color={"primary"} onClick={()=>zoom(false)}>
                     <Icon>zoom_in</Icon>
                 </Fab>
-                <Fab className={"MuiFab-primary"} onClick={()=>zoom(true)}>
+                <Fab color={"primary"} onClick={()=>zoom(true)}>
                     <Icon>zoom_out</Icon>
                 </Fab>
-                <Fab className={"MuiFab-primary"} onClick={()=>setZoomState(ZoomState.FitScreen)}>
+                <Fab color={"primary"} onClick={()=>setZoomState(ZoomState.FitScreen)}>
                     <Icon>fit_screen</Icon>
                 </Fab>
             </div>
@@ -72,7 +72,7 @@ export function ZoomControls(props: ZoomControlsProps) {
     } else {
         return (
             <div className={className}>
-                <Fab className={"MuiFab-primary"} onClick={()=>setZoomState(currentState === ZoomState.FitScreen ? ZoomState.ZoomedOut : ZoomState.FitScreen)}>
+                <Fab color={"primary"} onClick={()=>setZoomState(currentState === ZoomState.FitScreen ? ZoomState.ZoomedOut : ZoomState.FitScreen)}>
                     <Icon>{currentState === ZoomState.FitScreen ? "zoom_out" : "fit_screen"}</Icon>
                 </Fab>
             </div>
