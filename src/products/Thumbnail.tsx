@@ -1,6 +1,6 @@
 import {default as React} from "react";
 import {SwatchItem} from "react-home-ar";
-import {LazyImage} from "react-lazy-elements";
+import {LazyImage} from "./LazyImage";
 
 type ThumbnailProps = {
     swatch:SwatchItem

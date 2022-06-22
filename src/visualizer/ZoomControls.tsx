@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {CBARContext, ZoomState} from "react-home-ar";
 import classes from "./VisualizerTools.scss";
 import {Fab, Icon} from "@mui/material";
@@ -50,6 +50,20 @@ export function ZoomControls(props: ZoomControlsProps) {
         }
     }, [refreshState, interval]);
 
+    const nextState = useMemo(()=>{
+        switch (currentState) {
+            case ZoomState.FitScreen:
+                return ZoomState.ZoomedOut;
+            case ZoomState.ZoomedIn:
+            case ZoomState.ZoomedOut:
+        }
+        return ZoomState.FitScreen;
+    }, [currentState])
+
+    const currentIcon = useMemo(()=>{
+        return nextState.replace("-", "_");
+    }, [nextState])
+
     let className = classes.zoomControls + ' zoom-controls';
     if (props.className) {
         className += ` ${props.className}`
@@ -72,8 +86,8 @@ export function ZoomControls(props: ZoomControlsProps) {
     } else {
         return (
             <div className={className}>
-                <Fab color={"primary"} onClick={()=>setZoomState(currentState === ZoomState.FitScreen ? ZoomState.ZoomedOut : ZoomState.FitScreen)}>
-                    <Icon>{currentState === ZoomState.FitScreen ? "zoom_out" : "fit_screen"}</Icon>
+                <Fab color={"primary"} onClick={()=>setZoomState(nextState)}>
+                    <Icon>{currentIcon}</Icon>
                 </Fab>
             </div>
         )
