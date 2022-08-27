@@ -18,6 +18,7 @@ export type ToolsMenuAction = {
     operation?:string
     requiresAsset?:boolean
     requiresSurface?:boolean
+    isColor?:boolean
 }
 
 export const DefaultAssetMenuActions:ToolsMenuAction[] = [
