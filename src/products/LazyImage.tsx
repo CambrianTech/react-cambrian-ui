@@ -17,6 +17,7 @@ type LazyImageProps = {
     placeholderSrc?:string
     maintainSize?:boolean
     loadOnMount?:boolean
+    crossOrigin?:"anonymous" | "use-credentials" | "" | undefined
     getImageSource?:() => ImageSource
     placeholder?:() => ReactElement
     visibilityWillChange?:(visible:boolean)=>void
@@ -84,6 +85,7 @@ export class LazyImage extends LazyBase<LazyImageProps> {
     render() {
         return <Observer root={this.props.root} rootMargin={this.props.rootMargin} onChange={(event:IntersectionObserverEntry) => this.handleIntersection(event)}>
             <img ref={this._imageElement} className={this.props.className} alt={this.props.alt}
+                 crossOrigin={this.props.crossOrigin ? this.props.crossOrigin : "anonymous"}
                  src={this.props.src ? (this.props.loadOnMount ? this.props.src : blankImageSrc) : undefined}
                  srcSet={this.props.srcSet ? (this.props.loadOnMount ? this.props.srcSet : blankImageSrc) : undefined}
             />
