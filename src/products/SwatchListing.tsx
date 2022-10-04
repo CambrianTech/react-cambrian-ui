@@ -2,6 +2,8 @@ import * as React from "react";
 import {DataItem, SwatchItem, DataFilter} from "react-home-ar";
 import {appendClassName} from "../internal/Utils";
 import {createRef, ReactNode} from "react";
+import {ImageInfo} from "./LazyImage";
+import {isDarkSwatch} from "./Thumbnail";
 
 export type SwatchListingProps = {
     visible?:boolean
@@ -251,6 +253,15 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
             //console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
             this.scrollSwatchIntoView(swatchDiv, this._prevSwatchDiv, "smooth")
         }
+    }
+
+    protected swatchLoaded(swatch:SwatchItem, darkClass:string, lightClass:string, info?:ImageInfo) {
+        const swatchElement = document.getElementById(swatch.key);
+        if (!swatchElement) return
+
+        swatchElement.classList.remove(darkClass);
+        swatchElement.classList.remove(lightClass);
+        swatchElement.classList.add(isDarkSwatch(swatch) ? darkClass : lightClass);
     }
 
     render() {

@@ -1,6 +1,7 @@
 import React, {createRef, ReactElement} from "react"
 import {LazyBase} from "./LazyElement";
 import Observer from "@researchgate/react-intersection-observer";
+import {FastAverageColor, FastAverageColorResult} from "fast-average-color";
 
 type ImageSource = {
     src?:string
@@ -8,6 +9,11 @@ type ImageSource = {
 }
 
 const blankImageSrc = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+
+export type ImageInfo = FastAverageColorResult & {
+    width: number
+    height: number
+}
 
 type LazyImageProps = {
     className?: string
@@ -21,11 +27,12 @@ type LazyImageProps = {
     getImageSource?:() => ImageSource
     placeholder?:() => ReactElement
     visibilityWillChange?:(visible:boolean)=>void
+    imageLoaded?:(info:ImageInfo)=>void
 }
 
 export class LazyImage extends LazyBase<LazyImageProps> {
 
-    private _imageElement = createRef<HTMLImageElement>()
+    private _imageElement = createRef<HTMLImageElement>();
 
     getImageSource() : ImageSource {
         if (this.props.getImageSource) {
@@ -37,23 +44,34 @@ export class LazyImage extends LazyBase<LazyImageProps> {
         }
     }
 
+    componentDidMount() {
+        super.componentDidMount();
+
+        const element = this._imageElement.current;
+        const onload = this.props.imageLoaded;
+        if (element && onload) {
+
+            element.onload = () =>{
+                const fac = new FastAverageColor();
+                const info = fac.getColor(element);
+                const size = element.getBoundingClientRect();
+
+                if (this.props.maintainSize) {
+                    element.style.width = `${size.width}px`;
+                    element.style.height = `${size.height}px`;
+                }
+
+                onload({...size, ...info});
+            }
+        }
+    }
+
     componentWillUnmount() {
         if (this._imageElement.current) {
             this._imageElement.current.src = blankImageSrc
             this._imageElement.current.srcset = blankImageSrc
         }
         super.componentWillUnmount()
-    }
-
-    private maintainSize() {
-        if (this._imageElement.current) {
-            const element = this._imageElement.current
-            element.onload = ()=>{
-                const size = element.getBoundingClientRect()
-                element.style.width = `${size.width}px`
-                element.style.height = `${size.height}px`
-            }
-        }
     }
 
     protected get placeholderImageSrc(): string {
@@ -75,10 +93,6 @@ export class LazyImage extends LazyBase<LazyImageProps> {
 
         if (this.props.visibilityWillChange) {
             this.props.visibilityWillChange(visible)
-        }
-
-        if (visible && this.props.maintainSize) {
-            this.maintainSize()
         }
     }
 

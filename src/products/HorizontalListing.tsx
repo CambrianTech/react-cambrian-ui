@@ -1,6 +1,6 @@
 import * as React from "react";
 import classes from "./HorizontalListing.scss";
-import {Thumbnail} from "../general";
+import {isDarkSwatch, Thumbnail} from "../general";
 import {SwatchInfoParams, SwatchListing, SwatchListingProps} from "./SwatchListing";
 import {SwatchItem} from "react-home-ar";
 import {ReactNode} from "react";
@@ -53,6 +53,8 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
         let className = appendClassName("horizontal-swatch-listing-item",
             isSelected ? classes.swatchListingItemSelected : classes.swatchListingItem)
 
+        className = appendClassName(className, isDarkSwatch(swatch) ? classes.darkImage : classes.lightImage)
+
         if (isSelected) {
             className = appendClassName(className, "selected")
         }
@@ -65,13 +67,15 @@ export class HorizontalListing extends SwatchListing<HorizontalListingProps> {
                     <div className={appendClassName("horizontal-swatch-listing-image-container", classes.swatchListingImageContainer)}>
                         <Thumbnail className={appendClassName("horizontal-swatch-listing-image", classes.swatchListingImage)}
                                    visibilityWillChange={(visible)=>{this.thumbnailVisibilityChanged(swatch, visible)}}
-                                   swatch={swatch} resolveThumbnailPath={this.props.resolveThumbnailPath} />
+                                   onload={(swatch, info)=>this.swatchLoaded(swatch, classes.darkImage, classes.lightImage, info)}
+                                   swatch={swatch}
+                                   resolveThumbnailPath={this.props.resolveThumbnailPath} />
+                        {this.getSwatchInfo({swatch, isSelected,
+                            isFiltered:!!this.props.filters && this.props.filters.length > 0,
+                            childCount:swatch.children.length
+                        })}
                         {swatchChildren}
                     </div>
-                    {this.getSwatchInfo({swatch, isSelected,
-                        isFiltered:!!this.props.filters && this.props.filters.length > 0,
-                        childCount:swatch.children.length
-                    })}
                 </div>
             </div>
         )
