@@ -171,6 +171,7 @@ export class VerticalListing extends SwatchListing<VerticalListingProps> {
                 <div id={`${swatch.key}-swatches`} className={childClassName}>
                     {isChildSelected && subSwatches.length > 0 &&
                     <HorizontalListing
+                        id={`${swatch.key}-horizontal`}
                         selectedSwatch={this.props.selectedSubSwatch}
                         onClick={this.props.onClick}
                         resolveThumbnailPath={this.props.resolveThumbnailPath}

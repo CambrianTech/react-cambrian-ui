@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./HorizontalListing.scss";
 import {isDarkSwatch, Thumbnail} from "../general";
-import {SwatchInfoParams, SwatchListing, SwatchListingProps} from "./SwatchListing";
+import {SwatchInfoParams, SwatchListing, SwatchListingProps, SwatchListingState} from "./SwatchListing";
 import {SwatchItem} from "react-home-ar";
 import {ReactNode} from "react";
 import {appendClassName} from "../internal/Utils";

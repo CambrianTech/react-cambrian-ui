@@ -6,6 +6,7 @@ import {ImageInfo} from "./LazyImage";
 import {isDarkSwatch} from "./Thumbnail";
 
 export type SwatchListingProps = {
+    id?:string
     visible?:boolean
     className?:string
     swatches?:SwatchItem[]
@@ -217,6 +218,10 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
     componentDidMount() {
         this._isMounted = true;
+
+        if (!this._boundEvents) {
+            this.bindEvents();
+        }
     }
 
     componentWillUnmount() {
@@ -244,10 +249,6 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
 
         const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
         this._prevSwatchDiv = prevProps.selectedSwatch ? document.getElementById(prevProps.selectedSwatch.key) as HTMLDivElement : undefined;
-
-        if (!this._boundEvents) {
-            this.bindEvents();
-        }
 
         if (swatchDiv && prevProps.selectedSwatch !== this.props.selectedSwatch) {
             //console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
@@ -293,7 +294,7 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         const filterCount = this.props.applyFilters && this.props.filters ? this.props.filters.length : -1;
 
         return (
-            <div ref={this._listing} className={className}>
+            <div ref={this._listing} id={this.props.id} className={className}>
                 <div ref={this._content} className={appendClassName(`${this.listingName}-content`, this.scss.swatchListingContent)}>
                     {swatches.map((swatch) => {
                         const result = this.renderSwatch(swatch);
