@@ -229,6 +229,12 @@ export abstract class SwatchListing<T extends SwatchListingProps> extends React.
         if (this._boundEvents) {
             this.unbindEvents();
         }
+
+        if (this.props.selectedSwatch) {
+            const swatchDiv = document.getElementById(this.props.selectedSwatch.key) as HTMLDivElement;
+            //console.log(`Swatch changed from '${prevProps.selectedSwatch ? prevProps.selectedSwatch.displayName:""}' to '${this.props.selectedSwatch.displayName}'`);
+            this.scrollSwatchIntoView(swatchDiv, this._prevSwatchDiv, "smooth")
+        }
     }
 
     componentDidUpdate(prevProps: Readonly<T>, prevState: Readonly<SwatchListingState>, snapshot?: any): void {
